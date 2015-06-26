@@ -1,0 +1,28 @@
+<md-content ng-click="sidenav($event)">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <md-icon ng-click="sidenav($event)" md-svg-icon="images/ic_reorder_white_24px.svg" ></md-icon> &nbsp;
+            <span>JS Session > Basics</span>
+            <!-- fill up the space between left and right area -->
+            <span flex></span>
+        </div>
+    </md-toolbar>
+    <md-sidenav md-component-id="left" class="md-sidenav-left">
+        Left Nav!
+    </md-sidenav>
+    <md-card ng-repeat="question in questions">
+        <md-card-content>
+            <h3>{{question.question}}</h3>
+            <md-radio-group>
+                <md-radio-button>{{question.option1}}</md-radio-button>
+                <md-radio-button>{{question.option2}}</md-radio-button>
+                <md-radio-button>{{question.option3}}</md-radio-button>
+                <md-radio-button>{{question.option4}}</md-radio-button>
+            </md-radio-group>
+        </md-card-content>
+        <div class="md-actions" layout="row" layout-align="end center">
+            <md-button class="md-raised ">Give up</md-button>
+            <md-button class="md-raised md-primary">Submit</md-button>
+        </div>
+    </md-card>
+</md-content>
