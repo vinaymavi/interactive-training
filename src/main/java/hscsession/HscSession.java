@@ -8,6 +8,7 @@ import entity.Question;
 import persist.QuestionOfy;
 
 import javax.inject.Named;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -48,5 +49,11 @@ public class HscSession {
         q.setRightOption(rightOption);
 
         return qf.loadByKey(qf.save(q));
+    }
+
+    @ApiMethod(name = "questionsByGroupId")
+    public List<Question> questionsByGroupId(@Named("groupid") String groupId) {
+        QuestionOfy qf = new QuestionOfy();
+        return qf.loadByGroupId(groupId);
     }
 }

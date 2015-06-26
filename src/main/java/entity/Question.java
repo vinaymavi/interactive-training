@@ -2,6 +2,7 @@ package entity;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 
 /**
  * Created by vinaymavi on 24/06/15.
@@ -11,6 +12,7 @@ public class Question {
     @Id
     Long id;
     private String session;
+    @Index
     private String groupId;
     private String question;
     private String option1;

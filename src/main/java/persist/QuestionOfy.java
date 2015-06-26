@@ -4,6 +4,8 @@ package persist;
 import com.googlecode.objectify.Key;
 import entity.Question;
 
+import java.util.List;
+
 import static persist.OfyService.ofy;
 
 /**
@@ -28,5 +30,14 @@ public class QuestionOfy {
      */
     public Question loadByKey(Key<Question> key) {
         return ofy().load().key(key).safe();
+    }
+
+    /**
+     * This is function query the datastore and return list of Question class.
+     * @param groupId
+     * @return List<Question>
+     */
+    public List<Question> loadByGroupId(String groupId) {
+        return ofy().load().type(Question.class).filter("groupId", groupId).list();
     }
 }
