@@ -3,30 +3,53 @@
  * 2-Send direction to server to push question to users.
  * Author: Vinay Mavi vinaymavi@gmail.com*/
 
-$(document).ready(function(){
+
+var hscsession = (function () {
+    /*Firebase Initialization*/
+    //TODO security pending.
+    var firebaseObj = new Firebase('https://hscsession.firebaseio.com/');
+    return {
+        'set': function (deferredReq) {
+            deferredReq.execute(function (resp) {
+                console.log(resp);
+                console.log("Vinay Kumar");
+                if (resp.items && resp.items.length > 0) {
+                    firebaseObj.set(resp.items);
+                }
+            });
+        },
+        'loadByGroupId': function (groupid) {
+            return gapi.client.hscsession.questionsByGroupId({
+                'groupid': groupid
+            });
+        }
+    }
+}());
+
+console.log(hscsession);
+
+/*
+ * Register StepEnter and StepLeave listeners
+ * */
+$(document).ready(function () {
     document.addEventListener
     ("impress:stepenter", function (event) {
-        console.log("Enter Id-"+event.target.id);
+        /*API calling for question list.*/
+        console.log("SetpEnter Calling.")
+        hscsession.set(hscsession.loadByGroupId(event.target.id));
     }, false);
     document.addEventListener
     ("impress:stepleave", function (event) {
-        console.log("Leave Id-"+event.target.id);
+        console.log("Leave Id-" + event.target.id);
     }, false);
 });
 
-//TODO security pending.
-var myDataRef = new Firebase('https://hscsession.firebaseio.com/');
-//TODO pending appengine integration.
-myDataRef.set({"id1":{
-    "id": "vinay",
-    "session": "jssession",
-    "groupId": "id1",
-    "question": "what is Javascript.",
-    "option1": "Scripting language.",
-    "option2": "Web Scripting language.",
-    "option3": "Web Style Language.",
-    "option4": "Web Design Language.",
-    "rightOption": 2,
-    "kind": "hscsession#resourcesItem"
-}});
-
+function init() {
+    var ROOT = 'https://hscsession.appspot.com/_ah/api';
+    gapi.client.load('hscsession', 'v1', function () {
+        console.log("GAPI Loaded.");
+        /*ImpressJs Initialization.*/
+        impress().init();
+        console.log("ImpressJS loaded.")
+    }, ROOT);
+}
