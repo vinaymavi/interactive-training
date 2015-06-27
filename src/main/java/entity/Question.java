@@ -4,8 +4,11 @@ import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 
+import java.util.Date;
+
 /**
  * Created by vinaymavi on 24/06/15.
+ * @description This is Question Entity for Google Datastore.
  */
 @Entity(name = "Questions")
 public class Question {
@@ -20,12 +23,21 @@ public class Question {
     private String option3;
     private String option4;
     private int rightOption;
+    private Date addDate;
 
     public Question() {
     }
 
     public Long getId() {
         return id;
+    }
+
+    public Date getAddDate() {
+        return addDate;
+    }
+
+    public void setAddDate(Date addDate) {
+        this.addDate = addDate;
     }
 
     public void setId(Long id) {

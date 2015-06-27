@@ -4,6 +4,7 @@ package persist;
  * Created by vinaymavi on 24/06/15.
  */
 
+import entity.Answer;
 import entity.Question;
 
 import com.googlecode.objectify.Objectify;
@@ -21,8 +22,8 @@ public class OfyService {
     public static Logger logger = Logger.getLogger(OfyService.class.getName());
     static {
         factory().register(Question.class);
-        logger.warning(Question.class.getName()+" Registered");
-
+        factory().register(Answer.class);
+        logger.warning("Classes registered for Objectify service.");
     }
 
     public static Objectify ofy() {

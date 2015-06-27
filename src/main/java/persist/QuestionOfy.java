@@ -10,6 +10,7 @@ import static persist.OfyService.ofy;
 
 /**
  * Created by vinaymavi on 24/06/15.
+ * @description This Objectify class of @code{entity.Question} class.
  */
 public class QuestionOfy {
     /**
