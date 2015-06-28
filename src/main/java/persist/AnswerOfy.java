@@ -43,4 +43,15 @@ public class AnswerOfy {
         return ofy().load().type(Answer.class).filter("user", user).list();
     }
 
+    /**
+     * Load List of Answers by user and questionId.
+     *
+     * @param questionId
+     * @param user
+     * @return {List<Answer>}
+     */
+    public List<Answer> loadByQuesIDAadUser(Long questionId, String user) {
+        return ofy().load().type(Answer.class).filter("questionId", questionId).filter("user",user).list();
+    }
+
 }

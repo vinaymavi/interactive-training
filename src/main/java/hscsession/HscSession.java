@@ -71,23 +71,33 @@ public class HscSession {
     public Answer addAnswer(@Named("user") String user,
                             @Named("session") String session,
                             @Named("groupId") String groupId,
-                            @Named("questionId") String questionId,
+                            @Named("questionId") Long questionId,
                             @Named("answer") int answer,
                             @Named("rightAnswer") int rightAnswer,
                             @Named("result") String result,
                             @Named("giveUp") boolean giveUp) {
         AnswerOfy af = new AnswerOfy();
-        Answer a = new Answer();
-        a.setUser(user);
-        a.setSession(session);
-        a.setGroupId(groupId);
-        a.setQuestionId(questionId);
-        a.setAnswer(answer);
-        a.setRight_answer(rightAnswer);
-        a.setResult(result);
-        a.setAddDate(new Date());
-        a.setGiveUp(giveUp);
-        return af.loadByKey(af.save(a));
+        Answer a;
+
+        List<Answer> answers = af.loadByQuesIDAadUser(questionId, user);
+        if (answers.size() > 0) {
+            a = answers.get(0);
+            a.setAnswer(answer);
+            a.setResult(result);
+            return af.loadByKey(af.save(a));
+        } else {
+            a = new Answer();
+            a.setUser(user);
+            a.setSession(session);
+            a.setGroupId(groupId);
+            a.setQuestionId(questionId);
+            a.setAnswer(answer);
+            a.setRight_answer(rightAnswer);
+            a.setResult(result);
+            a.setAddDate(new Date());
+            a.setGiveUp(giveUp);
+            return af.loadByKey(af.save(a));
+        }
     }
 
     /**
@@ -100,5 +110,11 @@ public class HscSession {
     public List<Answer> answersByUser(@Named("user") String user) {
         AnswerOfy af = new AnswerOfy();
         return af.loadByUser(user);
+    }
+
+    @ApiMethod(name = "quesionByQuesIdAndUser")
+    public List<Answer> quesionByQuesIdAndUser(@Named("questionId") Long questionId, @Named("user") String user) {
+        AnswerOfy af = new AnswerOfy();
+        return af.loadByQuesIDAadUser(questionId, user);
     }
 }

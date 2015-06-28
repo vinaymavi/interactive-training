@@ -34,3 +34,11 @@ angular
                 redirectTo: '/'
             });
     });
+
+function init() {
+    var ROOT = 'https://hscsession.appspot.com/_ah/api';
+    gapi.client.load('hscsession', 'v1', function () {
+        console.log("GAPI Loaded.");
+        window.init();
+    }, ROOT);
+}

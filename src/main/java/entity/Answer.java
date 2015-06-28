@@ -21,7 +21,8 @@ public class Answer {
     private String session;
     @Index
     private String groupId;
-    private String questionId;
+    @Index
+    private Long questionId;
     private int answer;
     private int right_answer;
     @Index
@@ -72,11 +73,11 @@ public class Answer {
         this.groupId = groupId;
     }
 
-    public String getQuestionId() {
+    public Long getQuestionId() {
         return questionId;
     }
 
-    public void setQuestionId(String questionId) {
+    public void setQuestionId(Long questionId) {
         this.questionId = questionId;
     }
 
