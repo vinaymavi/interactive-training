@@ -7,4 +7,17 @@
     <system-properties>
         <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
     </system-properties>
+    <static-files>
+        <include path="/**.html" expiration="15m"/>
+        <include path="/**.js" expiration="15m"/>
+        <include path="/**.css" expiration="2h"/>
+        <include path="/**.png" expiration="1d"/>
+        <include path="/**.jpg" expiration="1d"/>
+        <include path="/**.gif" expiration="1d"/>
+        <include path="/**.woff" expiration="1d"/>
+        <include path="/**.ttf" expiration="1d"/>
+        <include path="/**.svg" expiration="1d"/>
+        <include path="/favicon.ico" expiration="15d"/>
+        <include path="/robots.txt" expiration="1d"/>
+    </static-files>
 </appengine-web-app>

@@ -10,6 +10,7 @@ import entity.Question;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
+import entity.Slide;
 
 import java.util.logging.Logger;
 
@@ -23,6 +24,7 @@ public class OfyService {
     static {
         factory().register(Question.class);
         factory().register(Answer.class);
+        factory().register(Slide.class);
         logger.warning("Classes registered for Objectify service.");
     }
 

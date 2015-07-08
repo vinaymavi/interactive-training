@@ -10,10 +10,7 @@
 angular.module('appApp')
     .service('hscsession', function ($mdToast) {
         this.addAnswer = function (reqObj) {
-            gapi.client.hscsession.addAnswer(reqObj).execute(function (resp) {
-                console.log(resp);
-                $mdToast.showSimple("Answer Updated.")
-            })
+            return gapi.client.hscsession.addAnswer(reqObj);
         }
         return this;
     });

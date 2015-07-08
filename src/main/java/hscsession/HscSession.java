@@ -3,13 +3,17 @@ package hscsession;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
+import com.google.appengine.api.users.User;
 import com.googlecode.objectify.Key;
 import entity.Answer;
 import entity.Question;
+import entity.Slide;
 import persist.AnswerOfy;
 import persist.QuestionOfy;
+import persist.SlideOfy;
 
 import javax.inject.Named;
+import java.net.URL;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -28,6 +32,7 @@ import java.util.logging.Logger;
 
 public class HscSession {
     private final static Logger logger = Logger.getLogger(HscSession.class.getName());
+    private static final String EMAILS = "vinaymavi@hotmail.com,vinaymavi@gmail.com,viney.yadav@gmail.com";
 
     @ApiMethod(name = "addQuestion")
     public Question addQuestion(@Named("session") String session,
@@ -37,22 +42,26 @@ public class HscSession {
                                 @Named("option2") String option2,
                                 @Named("option3") String option3,
                                 @Named("option4") String option4,
-                                @Named("rightOption") int rightOption
-    ) {
-        Question q = new Question();
-        QuestionOfy qf = new QuestionOfy();
+                                @Named("rightOption") int rightOption,
+                                User user) {
+        if (user != null && EMAILS.contains(user.getEmail())) {
+            Question q = new Question();
+            QuestionOfy qf = new QuestionOfy();
 
-        q.setSession(session);
-        q.setGroupId(groupId);
-        q.setQuestion(question);
-        q.setOption1(option1);
-        q.setOption2(option2);
-        q.setOption3(option3);
-        q.setOption4(option4);
-        q.setRightOption(rightOption);
-        q.setAddDate(new Date());
+            q.setSession(session);
+            q.setGroupId(groupId);
+            q.setQuestion(question);
+            q.setOption1(option1);
+            q.setOption2(option2);
+            q.setOption3(option3);
+            q.setOption4(option4);
+            q.setRightOption(rightOption);
+            q.setAddDate(new Date());
 
-        return qf.loadByKey(qf.save(q));
+            return qf.loadByKey(qf.save(q));
+        }
+
+        return null;
     }
 
     /**
@@ -116,5 +125,26 @@ public class HscSession {
     public List<Answer> quesionByQuesIdAndUser(@Named("questionId") Long questionId, @Named("user") String user) {
         AnswerOfy af = new AnswerOfy();
         return af.loadByQuesIDAadUser(questionId, user);
+    }
+
+    @ApiMethod(name = "slides", httpMethod = "GET")
+    public List<Slide> slides(@Named("sessionName") String session) {
+        return SlideOfy.loadBySession(session);
+    }
+
+    @ApiMethod(name = "addSlide")
+    public Slide addSlide(@Named("session") String session,
+                          @Named("index") Integer index,
+                          @Named("htmlId") String htmlId,
+                          @Named("url") String url, User user) throws Exception {
+        if (user != null && EMAILS.contains(user.getEmail())) {
+            Slide slide = new Slide();
+            slide.setUrl(new URL(url));
+            slide.setSession(session);
+            slide.setHtmlId(htmlId);
+            slide.setIndex(index);
+            return SlideOfy.loadByKey(SlideOfy.save(slide));
+        }
+        return null;
     }
 }

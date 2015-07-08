@@ -1,7 +1,7 @@
 <md-content>
     <md-toolbar>
         <div class="md-toolbar-tools">
-            <md-icon ng-click="sidenav($event)" md-svg-icon="/images/ic_reorder_white_24px.svg"></md-icon>
+            <md-icon ng-click="sidenav($event)" md-font-set="material-icons" >reorder</md-icon>
             &nbsp;
             <span>JS Session</span>
             <!-- fill up the space between left and right area -->
@@ -9,7 +9,19 @@
         </div>
     </md-toolbar>
     <md-sidenav md-component-id="left" class="md-sidenav-left md-whiteframe-z2">
-        Left Nav!
+        <md-toolbar layout="row">
+            <div class="md-toolbar-tools">
+                <md-icon md-font-set="material-icons">account_circle</md-icon>
+                &nbsp;
+                <span id="user"></span>
+                <!-- fill up the space between left and right area -->
+                <span flex></span>
+            </div>
+        </md-toolbar>
+        <div layout="row">
+            <md-button class="md-raised" ng-click="logout()" flex flex="100">Logout</md-button>
+        </div>
+
     </md-sidenav>
     <md-card ng-repeat="question in questions">
         <md-card-content>
@@ -22,8 +34,11 @@
             </md-radio-group>
         </md-card-content>
         <div class="md-actions" layout="row" layout-align="end center">
-            <md-button class="md-raised" ng-click="addAnswer($index,answers[$index],true)">Give up</md-button>
-            <md-button class="md-raised md-primary" ng-click="addAnswer($index,answers[$index],false)">Submit
+            <md-button class="md-raised"
+                       ng-click="addAnswer($index,answers[$index],true,$event)">{{giveBtn[$index]}}
+            </md-button>
+            <md-button class="md-raised md-primary"
+                       ng-click="addAnswer($index,answers[$index],false,$event)">{{submitBtn[$index]}}
             </md-button>
         </div>
     </md-card>

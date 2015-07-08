@@ -163,10 +163,9 @@ a:focus {
     We start with basics to make sure it displays correctly in everywhere ...
 */
 
-.step {
+.step,.slide-svg {
     position: relative;
     width: 900px;
-    padding: 40px;
     margin: 20px auto;
 
     -webkit-box-sizing: border-box;
@@ -179,7 +178,9 @@ a:focus {
     font-size: 48px;
     line-height: 1.5;
 }
-
+.slide{
+padding: 40px;
+}
 /*
     ... and we enhance the styles for impress.js.
 
@@ -206,13 +207,11 @@ a:focus {
 
     They cover everything what you see on first three steps of the demo.
 */
-.slide {
+.slide ,.slide-svg {
     display: block;
 
     width: 900px;
     height: 700px;
-    padding: 40px 60px;
-
     background-color: white;
     border: 1px solid rgba(0, 0, 0, .3);
     border-radius: 10px;
@@ -225,6 +224,10 @@ a:focus {
     font-size: 30px;
     line-height: 36px;
     letter-spacing: -1px;
+}
+
+.slide{
+padding: 40px 60px;
 }
 
 .slide q {
