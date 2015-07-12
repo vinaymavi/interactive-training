@@ -29,8 +29,26 @@ public class Answer {
     private boolean giveUp;
     private String result;
     private Date addDate;
+    private String level;
+    private String type;
 
     public Answer() {
+    }
+    
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getResult() {

@@ -24,7 +24,8 @@ public class Question {
     private String option4;
     private int rightOption;
     private Date addDate;
-
+    private String level;
+    private String type;
     public Question() {
     }
 
@@ -102,6 +103,22 @@ public class Question {
 
     public int getRightOption() {
         return rightOption;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public void setRightOption(int rightOption) {

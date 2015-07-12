@@ -16,6 +16,7 @@ import javax.inject.Named;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -34,6 +35,20 @@ public class HscSession {
     private final static Logger logger = Logger.getLogger(HscSession.class.getName());
     private static final String EMAILS = "vinaymavi@hotmail.com,vinaymavi@gmail.com,viney.yadav@gmail.com";
 
+    /**
+     * @param session
+     * @param groupId
+     * @param question
+     * @param option1
+     * @param option2
+     * @param option3
+     * @param option4
+     * @param rightOption
+     * @param level       level should be B/I/A
+     * @param type        type should P/T
+     * @param user
+     * @return
+     */
     @ApiMethod(name = "addQuestion")
     public Question addQuestion(@Named("session") String session,
                                 @Named("groupId") String groupId,
@@ -42,7 +57,9 @@ public class HscSession {
                                 @Named("option2") String option2,
                                 @Named("option3") String option3,
                                 @Named("option4") String option4,
+                                @Named("level") String level,
                                 @Named("rightOption") int rightOption,
+                                @Named("type") String type,
                                 User user) {
         if (user != null && EMAILS.contains(user.getEmail())) {
             Question q = new Question();
@@ -57,6 +74,8 @@ public class HscSession {
             q.setOption4(option4);
             q.setRightOption(rightOption);
             q.setAddDate(new Date());
+            q.setLevel(level);
+            q.setType(type);
 
             return qf.loadByKey(qf.save(q));
         }
@@ -84,7 +103,9 @@ public class HscSession {
                             @Named("answer") int answer,
                             @Named("rightAnswer") int rightAnswer,
                             @Named("result") String result,
-                            @Named("giveUp") boolean giveUp) {
+                            @Named("level") String level,
+                            @Named("giveUp") boolean giveUp,
+                            @Named("type") String type) {
         AnswerOfy af = new AnswerOfy();
         Answer a;
 
@@ -105,6 +126,8 @@ public class HscSession {
             a.setResult(result);
             a.setAddDate(new Date());
             a.setGiveUp(giveUp);
+            a.setLevel(level);
+            a.setType(type);
             return af.loadByKey(af.save(a));
         }
     }
@@ -146,5 +169,15 @@ public class HscSession {
             return SlideOfy.loadByKey(SlideOfy.save(slide));
         }
         return null;
+    }
+
+    @ApiMethod(name = "sessionResult")
+    public Map<String, Float> sessionResult(@Named("session") String session) {
+        return AnswerOfy.sessionResult(session);
+    }
+
+    @ApiMethod(name = "userResult")
+    public Map<String, Float> userResult(@Named("session") String session, @Named("user") String user) {
+        return AnswerOfy.userResult(session, user);
     }
 }

@@ -45,6 +45,8 @@ angular.module('appApp')
             reqObj.rightAnswer = question.rightOption;
             reqObj.result = reqObj.answer == reqObj.rightAnswer ? "RIGHT" : "WRONG";
             reqObj.giveUp = giveUp;
+            reqObj.level = question.level;
+            reqObj.type = question.type;
             if (giveUp) {
                 $scope.giveBtn[index] = '....';
             } else {
@@ -64,8 +66,14 @@ angular.module('appApp')
             });
         };
 
+        $scope.isUrl = function (url) {
+            var urlRegex = /^http[s]?:///;
+            return urlRegex.test(url);
+        }
+
         $window.init = function () {
             console.log("controller init");
             $('#user').html(localStorage.getItem("user"));
         };
+
     });

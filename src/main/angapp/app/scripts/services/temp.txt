@@ -1,0 +1,108 @@
+Who designed JavaScript?
+	James Gosling
+	Brenden Eich
+	Marc Endreeson
+	Douglas Crockford
+	2
+
+What was the first name given to the language?
+	LiveScript
+	JavaScript
+	JScrpit
+	Mocha
+	4
+
+JavaScript was created at?
+	Netscape
+	Sun Microsystem
+	Mozilla
+	Openwave
+	1
+------------------
+Which of the following is not an object?
+	String
+	Boolean
+	undefined
+	Number
+	3
+
+What will be the output of
+var myStr = new String(); console.log(typeof myStr);
+	"string"
+	"object"
+	null
+	undefined
+	2
+
+What will be the output of
+var myVar; console.log(myVar, typeof myVar);
+	undefined "undefined"
+	Error. Won't run.
+	null undefined
+	undefined undefined
+	1
+
+------------------
+What will be the value of d after the following statement
+var a = null; var b = ""; var d = (a === b);
+	true
+	false
+	undefined
+	Error. Won't run.
+	2
+
+What will be the value of d after the following statement
+var a; var b = ""; var d = (a === c);
+	true
+	false
+	undefined
+	Error. Won't run.
+	4
+
+What will be the output:
+var a = [0, 1]; a[3] = 3; console.log(a[2]);
+	false
+	undefined
+	Error. Won't run.
+	null
+	2
+
+---------------------
+
+Function arguments are passed
+	As reference
+	As value
+	Depends on the function
+	Depends on the call
+	1
+
+What will be the output:
+console.log (a);  var a =10;
+	10
+	undefined
+	null
+	Error. Won't run.
+	2
+
+What will be the output:
+var a = 10; { var a = 20; } console.log (a);
+	10
+	undefined
+	20
+	Error. Won't run.
+	3
+
+What will be the output:
+function x(){
+	y = 1;
+	var z = 2;
+}
+x();
+console.log (y);
+	undefined
+	null
+	Error. Won't run.
+	2
+	4
+
+

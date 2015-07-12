@@ -1,7 +1,7 @@
 <md-content>
     <md-toolbar>
         <div class="md-toolbar-tools">
-            <md-icon ng-click="sidenav($event)" md-font-set="material-icons" >reorder</md-icon>
+            <md-icon ng-click="sidenav($event)" md-font-set="material-icons">reorder</md-icon>
             &nbsp;
             <span>JS Session</span>
             <!-- fill up the space between left and right area -->
@@ -25,7 +25,9 @@
     </md-sidenav>
     <md-card ng-repeat="question in questions">
         <md-card-content>
-            <h3>{{question.question}}</h3>
+            <img ng-if="isUrl(question.question)" style="width: 100%" ng-src="{{question.question}}"/>
+
+            <h3 ng-if="!isUrl(question.question)">{{question.question}}</h3>
             <md-radio-group ng-model="answers[$index]">
                 <md-radio-button value="1" class="md-primary">{{question.option1}}</md-radio-button>
                 <md-radio-button value="2" class="md-primary">{{question.option2}}</md-radio-button>
@@ -43,3 +45,4 @@
         </div>
     </md-card>
 </md-content>
+<element onclick="doSomething()">
