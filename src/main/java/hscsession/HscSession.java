@@ -168,6 +168,7 @@ public class HscSession {
             slide.setIndex(index);
             return SlideOfy.loadByKey(SlideOfy.save(slide));
         }
+        /*TODO Exception required.*/
         return null;
     }
 
