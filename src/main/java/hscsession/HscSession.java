@@ -171,6 +171,7 @@ public class HscSession {
             slide.setIsPlunk(isPlunk);
             return SlideOfy.loadByKey(SlideOfy.save(slide));
         }
+        /*TODO Exception required.*/
         return null;
     }
 
