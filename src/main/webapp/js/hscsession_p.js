@@ -25,6 +25,9 @@ var hscsession = (function () {
         },
         'slides': function (session) {
             return gapi.client.hscsession.slides({'sessionName': session})
+        },
+        "keepAlive":function(){
+            /*TODO space for keep live messages.*/
         }
     }
 }());
@@ -53,7 +56,6 @@ $(document).ready(function () {
 
 function init() {
     var ROOT = 'https://hscsession.appspot.com/_ah/api';
-    var SESSION = 'jssession';
     var START_X = -1000;
     gapi.client.load('hscsession', 'v1', function () {
         console.log("GAPI Loaded.");
