@@ -3,6 +3,7 @@ package hscsession;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
+import com.google.api.server.spi.config.Nullable;
 import com.google.appengine.api.users.User;
 import com.googlecode.objectify.Key;
 import entity.Answer;
@@ -159,13 +160,15 @@ public class HscSession {
     public Slide addSlide(@Named("session") String session,
                           @Named("index") Integer index,
                           @Named("htmlId") String htmlId,
+                          @Named("isPlunk") @Nullable Boolean isPlunk,
                           @Named("url") String url, User user) throws Exception {
         if (user != null && EMAILS.contains(user.getEmail())) {
             Slide slide = new Slide();
-            slide.setUrl(new URL(url));
+            slide.setUrl(url.trim());
             slide.setSession(session);
             slide.setHtmlId(htmlId);
             slide.setIndex(index);
+            slide.setIsPlunk(isPlunk);
             return SlideOfy.loadByKey(SlideOfy.save(slide));
         }
         return null;

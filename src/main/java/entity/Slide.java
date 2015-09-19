@@ -15,15 +15,24 @@ public class Slide {
     @Id
     private Long id;
     @Index
-    private URL url;
+    private String url;
     @Index
     private Integer index;
     @Index
     private String htmlId;
     @Index
     private String session;
+    private boolean isPlunk;
 
     public Slide() {
+    }
+
+    public boolean isPlunk() {
+        return isPlunk;
+    }
+
+    public void setIsPlunk(boolean isPlunk) {
+        this.isPlunk = isPlunk;
     }
 
     public Long getId() {
@@ -34,11 +43,11 @@ public class Slide {
         this.id = id;
     }
 
-    public URL getUrl() {
+    public String getUrl() {
         return url;
     }
 
-    public void setUrl(URL url) {
+    public void setUrl(String url) {
         this.url = url;
     }
 

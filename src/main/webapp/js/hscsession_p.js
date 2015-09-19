@@ -26,7 +26,7 @@ var hscsession = (function () {
         'slides': function (session) {
             return gapi.client.hscsession.slides({'sessionName': session})
         },
-        "keepAlive":function(){
+        "keepAlive": function () {
             /*TODO space for keep live messages.*/
         }
     }
@@ -66,7 +66,11 @@ function init() {
             resp.items.forEach(function (value, index) {
                 console.log(value);
                 var data_x = START_X + index * 1000;
-                slidesHtml.push('<div id="' + value.htmlId + '" class="step slide-svg" data-x="' + data_x + '" data-y="-1500"><img src="' + value.url + '"/></div>')
+                if (value.plunk) {
+                    slidesHtml.push('<div id="' + value.htmlId + '" class="step slide-svg" data-x="' + data_x + '" data-y="-1500">' + value.url + '</div>')
+                } else {
+                    slidesHtml.push('<div id="' + value.htmlId + '" class="step slide-svg" data-x="' + data_x + '" data-y="-1500"><img src="' + value.url + '"/></div>')
+                }
             });
             $('#impress').html(slidesHtml.join(''));
 
