@@ -10,7 +10,7 @@ import java.util.Date;
  * Created by vinaymavi on 24/06/15.
  * @description This is Question Entity for Google Datastore.
  */
-@Entity(name = "Questions")
+@Entity(name = "question")
 public class Question {
     @Id
     Long id;

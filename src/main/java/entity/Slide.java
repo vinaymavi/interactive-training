@@ -10,7 +10,7 @@ import java.net.URL;
  * Created by vinaymavi on 07/07/15.
  * Entity for slide.
  */
-@Entity(name = "Slide")
+@Entity(name = "slide")
 public class Slide {
     @Id
     private Long id;

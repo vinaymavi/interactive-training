@@ -11,7 +11,7 @@ import java.util.Date;
  *
  * @Description This is Answer Entity for Google Datastore.
  */
-@Entity(name = "Answers")
+@Entity(name = "answers")
 public class Answer {
     @Id
     private Long id;
