@@ -1,9 +1,7 @@
 package entity;
 
 import com.googlecode.objectify.Ref;
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
-import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.*;
 
 import java.util.Date;
 
@@ -21,7 +19,10 @@ public class Session {
     private EmailAddress emailAddress;
     private Mobile mobile;
     private Boolean isLive;
+    @Load
     private Ref<User> userRef;
+    @Parent
+    @Load
     private Ref<Presentation> presentationRef;
     private Date addDate;
     private Date updateDate;

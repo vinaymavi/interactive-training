@@ -40,19 +40,5 @@ public class QuestionOfy {
      * @param groupId
      * @return List<Question>
      */
-//    TODO session also required for query.
-    public List<Question> loadByGroupId(String groupId) {
-        return ofy().load().type(Question.class).filter("groupId", groupId).list();
-    }
-
-    /**
-     * Get Question list by session.
-     *
-     * @param session
-     * @return List<Question>
-     */
-    public static List<Question> loadBySession(String session) {
-        return ofy().load().type(Question.class).filter("session", session).list();
-    }
 
 }

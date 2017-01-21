@@ -1,8 +1,7 @@
 package entity;
 
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
-import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.annotation.*;
 
 import java.util.Date;
 
@@ -11,116 +10,59 @@ import java.util.Date;
  *
  * @Description This is Answer Entity for Google Datastore.
  */
-@Entity(name = "answers")
+@Entity(name = "answer")
 public class Answer {
     @Id
     private Long id;
-    @Index
-    private String user;
-    @Index
-    private String session;
-    @Index
-    private String groupId;
-    @Index
-    private Long questionId;
-    private int answer;
-    private int right_answer;
-    @Index
-    private boolean giveUp;
-    private String result;
+    @Parent
+    @Load
+    private Ref<Question> questionRef;
+    @Load
+    private Ref<User> userRef;
+    @Load
+    private Ref<Session> sessionRef;
+    private Boolean isCorrect;
     private Date addDate;
-    private String level;
-    private String type;
+    private Date updateDate;
 
-    public Answer() {
-    }
-    
-    public String getLevel() {
-        return level;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getResult() {
-        return result;
-    }
-
-    public void setResult(String result) {
-        this.result = result;
-    }
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getUser() {
-        return user;
+    public Ref<Question> getQuestionRef() {
+        return questionRef;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setQuestionRef(Ref<Question> questionRef) {
+        this.questionRef = questionRef;
     }
 
-    public String getSession() {
-        return session;
+    public Ref<User> getUserRef() {
+        return userRef;
     }
 
-    public void setSession(String session) {
-        this.session = session;
+    public void setUserRef(Ref<User> userRef) {
+        this.userRef = userRef;
     }
 
-    public String getGroupId() {
-        return groupId;
+    public Ref<Session> getSessionRef() {
+        return sessionRef;
     }
 
-    public void setGroupId(String groupId) {
-        this.groupId = groupId;
+    public void setSessionRef(Ref<Session> sessionRef) {
+        this.sessionRef = sessionRef;
     }
 
-    public Long getQuestionId() {
-        return questionId;
+    public Boolean getCorrect() {
+        return isCorrect;
     }
 
-    public void setQuestionId(Long questionId) {
-        this.questionId = questionId;
-    }
-
-    public int getAnswer() {
-        return answer;
-    }
-
-    public void setAnswer(int answer) {
-        this.answer = answer;
-    }
-
-    public int getRight_answer() {
-        return right_answer;
-    }
-
-    public void setRight_answer(int right_answer) {
-        this.right_answer = right_answer;
-    }
-
-    public boolean isGiveUp() {
-        return giveUp;
-    }
-
-    public void setGiveUp(boolean giveUp) {
-        this.giveUp = giveUp;
+    public void setCorrect(Boolean correct) {
+        isCorrect = correct;
     }
 
     public Date getAddDate() {
@@ -129,5 +71,13 @@ public class Answer {
 
     public void setAddDate(Date addDate) {
         this.addDate = addDate;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
     }
 }

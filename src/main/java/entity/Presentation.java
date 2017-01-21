@@ -1,11 +1,10 @@
 package entity;
 
 import com.googlecode.objectify.Ref;
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
-import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by vku131 on 1/20/17.
@@ -14,6 +13,8 @@ import java.util.Date;
 public class Presentation {
     @Id
     private Long id;
+    @Parent
+    @Load
     private Ref<User> userRef;
     @Index
     private String name;
@@ -23,7 +24,7 @@ public class Presentation {
     private Date addDate;
     private Date updateDate;
     @Index
-    private String[] tags;
+    private List<String> tags;
     public Long getId() {
         return id;
     }
@@ -80,11 +81,11 @@ public class Presentation {
         this.updateDate = updateDate;
     }
 
-    public String[] getTags() {
+    public List<String> getTags() {
         return tags;
     }
 
-    public void setTags(String[] tags) {
+    public void setTags(List<String> tags) {
         this.tags = tags;
     }
 }

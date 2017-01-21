@@ -4,13 +4,11 @@ package persist;
  * Created by vinaymavi on 24/06/15.
  */
 
-import entity.Answer;
-import entity.Question;
+import entity.*;
 
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
-import entity.Slide;
 
 import java.util.logging.Logger;
 
@@ -22,10 +20,17 @@ import java.util.logging.Logger;
 public class OfyService {
     public static Logger logger = Logger.getLogger(OfyService.class.getName());
     static {
-        factory().register(Question.class);
+        factory().register(Address.class);
         factory().register(Answer.class);
+        factory().register(EmailAddress.class);
+        factory().register(Mobile.class);
+        factory().register(Option.class);
+        factory().register(Presentation.class);
+        factory().register(Question.class);
+        factory().register(Session.class);
         factory().register(Slide.class);
-        logger.warning("Classes registered for Objectify service.");
+        factory().register(User.class);
+        logger.info("Classes registered for Objectify service.");
     }
 
     public static Objectify ofy() {
