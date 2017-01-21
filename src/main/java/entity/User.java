@@ -6,6 +6,7 @@ import com.googlecode.objectify.annotation.Index;
 
 import java.net.URL;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by vku131 on 1/20/17.
@@ -29,9 +30,17 @@ public class User {
     @Index
     private Boolean status;
     private URL profileImage;
-    private Address[] address;
-    private Mobile[] mobile;
-    private EmailAddress[] emailAddress;
+    private Address address;
+    private Mobile mobile;
+    private EmailAddress emailAddress;
+
+    public User() {
+    }
+
+    public User(String fbId) {
+        this.fbId = fbId;
+    }
+
 
     public Long getId() {
         return id;
@@ -121,27 +130,27 @@ public class User {
         this.profileImage = profileImage;
     }
 
-    public Address[] getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(Address[] address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 
-    public Mobile[] getMobile() {
+    public Mobile getMobile() {
         return mobile;
     }
 
-    public void setMobile(Mobile[] mobile) {
+    public void setMobile(Mobile mobile) {
         this.mobile = mobile;
     }
 
-    public EmailAddress[] getEmailAddress() {
+    public EmailAddress getEmailAddress() {
         return emailAddress;
     }
 
-    public void setEmailAddress(EmailAddress[] emailAddress) {
+    public void setEmailAddress(EmailAddress emailAddress) {
         this.emailAddress = emailAddress;
     }
 }

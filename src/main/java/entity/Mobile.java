@@ -20,6 +20,24 @@ public class Mobile {
         return id;
     }
 
+    public Mobile() {
+    }
+
+    public Mobile(String number) {
+        this.number = number;
+    }
+
+    public Mobile(String countryCode, String number, String type) {
+        this.countryCode = countryCode;
+        this.number = number;
+        this.type = type;
+    }
+
+    public Mobile(String countryCode, String number) {
+        this.countryCode = countryCode;
+        this.number = number;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }

@@ -16,6 +16,20 @@ public class Address {
     //TODO need to include GEO coordinates.
 
 
+    public Address() {
+    }
+
+    public Address(String address, String city) {
+        this.address = address;
+        this.city = city;
+    }
+
+    public Address(String address, String city, String country) {
+        this.address = address;
+        this.city = city;
+        this.country = country;
+    }
+
     public Long getId() {
         return id;
     }

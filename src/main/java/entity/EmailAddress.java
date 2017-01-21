@@ -16,6 +16,19 @@ public class EmailAddress {
     private Email email;
     private String type;
 
+    public EmailAddress() {
+
+    }
+
+    public EmailAddress(Email email) {
+        this.email = email;
+    }
+
+    public EmailAddress(Email email, String type) {
+        this.email = email;
+        this.type = type;
+    }
+
     public Long getId() {
         return id;
     }
