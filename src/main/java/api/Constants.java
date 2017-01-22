@@ -1,4 +1,4 @@
-package hscsession;
+package api;
 
 /**
  * Contains the client IDs and scopes for allowed clients consuming your API.

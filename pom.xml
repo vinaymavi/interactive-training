@@ -9,7 +9,7 @@
     <artifactId>hscsession</artifactId>
 
     <properties>
-        <app.id>hscsession</app.id>
+        <app.id>api</app.id>
         <app.version>1</app.version>
         <appengine.version>1.9.17</appengine.version>
         <gcloud.plugin.version>0.9.58.v20150505</gcloud.plugin.version>
