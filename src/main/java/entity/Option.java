@@ -9,22 +9,11 @@ import java.util.Date;
 /**
  * Created by vku131 on 1/21/17.
  */
-@Entity(name = "option")
 public class Option {
-    @Id
-    private Long id;
     @Index
     private String desc;
     private Date addDate;
     private Date updateDate;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getDesc() {
         return desc;

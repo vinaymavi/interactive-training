@@ -13,10 +13,13 @@ import java.util.Map;
         version = "v1",
         scopes = {Constants.EMAIL_SCOPE},
         clientIds = {Constants.WEB_CLIENT_ID, Constants.ANDROID_CLIENT_ID, Constants.IOS_CLIENT_ID},
-        audiences = {Constants.ANDROID_AUDIENCE}
+        audiences = {Constants.ANDROID_AUDIENCE,},
+        title = "Interactive Training",
+        description = "Interactive Training Presentation api"
+
 )
 public class ApiBaseV1 {
-    @ApiMethod(name = "api_info",path = "api_info")
+    @ApiMethod(name = "api.info",path = "api_info")
     public Map<String,String> getApiDetails(){
         Map<String,String> map = new HashMap<String, String>();
         map.put("api name","reveal");

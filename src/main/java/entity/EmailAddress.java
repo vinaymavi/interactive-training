@@ -8,10 +8,7 @@ import com.googlecode.objectify.annotation.Index;
 /**
  * Created by vku131 on 1/20/17.
  */
-@Entity(name = "email_address")
 public class EmailAddress {
-    @Id
-    private Long id;
     @Index
     private Email email;
     private String type;
@@ -27,14 +24,6 @@ public class EmailAddress {
     public EmailAddress(Email email, String type) {
         this.email = email;
         this.type = type;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Email getEmail() {

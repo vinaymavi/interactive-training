@@ -20,11 +20,7 @@ import java.util.logging.Logger;
 public class OfyService {
     public static Logger logger = Logger.getLogger(OfyService.class.getName());
     static {
-        factory().register(Address.class);
         factory().register(Answer.class);
-        factory().register(EmailAddress.class);
-        factory().register(Mobile.class);
-        factory().register(Option.class);
         factory().register(Presentation.class);
         factory().register(Question.class);
         factory().register(Session.class);

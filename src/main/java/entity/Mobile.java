@@ -7,18 +7,11 @@ import com.googlecode.objectify.annotation.Index;
 /**
  * Created by vku131 on 1/20/17.
  */
-@Entity(name = "mobile")
 public class Mobile {
-    @Id
-    private Long id;
     private String countryCode;
     @Index
     private String number;
     private String type;
-
-    public Long getId() {
-        return id;
-    }
 
     public Mobile() {
     }
@@ -36,10 +29,6 @@ public class Mobile {
     public Mobile(String countryCode, String number) {
         this.countryCode = countryCode;
         this.number = number;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getCountryCode() {
