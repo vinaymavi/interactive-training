@@ -8,6 +8,7 @@ import entity.Slide;
 import persist.PresentationOfy;
 import persist.SlideOfy;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -26,11 +27,16 @@ public class SlideApi {
     private static Logger logger = Logger.getLogger(SlideApi.class.getName());
 
     @ApiMethod(name = "slide.create", path = "slide_create")
-    public Slide create(@Named("token") String token, @Named("presentationId") String presentationId, Slide slide) {
+    public Slide create(@Named("token") String token, @Named("presentationId") String pId, Slide slide) {
         logger.info("token = " + token);
-        Presentation presentation = PresentationOfy.loadById(presentationId);
+        Presentation presentation = PresentationOfy.loadByPresentationId(pId);
         slide.setPresentationRef(presentation);
         return SlideOfy.loadByKey(SlideOfy.save(slide));
     }
 
+    @ApiMethod(name = "slide.list", path = "slide_list")
+    public List<Slide> slideList(@Named("token") String token, @Named("presentationId") String pId) {
+        Presentation presentation = PresentationOfy.loadByPresentationId(pId);
+        return SlideOfy.listByPresentation(presentation);
+    }
 }

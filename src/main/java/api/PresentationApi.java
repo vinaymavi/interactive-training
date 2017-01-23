@@ -43,8 +43,8 @@ public class PresentationApi {
      * @return {{User}}
      */
     @ApiMethod(name = "presentation.user", path = "presentation_user")
-    public User getUser(@Named("presentationId") String presentationId) {
-        logger.info("presentationId = " + presentationId);
-        return PresentationOfy.loadById(presentationId).getUserRef();
+    public User getUser(@Named("presentationId") String pId) {
+        logger.info("presentationId = " + pId);
+        return PresentationOfy.loadByPresentationId(pId).getUserRef();
     }
 }

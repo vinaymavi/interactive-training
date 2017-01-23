@@ -17,7 +17,7 @@ public class AuthOfy {
 
     public static Auth createToken(Auth auth) {
         Key<Auth> key = ofy().save().entity(auth).now();
-        auth = ofy().load().type(Auth.class).first().now();
+        auth = ofy().load().type(Auth.class).filterKey(key).first().safe();
         logger.info("Generated token = " + auth.getToken());
         return auth;
     }

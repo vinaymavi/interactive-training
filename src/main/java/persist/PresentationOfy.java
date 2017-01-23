@@ -30,7 +30,7 @@ public class PresentationOfy {
         return ofy().load().key(key).safe();
     }
 
-    public static Presentation loadById(String presentationId) {
+    public static Presentation loadByPresentationId(String presentationId) {
         Presentation presentation = ofy().load().type(Presentation.class).filter("presentationId",presentationId).first().safe();
         return presentation;
     }

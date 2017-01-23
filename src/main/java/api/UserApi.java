@@ -11,7 +11,6 @@ import persist.AuthOfy;
 import persist.PresentationOfy;
 import persist.UserOfy;
 
-import java.nio.file.attribute.UserPrincipal;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -43,7 +42,7 @@ public class UserApi {
     }
 
     @ApiMethod(name = "user.presentation.list", path = "user_presentation_list")
-    public List<Presentation> listPresentations(@Named("token") String token) {
+    public List<Presentation> presentationList(@Named("token") String token) {
         logger.info("Token = " + token);
         return PresentationOfy.listByUser(AuthOfy.getUserByToken(token));
     }
