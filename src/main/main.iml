@@ -24,9 +24,6 @@
         </webroots>
       </configuration>
     </facet>
-    <facet type="google-app-engine" name="Google App Engine2">
-      <configuration />
-    </facet>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />

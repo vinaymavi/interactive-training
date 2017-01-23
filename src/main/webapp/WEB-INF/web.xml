@@ -27,6 +27,22 @@
         <servlet-name>SystemServiceServlet</servlet-name>
         <url-pattern>/_ah/spi/*</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>Presentation</servlet-name>
+        <servlet-class>servlet.PresentationServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Presentation</servlet-name>
+        <url-pattern>/presentation</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>Session</servlet-name>
+        <servlet-class>servlet.SessionServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Session</servlet-name>
+        <url-pattern>/session</url-pattern>
+    </servlet-mapping>
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
