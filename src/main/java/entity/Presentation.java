@@ -13,6 +13,8 @@ import java.util.List;
 public class Presentation {
     @Id
     private Long id;
+    @Index
+    private String presentationId;
     @Parent
     @Load
     private Ref<User> userRef;
@@ -33,12 +35,20 @@ public class Presentation {
         this.id = id;
     }
 
-    public Ref<User> getUserRef() {
-        return userRef;
+    public String getPresentationId() {
+        return presentationId;
     }
 
-    public void setUserRef(Ref<User> userRef) {
-        this.userRef = userRef;
+    public void setPresentationId(String presentationId) {
+        this.presentationId = presentationId;
+    }
+
+    public User getUserRef() {
+        return userRef.get();
+    }
+
+    public void setUserRef(User userRef) {
+        this.userRef = Ref.create(userRef);
     }
 
     public String getName() {

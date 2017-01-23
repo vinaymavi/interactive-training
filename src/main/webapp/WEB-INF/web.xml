@@ -16,7 +16,10 @@
             <param-name>services</param-name>
             <param-value>
                 api.UserApi,
-                api.ApiBaseV1
+                api.ApiBaseV1,
+                api.AuthApi,
+                api.PresentationApi,
+                api.SlideApi
             </param-value>
         </init-param>
     </servlet>

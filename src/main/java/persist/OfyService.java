@@ -26,6 +26,7 @@ public class OfyService {
         factory().register(Session.class);
         factory().register(Slide.class);
         factory().register(User.class);
+        factory().register(Auth.class);
         logger.info("Classes registered for Objectify service.");
     }
 

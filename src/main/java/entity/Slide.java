@@ -22,4 +22,52 @@ public class Slide {
     @Parent
     @Load
     Ref<Presentation> presentationRef;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public String getHtml() {
+        return html;
+    }
+
+    public void setHtml(String html) {
+        this.html = html;
+    }
+
+    public Date getAddDate() {
+        return addDate;
+    }
+
+    public void setAddDate(Date addDate) {
+        this.addDate = addDate;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
+    }
+
+    public Presentation getPresentationRef() {
+        return presentationRef.get();
+    }
+
+    public void setPresentationRef(Presentation presentationRef) {
+        this.presentationRef = Ref.create(presentationRef);
+    }
 }
