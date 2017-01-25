@@ -1,10 +1,7 @@
 package entity;
 
 import com.googlecode.objectify.Ref;
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
-import com.googlecode.objectify.annotation.Load;
-import com.googlecode.objectify.annotation.Parent;
+import com.googlecode.objectify.annotation.*;
 
 import java.util.Date;
 import java.util.List;
@@ -18,12 +15,16 @@ import java.util.List;
 public class Question {
     @Id
     private Long id;
+    @Index
+    private String questionId;
+    @Index
+    private String desc;
     @Parent
     @Load
     private Ref<Slide> slideRef;
     List<Option> options;
-    @Load
-    Ref<Option> rightOption;
+
+    Option rightOption;
     private Date addDate;
     private Date updateDate;
 
@@ -35,12 +36,28 @@ public class Question {
         this.id = id;
     }
 
-    public Ref<Slide> getSlideRef() {
-        return slideRef;
+    public String getQuestionId() {
+        return questionId;
     }
 
-    public void setSlideRef(Ref<Slide> slideRef) {
-        this.slideRef = slideRef;
+    public void setQuestionId(String questionId) {
+        this.questionId = questionId;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public Slide getSlideRef() {
+        return slideRef.get();
+    }
+
+    public void setSlideRef(Slide slideRef) {
+        this.slideRef = Ref.create(slideRef);
     }
 
     public List<Option> getOptions() {
@@ -51,11 +68,11 @@ public class Question {
         this.options = options;
     }
 
-    public Ref<Option> getRightOption() {
+    public Option getRightOption() {
         return rightOption;
     }
 
-    public void setRightOption(Ref<Option> rightOption) {
+    public void setRightOption(Option rightOption) {
         this.rightOption = rightOption;
     }
 

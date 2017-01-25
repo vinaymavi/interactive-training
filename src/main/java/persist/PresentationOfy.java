@@ -31,6 +31,7 @@ public class PresentationOfy {
     }
 
     public static Presentation loadByPresentationId(String presentationId) {
+        logger.info("PresentationId = "+presentationId);
         Presentation presentation = ofy().load().type(Presentation.class).filter("presentationId",presentationId).first().safe();
         return presentation;
     }

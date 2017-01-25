@@ -19,7 +19,9 @@
                 api.ApiBaseV1,
                 api.AuthApi,
                 api.PresentationApi,
-                api.SlideApi
+                api.SlideApi,
+                api.SessionApi,
+                api.QuestionApi
             </param-value>
         </init-param>
     </servlet>

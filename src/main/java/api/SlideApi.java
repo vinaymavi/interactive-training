@@ -5,6 +5,7 @@ import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.Named;
 import entity.Presentation;
 import entity.Slide;
+import helper.AuthHelper;
 import persist.PresentationOfy;
 import persist.SlideOfy;
 
@@ -30,6 +31,7 @@ public class SlideApi {
     public Slide create(@Named("token") String token, @Named("presentationId") String pId, Slide slide) {
         logger.info("token = " + token);
         Presentation presentation = PresentationOfy.loadByPresentationId(pId);
+        slide.setSlideId(new AuthHelper().createToken());
         slide.setPresentationRef(presentation);
         return SlideOfy.loadByKey(SlideOfy.save(slide));
     }

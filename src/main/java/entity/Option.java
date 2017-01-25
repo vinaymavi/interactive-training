@@ -11,16 +11,17 @@ import java.util.Date;
  */
 public class Option {
     @Index
-    private String desc;
+    private String content;
     private Date addDate;
     private Date updateDate;
+    private boolean isRight;
 
-    public String getDesc() {
-        return desc;
+    public String getContent() {
+        return content;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public Date getAddDate() {
@@ -37,5 +38,13 @@ public class Option {
 
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
+    }
+
+    public boolean isRight() {
+        return isRight;
+    }
+
+    public void setRight(boolean right) {
+        isRight = right;
     }
 }

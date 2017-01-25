@@ -43,4 +43,9 @@ public class SlideOfy {
         return ofy().load().type(Slide.class).ancestor(presentation).list();
     }
 
+    public static Slide loadBySlideId(String slideId) {
+        logger.info("slideId = " + slideId);
+        return ofy().load().type(Slide.class).filter("slideId", slideId).first().safe();
+    }
+
 }

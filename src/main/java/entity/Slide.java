@@ -16,6 +16,8 @@ public class Slide {
     private Long id;
     private int index;
     @Index
+    private String slideId;
+    @Index
     private String html;
     private Date addDate;
     private Date updateDate;
@@ -37,6 +39,14 @@ public class Slide {
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    public String getSlideId() {
+        return slideId;
+    }
+
+    public void setSlideId(String slideId) {
+        this.slideId = slideId;
     }
 
     public String getHtml() {

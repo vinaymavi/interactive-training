@@ -3,7 +3,9 @@ package entity;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by vku131 on 1/20/17.
@@ -13,26 +15,39 @@ public class Session {
     @Id
     private Long id;
     @Index
+    private String sessionId;
+    @Index
     private String name;
     private String desc;
     private Address address;
     private EmailAddress emailAddress;
     private Mobile mobile;
     private Boolean isLive;
+
+    @Index
     @Load
-    private Ref<User> userRef;
+    private List<User> audience;
     @Parent
     @Load
     private Ref<Presentation> presentationRef;
     private Date addDate;
     private Date updateDate;
     private Date liveDate;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 
     public String getName() {
@@ -83,20 +98,12 @@ public class Session {
         isLive = live;
     }
 
-    public Ref<User> getUserRef() {
-        return userRef;
+    public Presentation getPresentationRef() {
+        return presentationRef.get();
     }
 
-    public void setUserRef(Ref<User> userRef) {
-        this.userRef = userRef;
-    }
-
-    public Ref<Presentation> getPresentationRef() {
-        return presentationRef;
-    }
-
-    public void setPresentationRef(Ref<Presentation> presentationRef) {
-        this.presentationRef = presentationRef;
+    public void setPresentationRef(Presentation presentationRef) {
+        this.presentationRef = Ref.create(presentationRef);
     }
 
     public Date getAddDate() {
@@ -121,5 +128,15 @@ public class Session {
 
     public void setLiveDate(Date liveDate) {
         this.liveDate = liveDate;
+    }
+
+    public List<User> getAudience() {
+
+        return audience;
+    }
+
+    public void setAudience(List<User> audience) {
+
+        this.audience = audience;
     }
 }

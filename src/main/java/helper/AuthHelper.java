@@ -2,6 +2,7 @@ package helper;
 
 import entity.Auth;
 import entity.User;
+import persist.AuthOfy;
 import persist.UserOfy;
 
 import java.math.BigInteger;
@@ -25,7 +26,15 @@ public class AuthHelper {
         return auth;
     }
 
-    public String createToken() {
+    public static String createToken() {
         return new BigInteger(130, secureRandom).toString(32);
+    }
+
+    public boolean isValid(String token) {
+        if (AuthOfy.getUserByToken(token) != null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
