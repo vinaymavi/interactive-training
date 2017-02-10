@@ -1,16 +1,24 @@
 package webhook;
 
+import com.google.gson.Gson;
+import com.googlecode.objectify.Key;
+import entity.webhook.facebook.WebhookPushData;
+import persist.WebhookPushDataOfy;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 public class Facebook extends HttpServlet {
     private static Logger logger = Logger.getLogger(Facebook.class.getName());
     private static String VALIDATION_TOKEN = "tT4CLdfi";
+    private static Gson gson = new Gson();
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) {
@@ -40,6 +48,7 @@ public class Facebook extends HttpServlet {
     public void doPost(HttpServletRequest req, HttpServletResponse resp) {
         StringBuffer stringBuffer = new StringBuffer("");
         String lineStr;
+        Map<String,String> respMap = new HashMap<>();
         try {
             BufferedReader bufferedReader = req.getReader();
             lineStr = bufferedReader.readLine();
@@ -50,6 +59,12 @@ public class Facebook extends HttpServlet {
             }
             postReqStr = stringBuffer.toString();
             logger.warning(postReqStr);
+            WebhookPushData webhookPushData = gson.fromJson(postReqStr, WebhookPushData.class);
+            Key<WebhookPushData> key = WebhookPushDataOfy.save(webhookPushData);
+            logger.warning("key = "+key);
+            respMap.put("status","OK");
+            respMap.put("key",key.toString());
+            resp.getWriter().write(gson.toJson(respMap));
         } catch (IOException ioe) {
             logger.warning(ioe.getMessage());
         }

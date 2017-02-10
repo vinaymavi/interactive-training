@@ -1,5 +1,7 @@
 package entity.webhook.facebook;
 
+import com.googlecode.objectify.annotation.Index;
+
 import java.util.Map;
 
 /**
