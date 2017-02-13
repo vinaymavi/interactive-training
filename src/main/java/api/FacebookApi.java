@@ -3,7 +3,9 @@ package api;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.Named;
+import com.google.api.server.spi.config.Nullable;
 import com.google.gson.Gson;
+import helper.FacebookHelper;
 import send.Facebook;
 import send.ImageMessage;
 import send.TextMessage;
@@ -33,12 +35,12 @@ public class FacebookApi {
     private Gson gson = new Gson();
     private TextMessage textMessage;
     private ImageMessage imageMessage;
-    private Map<String, String> msgMap;
+    private Map<String, Object> msgMap;
     private Map<String, String> recipientMap;
     private String msgPayload;
 
     @ApiMethod(name = "facebook.sendtextmsg", path = "facebook_sendtextmsg", httpMethod = "POST")
-    public Map<String, String> sendTextMsg(@Named("msg") String msg, @Named("recipient") String recipient) {
+    public Map<String, String> sendTextMsg(@Named("msg") String msg, @Named("recipient") String recipient, @Nullable @Named("quickReplies") String quickReplies) {
         this.facebook = new Facebook();
         this.textMessage = new TextMessage();
         msgMap = new HashMap<>();
@@ -46,6 +48,10 @@ public class FacebookApi {
         this.msgMap.put("text", msg);
         this.recipientMap.put("id", recipient);
         this.textMessage.setRecipient(recipientMap);
+        if (quickReplies != null & quickReplies instanceof String) {
+            this.msgMap.put("quick_replies",FacebookHelper.StringToQuickReplies(quickReplies));
+        }
+
         this.textMessage.setMessage(msgMap);
         this.msgPayload = gson.toJson(textMessage);
         logger.warning("msgPayload = " + this.msgPayload);
@@ -53,7 +59,7 @@ public class FacebookApi {
     }
 
     @ApiMethod(name = "facebook.sendimagemsg", path = "facebook_sendimagemsg", httpMethod = "POST")
-    public Map<String, String> sendImageMsg(@Named("msg") String url, @Named("recipient") String recipient) {
+    public Map<String, String> sendImageMsg(@Named("msg") String url, @Named("recipient") String recipient, @Nullable @Named("quickReplies") String quickReplies) {
 //        TODO implement image size limit.
 //        TODO need to handle request timeout.
         this.facebook = new Facebook();
@@ -62,9 +68,14 @@ public class FacebookApi {
             this.imageMessage = new ImageMessage(new URL(url));
             this.recipientMap.put("id", recipient);
             this.imageMessage.setRecipient(this.recipientMap);
+            if (quickReplies != null & quickReplies instanceof String) {
+                this.imageMessage.getMessage().put("quick_replies",FacebookHelper.StringToQuickReplies(quickReplies));
+            }
+
         } catch (MalformedURLException mue) {
             logger.warning(mue.getMessage());
         }
+//      TODO check toJson execution time.
         this.msgPayload = gson.toJson(imageMessage);
         logger.warning("msgPayload = " + msgPayload);
         return facebook.sendMessage(msgPayload);
