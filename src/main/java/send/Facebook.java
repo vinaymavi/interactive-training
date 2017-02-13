@@ -29,7 +29,8 @@ public class Facebook {
     private URLFetchService fetchService = URLFetchServiceFactory.getURLFetchService();
     private HTTPRequest httpRequest;
     private HTTPResponse httpResponse;
-    private HTTPHeader httpHeader = new HTTPHeader("Content-Type","application/json");
+    private HTTPHeader httpHeader = new HTTPHeader("Content-Type", "application/json");
+
     public Facebook() {
         this.configList = ConfigOfy.loadByGroupName(GROUP_NAME);
         if (configList != null) {
@@ -48,7 +49,7 @@ public class Facebook {
         }
     }
 
-    public Map<String, String> sendTextMessage(String msgPayload) {
+    public Map<String, String> sendMessage(String msgPayload) {
         this.httpRequest = new HTTPRequest(this.url, HTTPMethod.POST);
         this.httpRequest.setHeader(httpHeader);
         this.httpRequest.setPayload(msgPayload.getBytes());
@@ -65,5 +66,4 @@ public class Facebook {
         }
         return respMap;
     }
-
 }

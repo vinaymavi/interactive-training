@@ -5,9 +5,12 @@ import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.Named;
 import com.google.gson.Gson;
 import send.Facebook;
+import send.ImageMessage;
 import send.TextMessage;
 
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -25,26 +28,45 @@ import java.util.logging.Logger;
 
 )
 public class FacebookApi {
-    Logger logger = Logger.getLogger(FacebookApi.class.getName());
+    private static Logger logger = Logger.getLogger(FacebookApi.class.getName());
     private Facebook facebook;
     private Gson gson = new Gson();
     private TextMessage textMessage;
+    private ImageMessage imageMessage;
     private Map<String, String> msgMap;
     private Map<String, String> recipientMap;
     private String msgPayload;
 
     @ApiMethod(name = "facebook.sendtextmsg", path = "facebook_sendtextmsg", httpMethod = "POST")
     public Map<String, String> sendTextMsg(@Named("msg") String msg, @Named("recipient") String recipient) {
-        facebook = new Facebook();
-        textMessage = new TextMessage();
+        this.facebook = new Facebook();
+        this.textMessage = new TextMessage();
         msgMap = new HashMap<>();
-        recipientMap = new HashMap<>();
-        msgMap.put("text", msg);
-        recipientMap.put("id",recipient);
-        textMessage.setRecipient(recipientMap);
-        textMessage.setMessage(msgMap);
-        msgPayload = gson.toJson(textMessage);
+        this.recipientMap = new HashMap<>();
+        this.msgMap.put("text", msg);
+        this.recipientMap.put("id", recipient);
+        this.textMessage.setRecipient(recipientMap);
+        this.textMessage.setMessage(msgMap);
+        this.msgPayload = gson.toJson(textMessage);
+        logger.warning("msgPayload = " + this.msgPayload);
+        return facebook.sendMessage(this.msgPayload);
+    }
+
+    @ApiMethod(name = "facebook.sendimagemsg", path = "facebook_sendimagemsg", httpMethod = "POST")
+    public Map<String, String> sendImageMsg(@Named("msg") String url, @Named("recipient") String recipient) {
+//        TODO implement image size limit.
+//        TODO need to handle request timeout.
+        this.facebook = new Facebook();
+        this.recipientMap = new HashMap<>();
+        try {
+            this.imageMessage = new ImageMessage(new URL(url));
+            this.recipientMap.put("id", recipient);
+            this.imageMessage.setRecipient(this.recipientMap);
+        } catch (MalformedURLException mue) {
+            logger.warning(mue.getMessage());
+        }
+        this.msgPayload = gson.toJson(imageMessage);
         logger.warning("msgPayload = " + msgPayload);
-        return facebook.sendTextMessage(msgPayload);
+        return facebook.sendMessage(msgPayload);
     }
 }
