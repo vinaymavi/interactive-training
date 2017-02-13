@@ -9,6 +9,7 @@ import entity.*;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
+import entity.config.Config;
 import entity.webhook.facebook.WebhookPushData;
 
 import java.util.logging.Logger;
@@ -29,6 +30,7 @@ public class OfyService {
         factory().register(User.class);
         factory().register(Auth.class);
         factory().register(WebhookPushData.class);
+        factory().register(Config.class);
         logger.warning("Classes registered for Objectify service.");
     }
 

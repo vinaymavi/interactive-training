@@ -21,7 +21,9 @@
                 api.PresentationApi,
                 api.SlideApi,
                 api.SessionApi,
-                api.QuestionApi
+                api.QuestionApi,
+                api.ConfigApi,
+                api.FacebookApi
             </param-value>
         </init-param>
     </servlet>
