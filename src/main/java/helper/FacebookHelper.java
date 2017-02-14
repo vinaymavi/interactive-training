@@ -1,5 +1,6 @@
 package helper;
 
+import entity.Option;
 import send.QuickReply;
 
 import java.util.ArrayList;
@@ -18,6 +19,17 @@ public class FacebookHelper {
             qr.setPayload("QUESTION NUMEBR");
             quickRepliesList.add(qr);
 
+        }
+        return quickRepliesList;
+    }
+
+    public static List<QuickReply> optionToQuickReply(List<Option> optionList) {
+        List<QuickReply> quickRepliesList = new ArrayList<>();
+        QuickReply qr;
+        for (Option option : optionList) {
+            qr = new QuickReply("text", option.getContent());
+            qr.setPayload("QUESTION NUMEBR");
+            quickRepliesList.add(qr);
         }
         return quickRepliesList;
     }

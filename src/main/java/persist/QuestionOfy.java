@@ -45,8 +45,18 @@ public class QuestionOfy {
     }
 
     public static List<Question> listByPresentation(Presentation presentation) {
-    //  TODO logging required.
+        //  TODO logging required.
         return ofy().load().type(Question.class).ancestor(presentation).list();
+    }
+
+    public static List<Question> feedbackListByPresentation(Presentation presentation) {
+        //  TODO logging required.
+        return ofy().load().type(Question.class).ancestor(presentation).filter("questionNature", "feedback").list();
+    }
+
+    public static List<Question> questionListByPresentation(Presentation presentation) {
+        //  TODO logging required.
+        return ofy().load().type(Question.class).ancestor(presentation).filter("questionNature", "question").list();
     }
 
 

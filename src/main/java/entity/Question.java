@@ -25,7 +25,9 @@ public class Question {
     @Parent
     @Load
     Ref<Presentation> presentationRef;
+    @Index
     private String questionNature;
+    @Index
     private String questionType;
 
     Option rightOption;

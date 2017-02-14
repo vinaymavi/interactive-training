@@ -1,14 +1,18 @@
 package helper;
 
+import com.google.gson.Gson;
 import entity.Option;
+import entity.Question;
+import entity.User;
+import send.TextMessage;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by vku131 on 1/25/17.
  */
 public class QuestionHelper {
+    private static Gson gson = new Gson();
 
     public static Option getRightOptions(List<Option> optionList) {
         Option rightOption = null;
@@ -36,4 +40,17 @@ public class QuestionHelper {
         }
         return optionList;
     }
+
+    public static String createFbTextMsg(User user, Question question) {
+        Map<String, String> recipient = new HashMap<>();
+        Map<String, Object> msgMap = new HashMap<>();
+        TextMessage textMessage = new TextMessage();
+        recipient.put("id", user.getSenderId());
+        textMessage.setRecipient(recipient);
+        msgMap.put("text", question.getDesc());
+        msgMap.put("quick_replies", FacebookHelper.optionToQuickReply(question.getOptions()));
+        textMessage.setMessage(msgMap);
+        return gson.toJson(textMessage);
+    }
+
 }

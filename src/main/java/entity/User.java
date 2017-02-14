@@ -24,6 +24,8 @@ public class User {
     @Index
     private String fbId;
     @Index
+    private String senderId;
+    @Index
     private String gender;
     private Date addDate;
     private Date updateDate;
@@ -88,6 +90,14 @@ public class User {
 
     public void setFbId(String fbId) {
         this.fbId = fbId;
+    }
+
+    public String getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(String senderId) {
+        this.senderId = senderId;
     }
 
     public String getGender() {
