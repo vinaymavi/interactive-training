@@ -2,6 +2,7 @@ package persist;
 
 
 import com.googlecode.objectify.Key;
+import entity.Presentation;
 import entity.Question;
 import entity.Slide;
 
@@ -41,6 +42,11 @@ public class QuestionOfy {
     public static List<Question> listBySlide(Slide slide) {
 //  TODO logging required.
         return ofy().load().type(Question.class).ancestor(slide).list();
+    }
+
+    public static List<Question> listByPresentation(Presentation presentation) {
+    //  TODO logging required.
+        return ofy().load().type(Question.class).ancestor(presentation).list();
     }
 
 

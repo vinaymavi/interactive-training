@@ -16,6 +16,10 @@ public class Option {
     private Date updateDate;
     private boolean isRight;
 
+    public Option(String content) {
+        this.content = content;
+    }
+
     public String getContent() {
         return content;
     }

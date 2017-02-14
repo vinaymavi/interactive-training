@@ -19,10 +19,14 @@ public class Question {
     private String questionId;
     @Index
     private String desc;
-    @Parent
     @Load
     private Ref<Slide> slideRef;
     List<Option> options;
+    @Parent
+    @Load
+    Ref<Presentation> presentationRef;
+    private String questionNature;
+    private String questionType;
 
     Option rightOption;
     private Date addDate;
@@ -53,6 +57,9 @@ public class Question {
     }
 
     public Slide getSlideRef() {
+        if (slideRef == null) {
+            return null;
+        }
         return slideRef.get();
     }
 
@@ -66,6 +73,36 @@ public class Question {
 
     public void setOptions(List<Option> options) {
         this.options = options;
+    }
+
+    public Presentation getPresentationRef() {
+        return presentationRef.get();
+    }
+
+    public void setPresentationRef(Presentation presentationRef) {
+        this.presentationRef = Ref.create(presentationRef);
+    }
+
+    public String getQuestionNature() {
+        return questionNature;
+    }
+
+    /**
+     * @param questionNature values could be feedback|question
+     */
+    public void setQuestionNature(String questionNature) {
+        this.questionNature = questionNature;
+    }
+
+    public String getQuestionType() {
+        return questionType;
+    }
+
+    /**
+     * @param questionType values cloud be objective:yesno
+     */
+    public void setQuestionType(String questionType) {
+        this.questionType = questionType;
     }
 
     public Option getRightOption() {
