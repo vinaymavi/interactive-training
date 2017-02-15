@@ -1,5 +1,8 @@
 package webhook;
 
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.gson.Gson;
 import com.googlecode.objectify.Key;
 import entity.webhook.facebook.WebhookPushData;
@@ -48,7 +51,7 @@ public class Facebook extends HttpServlet {
     public void doPost(HttpServletRequest req, HttpServletResponse resp) {
         StringBuffer stringBuffer = new StringBuffer("");
         String lineStr;
-        Map<String,String> respMap = new HashMap<>();
+        Map<String, String> respMap = new HashMap<>();
         try {
             BufferedReader bufferedReader = req.getReader();
             lineStr = bufferedReader.readLine();
@@ -61,9 +64,11 @@ public class Facebook extends HttpServlet {
             logger.warning(postReqStr);
             WebhookPushData webhookPushData = gson.fromJson(postReqStr, WebhookPushData.class);
             Key<WebhookPushData> key = WebhookPushDataOfy.save(webhookPushData);
-            logger.warning("key = "+key);
-            respMap.put("status","OK");
-            respMap.put("key",key.toString());
+            logger.warning("key = " + key);
+            respMap.put("status", "OK");
+            respMap.put("key", key.toString());
+            Queue queue = QueueFactory.getDefaultQueue();
+            queue.add(TaskOptions.Builder.withUrl("/check_and_register_fb_user").param("payload", postReqStr));
             resp.getWriter().write(gson.toJson(respMap));
         } catch (IOException ioe) {
             logger.warning(ioe.getMessage());

@@ -45,8 +45,7 @@ public class QuestionHelper {
         Map<String, String> recipient = new HashMap<>();
         Map<String, Object> msgMap = new HashMap<>();
         TextMessage textMessage = new TextMessage();
-        recipient.put("id", user.getSenderId());
-        textMessage.setRecipient(recipient);
+        textMessage.setRecipient(user.getSenderId());
         msgMap.put("text", question.getDesc());
         msgMap.put("quick_replies", FacebookHelper.optionToQuickReply(question.getOptions()));
         textMessage.setMessage(msgMap);

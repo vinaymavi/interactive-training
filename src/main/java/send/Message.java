@@ -1,5 +1,6 @@
 package send;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -12,7 +13,10 @@ public class Message {
         return recipient;
     }
 
-    public void setRecipient(Map<String, String> recipient) {
+    //    TODO pass recipient instead of map.
+    public void setRecipient(String recipientId) {
+        Map<String, String> recipient = new HashMap<>();
+        recipient.put("id", recipientId);
         this.recipient = recipient;
     }
 }

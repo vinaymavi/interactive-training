@@ -66,4 +66,24 @@ public class Facebook {
         }
         return respMap;
     }
+
+    public String getUserProfile(String senderId) {
+        logger.warning("SenderId = " + senderId);
+        URL url;
+        String respStr = null;
+        try {
+            url = new URL("https://graph.facebook.com/v2.8/" + senderId + "?access_token=" + this.pageAccessToken);
+            logger.warning("Profile URl = " + url);
+            HTTPRequest httpRequest = new HTTPRequest(url, HTTPMethod.GET);
+            HTTPResponse httpResponse = fetchService.fetch(httpRequest);
+            respStr = new String(httpResponse.getContent());
+            logger.warning("httpRespFB = " + respStr);
+            return respStr;
+        } catch (MalformedURLException mue) {
+            logger.warning(mue.getMessage());
+        } catch (IOException ioe) {
+            logger.warning(ioe.getMessage());
+        }
+        return respStr;
+    }
 }

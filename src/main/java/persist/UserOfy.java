@@ -37,4 +37,10 @@ public class UserOfy {
         User user = ofy().load().type(User.class).filter("fbId =", fbId).first().now();
         return user;
     }
+
+    public static User loadBySenderId(String senderId) {
+        logger.info("senderId=" + senderId);
+        User user = ofy().load().type(User.class).filter("senderId =", senderId).first().now();
+        return user;
+    }
 }

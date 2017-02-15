@@ -1,6 +1,8 @@
 package helper;
 
 import entity.Option;
+import entity.User;
+import entity.webhook.facebook.FbUserProfile;
 import send.QuickReply;
 
 import java.util.ArrayList;
@@ -32,5 +34,15 @@ public class FacebookHelper {
             quickRepliesList.add(qr);
         }
         return quickRepliesList;
+    }
+
+    public static User UserProfileToUser(FbUserProfile fbUserProfile, User user, String senderId) {
+        if (!(user instanceof User)) {
+            user = new User();
+        }
+        user.setFirstName(fbUserProfile.getFirst_name());
+        user.setLastName(fbUserProfile.getLast_name());
+        user.setSenderId(senderId);
+        return user;
     }
 }

@@ -16,7 +16,7 @@ public class TextMessage extends Message {
     public Map<String, Object> getMessage() {
         return message;
     }
-
+    //    TODO set message as string instead of map.
     public void setMessage(Map<String, Object> message) {
         this.message = message;
     }

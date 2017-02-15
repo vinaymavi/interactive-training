@@ -35,8 +35,9 @@ public class User {
     private Address address;
     private Mobile mobile;
     private EmailAddress emailAddress;
-
+    private boolean isRegistered;
     public User() {
+        this.isRegistered = false;
     }
 
     public User(String fbId) {
@@ -162,5 +163,13 @@ public class User {
 
     public void setEmailAddress(EmailAddress emailAddress) {
         this.emailAddress = emailAddress;
+    }
+
+    public boolean isRegistered() {
+        return isRegistered;
+    }
+
+    public void setRegistered(boolean registered) {
+        isRegistered = registered;
     }
 }
