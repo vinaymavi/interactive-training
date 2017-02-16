@@ -3,6 +3,9 @@ package api;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.Named;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import entity.Presentation;
 import entity.Session;
 import entity.User;
@@ -13,7 +16,9 @@ import persist.UserOfy;
 
 import javax.jws.soap.SOAPBinding;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -48,11 +53,27 @@ public class SessionApi {
 
     @ApiMethod(name = "session.addAudience")
     public Session addAudience(@Named("token") String token, @Named("sessionId") String sessionId, @Named("fbId") String fbId) {
-        User user = UserOfy.loadByFbId(fbId);
-        List<User> userList = new ArrayList<>();
-        userList.add(user);
         Session session = SessionOfy.loadBySessionId(sessionId);
-//        session.setAudience(userList);
+        User user = UserOfy.loadByFbId(fbId);
+        List<User> userList = session.getAudience();
+        if (userList == null) {
+            userList = new ArrayList<>();
+            ;
+            userList.add(user);
+        } else {
+            userList.add(user);
+        }
+        session.setAudience(userList);
         return SessionOfy.loadByKey(SessionOfy.save(session));
+    }
+
+    @ApiMethod(name = "session.pushFeedback", path = "session_push_feedback")
+    public Map<String, String> pushFeedback(@Named("token") String token, @Named("sessionId") String sessionId) {
+        Queue queue = QueueFactory.getDefaultQueue();
+        queue.add(TaskOptions.Builder.withUrl("/send_feedback_message_fb").param("sid",sessionId));
+        Map<String, String> resp = new HashMap<>();
+        resp.put("status", "OK");
+        resp.put("message", "Task queue initialized");
+        return resp;
     }
 }

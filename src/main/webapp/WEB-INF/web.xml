@@ -1,4 +1,7 @@
-<?xml version="1.0" encoding="utf-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
     <!-- Objectify Filter start-->
     <filter>
         <filter-name>ObjectifyFilter</filter-name>
@@ -54,6 +57,22 @@
     <servlet-mapping>
         <servlet-name>FacebookWebhook</servlet-name>
         <url-pattern>/facebook_webhook</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>SendFeedbackMessageFb</servlet-name>
+        <servlet-class>servlet.SendFeedbackFbMessenger</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SendFeedbackMessageFb</servlet-name>
+        <url-pattern>/send_feedback_message_fb</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>CheckAndRegisterFbUser</servlet-name>
+        <servlet-class>servlet.CheckAndRegisterFbUser</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CheckAndRegisterFbUser</servlet-name>
+        <url-pattern>/check_and_register_fb_user</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>

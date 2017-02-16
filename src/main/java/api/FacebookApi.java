@@ -36,7 +36,6 @@ public class FacebookApi {
     private TextMessage textMessage;
     private ImageMessage imageMessage;
     private Map<String, Object> msgMap;
-    private Map<String, String> recipientMap;
     private String msgPayload;
 
     @ApiMethod(name = "facebook.sendtextmsg", path = "facebook_sendtextmsg", httpMethod = "POST")
@@ -44,10 +43,8 @@ public class FacebookApi {
         this.facebook = new Facebook();
         this.textMessage = new TextMessage();
         msgMap = new HashMap<>();
-        this.recipientMap = new HashMap<>();
         this.msgMap.put("text", msg);
-        this.recipientMap.put("id", recipient);
-        this.textMessage.setRecipient(recipientMap);
+        this.textMessage.setRecipient(recipient);
         if (quickReplies != null & quickReplies instanceof String) {
             this.msgMap.put("quick_replies",FacebookHelper.StringToQuickReplies(quickReplies));
         }
@@ -63,11 +60,9 @@ public class FacebookApi {
 //        TODO implement image size limit.
 //        TODO need to handle request timeout.
         this.facebook = new Facebook();
-        this.recipientMap = new HashMap<>();
         try {
             this.imageMessage = new ImageMessage(new URL(url));
-            this.recipientMap.put("id", recipient);
-            this.imageMessage.setRecipient(this.recipientMap);
+            this.imageMessage.setRecipient(recipient);
             if (quickReplies != null & quickReplies instanceof String) {
                 this.imageMessage.getMessage().put("quick_replies",FacebookHelper.StringToQuickReplies(quickReplies));
             }

@@ -24,6 +24,8 @@ public class User {
     @Index
     private String fbId;
     @Index
+    private String senderId;
+    @Index
     private String gender;
     private Date addDate;
     private Date updateDate;
@@ -33,8 +35,9 @@ public class User {
     private Address address;
     private Mobile mobile;
     private EmailAddress emailAddress;
-
+    private boolean isRegistered;
     public User() {
+        this.isRegistered = false;
     }
 
     public User(String fbId) {
@@ -88,6 +91,14 @@ public class User {
 
     public void setFbId(String fbId) {
         this.fbId = fbId;
+    }
+
+    public String getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(String senderId) {
+        this.senderId = senderId;
     }
 
     public String getGender() {
@@ -152,5 +163,13 @@ public class User {
 
     public void setEmailAddress(EmailAddress emailAddress) {
         this.emailAddress = emailAddress;
+    }
+
+    public boolean isRegistered() {
+        return isRegistered;
+    }
+
+    public void setRegistered(boolean registered) {
+        isRegistered = registered;
     }
 }
