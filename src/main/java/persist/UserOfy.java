@@ -33,13 +33,13 @@ public class UserOfy {
     }
 
     public static User loadByFbId(String fbId) {
-        logger.info("fbId=" + fbId);
+        logger.warning("fbId=" + fbId);
         User user = ofy().load().type(User.class).filter("fbId =", fbId).first().now();
         return user;
     }
 
     public static User loadBySenderId(String senderId) {
-        logger.info("senderId=" + senderId);
+        logger.warning("senderId=" + senderId);
         User user = ofy().load().type(User.class).filter("senderId =", senderId).first().now();
         return user;
     }

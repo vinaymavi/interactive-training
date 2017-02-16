@@ -1,6 +1,7 @@
 package send;
 
 import com.google.gson.Gson;
+import entity.User;
 import entity.webhook.facebook.FbUserProfile;
 import entity.webhook.facebook.MessageEntry;
 import entity.webhook.facebook.WebhookPushData;
@@ -32,12 +33,10 @@ public class ConversationMessage {
 
         List<QuickReply> quickReplies = new ArrayList<>();
         QuickReply doneQuickReply = new QuickReply("text", "Done");
-        doneQuickReply.setPayload("ADMIN_MESSAGE:REGISTRATION:SUCCESS:SEND_MESSAGE:" + messageEntry.getSender().get
-                ("id") + "");
+        doneQuickReply.setPayload("ADMIN_MESSAGE:REGISTRATION:SUCCESS:SEND_WELCOME_MESSAGE:" + messageEntry.getSender().get("id") + "");
 
         QuickReply wrongInfoQuickReply = new QuickReply("text", "WrongInfo");
-        wrongInfoQuickReply.setPayload("ADMIN_MESSAGE:REGISTRATION:FAILURE:NONE:" + messageEntry.getSender().get
-                ("id") + "");
+        wrongInfoQuickReply.setPayload("ADMIN_MESSAGE:NONE:FAILURE:NONE:" + messageEntry.getSender().get("id") + "");
         quickReplies.add(doneQuickReply);
         quickReplies.add(wrongInfoQuickReply);
 
@@ -62,5 +61,19 @@ public class ConversationMessage {
                 .getSender().get("id") + ""));
         ButtonTemplate buttonTemplate = new ButtonTemplate(adminId, text, buttonPayloads);
         return gson.toJson(buttonTemplate);
+    }
+
+    public static String welcomeMessage(User user, String senderId) {
+        TextMessage textMessage = new TextMessage();
+        Map<String, Object> message = new HashMap<>();
+        String welcomeStr;
+
+        message.put("text", "Hey "+user.getFirstName()+"," +
+                "you have been registered successfully. Thank you for registration :)");
+        textMessage.setRecipient(senderId);
+        textMessage.setMessage(message);
+
+        welcomeStr = gson.toJson(textMessage);
+        return welcomeStr;
     }
 }
