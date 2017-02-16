@@ -13,7 +13,7 @@ public class Message {
         return recipient;
     }
 
-    //    TODO pass recipient instead of map.
+
     public void setRecipient(String recipientId) {
         Map<String, String> recipient = new HashMap<>();
         recipient.put("id", recipientId);
