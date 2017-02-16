@@ -38,13 +38,18 @@ public class CheckAndRegisterFbUser extends HttpServlet {
         FbUserProfile fbUserProfile = null;
         PayloadHelper payloadHelper;
 
-        Map<String, String> quickReplies = webhookPushData.getEntry().get(0).getMessaging().get(0).getMessage().getQuick_reply();
+        Map<String, String> quickReplies = null;
+        if (webhookPushData.getEntry().get(0).getMessaging().get(0).getMessage() != null) {
+            quickReplies = webhookPushData.getEntry().get(0).getMessaging().get(0).getMessage().getQuick_reply();
+        }
         String quickReplyPayload = null;
         String[] payloadItems;
         if (quickReplies != null) {
             quickReplyPayload = quickReplies.get("payload");
+        }else if(webhookPushData.getEntry().get(0).getMessaging().get(0).getPostback()!=null){
+            quickReplyPayload = webhookPushData.getEntry().get(0).getMessaging().get(0).getPostback().get("payload");
         }
-
+        logger.warning(quickReplyPayload);
         if (quickReplyPayload == null) {
             String profileStr = null;
             profileStr = new Facebook().getUserProfile(senderId);
@@ -56,7 +61,8 @@ public class CheckAndRegisterFbUser extends HttpServlet {
                 user = FacebookHelper.UserProfileToUser(fbUserProfile, user, senderId);
             }
             if (!user.isRegistered()) {
-                String adminMsgPayload = ConversationMessage.newUserInfoTOAdmin(webhookPushData, fbUserProfile);
+                String adminMsgPayload = ConversationMessage.newUserInfoToAdminButtonTemplate(webhookPushData,
+                        fbUserProfile);
                 logger.warning("adminMsgPayload" + adminMsgPayload);
                 facebook.sendMessage(adminMsgPayload);
                 UserOfy.save(user);

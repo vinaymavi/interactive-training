@@ -57,12 +57,16 @@ public class PayloadHelper {
     }
 
     private void processNextAction() {
-        switch (nextAction) {
+        logger.warning("Next Action = "+this.nextAction);
+        switch (this.nextAction) {
             case "SEND_WELCOME_MESSAGE":
                 User user = UserOfy.loadBySenderId(this.senderId);
                 String welcomeStr = ConversationMessage.welcomeMessage(user, this.senderId);
                 Facebook facebook = new Facebook();
                 facebook.sendMessage(welcomeStr);
+                break;
+            case "NONE":
+                logger.warning("No Action required.");
                 break;
             default:
                 logger.warning("un-known next action");

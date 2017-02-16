@@ -41,7 +41,7 @@ public class ConversationMessage {
         quickReplies.add(wrongInfoQuickReply);
 
         message.put("quick_replies", quickReplies);
-        message.put("text", "Admin Message to register user. Facebook Id - " + webhookPushData.getEntry().get(0)
+        message.put("text", "ADMIN|NEW_USER|Facebook Id - " + webhookPushData.getEntry().get(0)
                 .getMessaging().get(0).getMessage().getText());
         textMessage.setMessage(message);
         textMessage.setRecipient(adminId);
@@ -51,11 +51,11 @@ public class ConversationMessage {
     public static String newUserInfoToAdminButtonTemplate(WebhookPushData webhookPushData, FbUserProfile
             fbUserProfile) {
         String adminId = "1405055952852003";
-        String text = "Admin Message to register user. Facebook Id - " + webhookPushData.getEntry().get(0)
+        String text = "ADMIN|NEW_USER|Facebook Id - " + webhookPushData.getEntry().get(0)
                 .getMessaging().get(0).getMessage().getText();
         MessageEntry messageEntry = webhookPushData.getEntry().get(0).getMessaging().get(0);
         List<ButtonPayload> buttonPayloads = new ArrayList<>();
-        buttonPayloads.add(new ButtonPayload("Done", "ADMIN_MESSAGE:REGISTRATION:SUCCESS:SEND_MESSAGE:" +
+        buttonPayloads.add(new ButtonPayload("Done", "ADMIN_MESSAGE:REGISTRATION:SUCCESS:SEND_WELCOME_MESSAGE:" +
                 messageEntry.getSender().get("id") + ""));
         buttonPayloads.add(new ButtonPayload("WrongInfo", "ADMIN_MESSAGE:REGISTRATION:FAILURE:NONE:" + messageEntry
                 .getSender().get("id") + ""));
