@@ -7,6 +7,7 @@ import entity.webhook.facebook.Message;
 import entity.webhook.facebook.MessageEntry;
 import entity.webhook.facebook.WebhookPushData;
 import helper.FacebookHelper;
+import helper.PayloadHelper;
 import persist.UserOfy;
 import send.ConversationMessage;
 import send.Facebook;
@@ -35,6 +36,7 @@ public class CheckAndRegisterFbUser extends HttpServlet {
         String senderId = messageEntry.getSender().get("id");
         User user = null;
         FbUserProfile fbUserProfile = null;
+        PayloadHelper payloadHelper;
 
         Map<String, String> quickReplies = webhookPushData.getEntry().get(0).getMessaging().get(0).getMessage().getQuick_reply();
         String quickReplyPayload = null;
@@ -57,12 +59,15 @@ public class CheckAndRegisterFbUser extends HttpServlet {
                 String adminMsgPayload = ConversationMessage.newUserInfoTOAdmin(webhookPushData, fbUserProfile);
                 logger.warning("adminMsgPayload" + adminMsgPayload);
                 facebook.sendMessage(adminMsgPayload);
+                UserOfy.save(user);
             } else {
                 logger.warning("User Already registered");
             }
         } else {
             user = UserOfy.loadBySenderId(senderId);
             payloadItems = quickReplyPayload.split(":");
+            payloadHelper = new PayloadHelper(payloadItems);
+            payloadHelper.processPayload();
             logger.warning("payloadItems[0]=" + payloadItems[0]);
         }
 
