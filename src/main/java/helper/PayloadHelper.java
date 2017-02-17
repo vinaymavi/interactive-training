@@ -13,21 +13,21 @@ import java.util.logging.Logger;
 public class PayloadHelper {
 
     private static Logger logger = Logger.getLogger(PayloadHelper.class.getName());
-    private static final String ADMIN_PAYLOAD = "ADMIN_MESSAGE";
     private String from;
     private String action;
     private String status;
     private String nextAction;
+    private String messengerId;
     private String senderId;
 
     public PayloadHelper(String[] payloadItems) {
-//        "payload":"ADMIN_MESSAGE:REGISTRATION:SUCCESS:SEND_MESSAGE:null"
+//        "payload":"ADMIN_MESSAGE:REGISTRATION:SUCCESS:SEND_MESSAGE:NONE"
         if (payloadItems != null || payloadItems.length >= 5) {
             this.from = payloadItems[0];
             this.action = payloadItems[1];
             this.status = payloadItems[2];
             this.nextAction = payloadItems[3];
-            this.senderId = payloadItems[4];
+            this.messengerId = payloadItems[4];
         } else {
             logger.warning("payload is null or not complete");
         }
@@ -35,7 +35,7 @@ public class PayloadHelper {
 
     public void processPayload() {
         switch (this.from) {
-            case PayloadHelper.ADMIN_PAYLOAD:
+            case "ADMIN_MESSAGE":
                 this.processAction();
                 this.processNextAction();
                 break;
@@ -47,9 +47,24 @@ public class PayloadHelper {
     private void processAction() {
         switch (this.action) {
             case "REGISTRATION":
-                User user = UserOfy.loadBySenderId(this.senderId);
+                User user = UserOfy.loadBySenderId(this.messengerId);
                 user.setRegistered(true);
                 UserOfy.save(user);
+                break;
+            case "LIST_QUIZ":
+                logger.warning("List quiz.");
+                break;
+            case "LIST_SESSION":
+                logger.warning("List session.");
+                break;
+            case "LIST_CURRENT_SESSION":
+                logger.warning("List current session.");
+                break;
+            case "HELP":
+                logger.warning("List help.");
+                break;
+            case "LIST_MY_SESSION":
+                logger.warning("List my session.");
                 break;
             default:
                 logger.warning("un-known action");
@@ -59,8 +74,8 @@ public class PayloadHelper {
     private void processNextAction() {
         switch (nextAction) {
             case "SEND_WELCOME_MESSAGE":
-                User user = UserOfy.loadBySenderId(this.senderId);
-                String welcomeStr = ConversationMessage.welcomeMessage(user, this.senderId);
+                User user = UserOfy.loadBySenderId(this.messengerId);
+                String welcomeStr = ConversationMessage.welcomeMessage(user, this.messengerId);
                 Facebook facebook = new Facebook();
                 facebook.sendMessage(welcomeStr);
                 break;
