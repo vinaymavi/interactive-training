@@ -60,7 +60,7 @@ public class WebhookPushData {
 
     @OnSave
     public void renameCoordinates() {
-        List<Attachment> attachmentList;
+        List<Attachment> attachmentList = null;
         List<MessageEntry> messageEntries;
         Map<String, Object> payload;
         for (DataEntry dataEntry : entry) {
@@ -70,8 +70,9 @@ public class WebhookPushData {
                 if (messageEntry.getSender() != null) {
                     this.senderId = messageEntry.getSender().get("id");
                 }
-
-                attachmentList = messageEntry.getMessage().getAttachments();
+                if (messageEntry.getMessage() != null) {
+                    attachmentList = messageEntry.getMessage().getAttachments();
+                }
                 if (attachmentList != null) {
                     for (Attachment attachment :
                             attachmentList) {

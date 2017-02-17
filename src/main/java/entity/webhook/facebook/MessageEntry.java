@@ -10,6 +10,7 @@ import java.util.Map;
 public class MessageEntry {
     private Map<String,String> sender;
     private Map<String,String> recipient;
+    private Map<String,String> postback;
     private double timestamp;
     private Message message;
 
@@ -46,5 +47,13 @@ public class MessageEntry {
 
     public void setMessage(Message message) {
         this.message = message;
+    }
+
+    public Map<String, String> getPostback() {
+        return postback;
+    }
+
+    public void setPostback(Map<String, String> postback) {
+        this.postback = postback;
     }
 }
