@@ -48,6 +48,7 @@ public class PayloadHelper {
         Quiz quiz;
         List<Question> questionList;
         TextMessage textMessage;
+        List<TextMessage> textMessageList;
         switch (this.payload.getAction()) {
             case "REGISTRATION":
                 User user = UserOfy.loadBySenderId(this.payload.getMessengerId());
@@ -94,8 +95,13 @@ public class PayloadHelper {
                 quizId = (String) other.get("quizId");
                 quiz = QuizOfy.loadById(quizId);
                 questionList = QuestionOfy.questionListByQuiz(quiz);
-                textMessage = QuestionHelper.textMessage(questionList.get(0), 0, this.payload.getSenderId());
-                facebook.sendMessage(gson.toJson(textMessage));
+                textMessageList = QuestionHelper.textMessage(questionList.get(0), 0, this.payload
+                        .getSenderId());
+                for (int i = 0; i < textMessageList.size(); i++) {
+                    textMessage = textMessageList.get(i);
+                    facebook.sendMessage(gson.toJson(textMessage));
+                }
+
                 break;
             case "ADD_ANSWER":
                 logger.warning("add answer");

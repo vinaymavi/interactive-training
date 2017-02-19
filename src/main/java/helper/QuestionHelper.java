@@ -61,26 +61,37 @@ public class QuestionHelper {
      * @param senderId      {String}
      * @return
      */
-    public static TextMessage textMessage(Question question, int questionIndex, String senderId) {
+    public static List<TextMessage> textMessage(Question question, int questionIndex, String senderId) {
         List<QuickReply> quickReplies = new ArrayList<>();
         QuickReply quickReply;
         Payload payload;
 
         List<Option> options = question.getOptions();
         Option option;
+        TextMessage textMessage;
+        List<TextMessage> textMessageList = new ArrayList<>();
+
+        // Question textMessage.
+        textMessage = new TextMessage(question.getDesc());
+        textMessageList.add(textMessage);
+        textMessage.setRecipient(senderId);
+
+        // Option text message.
         for (int i = 0; i < options.size(); i++) {
             option = options.get(i);
-            quickReply = new QuickReply(option.getContent());
+            quickReply = new QuickReply(" " + (i + 1) + " ");
             payload = new Payload("ADD_ANSWER", "SEND_NEXT_QUESTION");
             payload.setOther("questionId", question.getQuestionId());
             payload.setOther("isRight", option.isRight());
             payload.setOther("questionIndex", questionIndex);
             quickReply.setPayload(gson.toJson(payload));
             quickReplies.add(quickReply);
+            textMessage = new TextMessage("#" + (i + 1) + "    " + option.getContent(), quickReplies);
+            textMessage.setRecipient(senderId);
+            textMessageList.add(textMessage);
         }
 
-        TextMessage textMessage = new TextMessage(question.getDesc(), quickReplies);
-        textMessage.setRecipient(senderId);
-        return textMessage;
+
+        return textMessageList;
     }
 }
