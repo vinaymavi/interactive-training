@@ -22,6 +22,7 @@ public class Question {
     @Load
     private Ref<Slide> slideRef;
     @Load
+    @Index
     private Ref<Quiz> quizRef;
     List<Option> options;
     @Parent
@@ -78,8 +79,8 @@ public class Question {
         return quizRef.get();
     }
 
-    public void setQuizRef(Ref<Quiz> quizRef) {
-        this.quizRef = quizRef;
+    public void setQuizRef(Quiz quizRef) {
+        this.quizRef = Ref.create(quizRef);
     }
 
     public List<Option> getOptions() {

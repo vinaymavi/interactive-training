@@ -61,8 +61,13 @@ public class QuestionOfy {
     }
 
     public static List<Question> questionListByQuiz(Quiz quiz) {
-        logger.warning("Quiz name=" + quiz.getName());
-        return ofy().load().type(Question.class).ancestor(quiz).filter("questionNature", "quiz").list();
+        logger.info("Quiz name=" + quiz.getName());
+        List<Question> questionList = ofy().load().type(Question.class).filter("quizRef", quiz).filter("questionNature",
+                "quiz").list();
+        if (questionList.size() == 0) {
+            logger.warning("Empty list");
+        }
+        return questionList;
     }
 
 

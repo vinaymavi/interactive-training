@@ -30,4 +30,13 @@ public class QuizOfy {
         quizs = ofy().load().type(Quiz.class).list();
         return quizs;
     }
+
+    /**
+     * @param quizId {String}
+     * @return {Quiz}
+     */
+    public static Quiz loadById(String quizId) {
+        logger.info("quizId = " + quizId);
+        return ofy().load().type(Quiz.class).filter("quizId", quizId).first().safe();
+    }
 }

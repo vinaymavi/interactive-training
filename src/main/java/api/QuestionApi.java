@@ -4,14 +4,12 @@ import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.Named;
 import com.google.api.server.spi.config.Nullable;
-import entity.Option;
-import entity.Presentation;
-import entity.Question;
-import entity.Slide;
+import entity.*;
 import helper.AuthHelper;
 import helper.QuestionHelper;
 import persist.PresentationOfy;
 import persist.QuestionOfy;
+import persist.QuizOfy;
 import persist.SlideOfy;
 
 import java.util.List;
@@ -33,24 +31,37 @@ public class QuestionApi {
     private static Logger logger = Logger.getLogger(QuestionApi.class.getName());
 
     @ApiMethod(name = "question.create", path = "question_create")
-    public Question create(@Named("token") String token, @Nullable @Named("slide") String slideId, @Named("presentationId") String pId, Question question) {
+    public Question create(@Named("token") String token, @Nullable @Named("slide") String slideId, @Nullable @Named
+            ("presentationId") String pId, @Nullable @Named("quizId") String quizId, Question question) {
+
         question.setQuestionId(AuthHelper.createToken());
-        if (slideId != null & slideId instanceof String) {
-            Slide slide = SlideOfy.loadBySlideId(slideId);
-            question.setSlideRef(slide);
+        Slide slide;
+        Presentation presentation;
+        Quiz quiz;
+        if (slideId == null && pId == null && quizId == null) {
+            logger.severe("SlideId,PresentationId,QuizId at-least one required");
+            return null;
         }
-        if (question.getQuestionNature() != null & question.getQuestionNature().equals("question")) {
+
+        if (slideId != null && slideId instanceof String) {
+            slide = SlideOfy.loadBySlideId(slideId);
+            question.setSlideRef(slide);
+        } else if (pId != null && pId instanceof String) {
+            presentation = PresentationOfy.loadByPresentationId(pId);
+            question.setPresentationRef(presentation);
+        } else if (quizId != null && quizId instanceof String) {
+            quiz = QuizOfy.loadById(quizId);
+            question.setQuizRef(quiz);
+        }
+
+        if (question.getQuestionNature() != null && question.getQuestionNature().equals("feedback")) {
+            question.setOptions(QuestionHelper.createFeedbackOptions(question.getQuestionType()));
+        } else {
             Option rightOption = QuestionHelper.getRightOptions(question.getOptions());
             question.setRightOption(rightOption);
-        } else {
-            question.setOptions(QuestionHelper.createFeedbackOptions(question.getQuestionType()));
         }
-        Presentation presentation = PresentationOfy.loadByPresentationId(pId);
-        if (presentation != null) {
-            question.setPresentationRef(presentation);
-            return QuestionOfy.loadByKey(QuestionOfy.save(question));
-        }
-        return null;
+
+        return QuestionOfy.loadByKey(QuestionOfy.save(question));
     }
 
     @ApiMethod(name = "question.list.slide", path = "question_list_slide")
@@ -65,4 +76,12 @@ public class QuestionApi {
         Presentation presentation = PresentationOfy.loadByPresentationId(pId);
         return QuestionOfy.listByPresentation(presentation);
     }
+
+    @ApiMethod(name = "question.list.quiz", path = "question_list_quiz")
+    public List<Question> questionQuizList(@Named("token") String token, @Named("quizId") String quizId) {
+        logger.info("quizId =" + quizId);
+        Quiz quiz = QuizOfy.loadById(quizId);
+        return QuestionOfy.questionListByQuiz(quiz);
+    }
+
 }
