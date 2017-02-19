@@ -6,6 +6,7 @@ import entity.webhook.facebook.FbUserProfile;
 import entity.webhook.facebook.MessageEntry;
 import entity.webhook.facebook.WebhookPushData;
 import send.button.ButtonPayload;
+import send.payload.Payload;
 import send.template.ButtonTemplate;
 
 import java.util.ArrayList;
@@ -29,20 +30,24 @@ public class ConversationMessage {
         TextMessage textMessage = new TextMessage();
         MessageEntry messageEntry = webhookPushData.getEntry().get(0).getMessaging().get(0);
         Map<String, Object> message = new HashMap<>();
-        Map<String, String> text = new HashMap<>();
-
+        Payload payload;
         List<QuickReply> quickReplies = new ArrayList<>();
         QuickReply doneQuickReply = new QuickReply("text", "Done");
-        doneQuickReply.setPayload("ADMIN_MESSAGE:REGISTRATION:SUCCESS:SEND_WELCOME_MESSAGE:" + messageEntry.getSender
-                ().get("id") + "");
+        payload = new Payload("REGISTRATION", "SEND_WELCOME_MESSAGE", messageEntry.getSender().get("id"));
+        payload.setMessengerId(messageEntry.getSender().get("id"));
+        doneQuickReply.setPayload(gson.toJson(payload));
 
         QuickReply wrongInfoQuickReply = new QuickReply("text", "WrongInfo");
-        wrongInfoQuickReply.setPayload("ADMIN_MESSAGE:NONE:FAILURE:NONE:" + messageEntry.getSender().get("id") + "");
+        payload = new Payload("NONE", "NONE", messageEntry.getSender().get("id"));
+        payload.setMessengerId(messageEntry.getSender().get("id"));
+        wrongInfoQuickReply.setPayload(gson.toJson(payload));
+
         quickReplies.add(doneQuickReply);
         quickReplies.add(wrongInfoQuickReply);
 
         message.put("quick_replies", quickReplies);
-        message.put("text", "ADMIN|NEW_USER|Facebook Id - " + webhookPushData.getEntry().get(0)
+        message.put("text", "NEW_USER|Name - " + fbUserProfile.getFirst_name() + " " + fbUserProfile.getLast_name() +
+                " |Facebook Id - " + webhookPushData.getEntry().get(0)
                 .getMessaging().get(0).getMessage().getText());
         textMessage.setMessage(message);
         textMessage.setRecipient(adminId);
@@ -52,14 +57,18 @@ public class ConversationMessage {
     public static String newUserInfoToAdminButtonTemplate(WebhookPushData webhookPushData, FbUserProfile
             fbUserProfile) {
         String adminId = "1405055952852003";
-        String text = "ADMIN|NEW_USER|Facebook Id - " + webhookPushData.getEntry().get(0)
+        Payload payload;
+        String text = "NEW_USER|Name - " + fbUserProfile.getFirst_name() + " " + fbUserProfile.getLast_name() +
+                "| Facebook Id - " + webhookPushData.getEntry().get(0)
                 .getMessaging().get(0).getMessage().getText();
         MessageEntry messageEntry = webhookPushData.getEntry().get(0).getMessaging().get(0);
         List<ButtonPayload> buttonPayloads = new ArrayList<>();
-        buttonPayloads.add(new ButtonPayload("Done", "ADMIN_MESSAGE:REGISTRATION:SUCCESS:SEND_WELCOME_MESSAGE:" +
-                messageEntry.getSender().get("id") + ""));
-        buttonPayloads.add(new ButtonPayload("WrongInfo", "ADMIN_MESSAGE:REGISTRATION:FAILURE:NONE:" + messageEntry
-                .getSender().get("id") + ""));
+        payload = new Payload("REGISTRATION", "SEND_WELCOME_MESSAGE", messageEntry.getSender().get("id"));
+        payload.setMessengerId(messageEntry.getSender().get("id"));
+        buttonPayloads.add(new ButtonPayload("Done", gson.toJson(payload)));
+        payload = new Payload("NONE", "NONE", messageEntry.getSender().get("id"));
+        payload.setMessengerId(messageEntry.getSender().get("id"));
+        buttonPayloads.add(new ButtonPayload("WrongInfo", gson.toJson(payload)));
         ButtonTemplate buttonTemplate = new ButtonTemplate(adminId, text, buttonPayloads);
         return gson.toJson(buttonTemplate);
     }

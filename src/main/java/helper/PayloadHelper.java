@@ -9,6 +9,7 @@ import send.ConversationMessage;
 import send.Facebook;
 import send.QuickReply;
 import send.TextMessage;
+import send.payload.Payload;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,30 +23,14 @@ public class PayloadHelper {
     private static Logger logger = Logger.getLogger(PayloadHelper.class.getName());
     private static final Gson gson = new Gson();
     private static final Facebook facebook = new Facebook();
-    private String from;
-    private String action;
-    private String status;
-    private String nextAction;
-    private String messengerId;
-    private String senderId;
+    private Payload payload;
 
-    public PayloadHelper(String[] payloadItems, String senderId) {
-//        TODO payload should be a class.
-//        "payload":"ADMIN_MESSAGE:REGISTRATION:SUCCESS:SEND_MESSAGE:null"
-        if (payloadItems != null && payloadItems.length >= 5) {
-            this.from = payloadItems[0];
-            this.action = payloadItems[1];
-            this.status = payloadItems[2];
-            this.nextAction = payloadItems[3];
-            this.messengerId = payloadItems[4];
-            this.senderId = senderId;
-        } else {
-            logger.warning("payload is null or not complete");
-        }
+    public PayloadHelper(Payload payload) {
+        this.payload = payload;
     }
 
     public void processPayload() {
-        switch (this.from) {
+        switch (this.payload.getFrom()) {
             case "ADMIN_MESSAGE":
                 this.processAction();
                 this.processNextAction();
@@ -56,24 +41,24 @@ public class PayloadHelper {
     }
 
     private void processAction() {
-        switch (this.action) {
+        switch (this.payload.getAction()) {
             case "REGISTRATION":
-                User user = UserOfy.loadBySenderId(this.messengerId);
+                User user = UserOfy.loadBySenderId(this.payload.getMessengerId());
                 user.setRegistered(true);
                 UserOfy.save(user);
                 break;
             case "LIST_QUIZ":
 //                TODO move this code quiz helper.
                 List<Quiz> quizList = QuizOfy.list();
-                if(quizList.size() >0){
+                if (quizList.size() > 0) {
                     QuizHelper quizHelper = new QuizHelper(quizList);
                     String msgPayload;
                     TextMessage textMessage = new TextMessage(QUIZ_LIST_MESSAGE, quizHelper.quickReplies(true));
-                    textMessage.setRecipient(senderId);
+                    textMessage.setRecipient(this.payload.getSenderId());
                     msgPayload = gson.toJson(textMessage);
-                    logger.info("message = "+ msgPayload);
+                    logger.info("message = " + msgPayload);
                     facebook.sendMessage(msgPayload);
-                }else{
+                } else {
                     logger.warning("No quiz found");
                 }
 
@@ -97,11 +82,11 @@ public class PayloadHelper {
     }
 
     private void processNextAction() {
-        logger.warning("Next Action = " + this.nextAction);
-        switch (this.nextAction) {
+        logger.warning("Next Action = " + this.payload.getNextAction());
+        switch (this.payload.getNextAction()) {
             case "SEND_WELCOME_MESSAGE":
-                User user = UserOfy.loadBySenderId(this.messengerId);
-                String welcomeStr = ConversationMessage.welcomeMessage(user, this.messengerId);
+                User user = UserOfy.loadBySenderId(this.payload.getMessengerId());
+                String welcomeStr = ConversationMessage.welcomeMessage(user, this.payload.getMessengerId());
                 Facebook facebook = new Facebook();
                 facebook.sendMessage(welcomeStr);
                 break;

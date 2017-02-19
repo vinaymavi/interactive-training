@@ -1,7 +1,9 @@
 package helper;
 
+import com.google.gson.Gson;
 import entity.Quiz;
 import send.QuickReply;
+import send.payload.Payload;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +12,10 @@ import java.util.List;
  * Created by vinaymavi on 19/02/17.
  */
 public class QuizHelper {
+    private static final Gson gson = new Gson();
     private Quiz quiz;
     private List<Quiz> quizs;
+    Payload payload;
 
     public QuizHelper(Quiz quiz) {
         this.quiz = quiz;
@@ -32,7 +36,8 @@ public class QuizHelper {
         QuickReply quickReply;
         for (Quiz quiz : this.quizs) {
             quickReply = new QuickReply(quiz.getName());
-            quickReply.setPayload("ADMIN_MESSAGE:QUIZ_INFO:OK:NONE:NONE:NONE");
+            payload = new Payload("QUIZ_INFO", "NONE");
+            quickReply.setPayload(gson.toJson(payload));
             quickReplies.add(quickReply);
         }
         return quickReplies;
@@ -46,7 +51,8 @@ public class QuizHelper {
     public List<QuickReply> quickReplies() {
         List<QuickReply> quickReplies = new ArrayList<>();
         QuickReply quickReply = new QuickReply(this.quiz.getName());
-        quickReply.setPayload("ADMIN_MESSAGE:QUIZ_INFO:OK:NONE:NONE:NONE");
+        payload = new Payload("QUIZ_INFO", "NONE");
+        quickReply.setPayload(gson.toJson(payload));
         quickReplies.add(quickReply);
         return quickReplies;
     }
