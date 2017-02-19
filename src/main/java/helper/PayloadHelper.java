@@ -1,8 +1,10 @@
 package helper;
 
 import com.google.gson.Gson;
+import entity.Question;
 import entity.Quiz;
 import entity.User;
+import persist.QuestionOfy;
 import persist.QuizOfy;
 import persist.UserOfy;
 import send.ConversationMessage;
@@ -13,10 +15,11 @@ import send.payload.Payload;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
- * Created by vku131 on 2/15/17.
+ * Payload helper main class the process all webhook requests payload.
  */
 public class PayloadHelper {
     private static final String QUIZ_LIST_MESSAGE = "Please select quiz from bubble list.";
@@ -41,6 +44,10 @@ public class PayloadHelper {
     }
 
     private void processAction() {
+        String quizId;
+        Quiz quiz;
+        List<Question> questionList;
+        TextMessage textMessage;
         switch (this.payload.getAction()) {
             case "REGISTRATION":
                 User user = UserOfy.loadBySenderId(this.payload.getMessengerId());
@@ -53,7 +60,7 @@ public class PayloadHelper {
                 if (quizList.size() > 0) {
                     QuizHelper quizHelper = new QuizHelper(quizList);
                     String msgPayload;
-                    TextMessage textMessage = new TextMessage(QUIZ_LIST_MESSAGE, quizHelper.quickReplies(true));
+                    textMessage = new TextMessage(QUIZ_LIST_MESSAGE, quizHelper.quickReplies(true));
                     textMessage.setRecipient(this.payload.getSenderId());
                     msgPayload = gson.toJson(textMessage);
                     logger.info("message = " + msgPayload);
@@ -61,8 +68,6 @@ public class PayloadHelper {
                 } else {
                     logger.warning("No quiz found");
                 }
-
-
                 break;
             case "LIST_SESSION":
                 logger.warning("List sessions.");
@@ -75,6 +80,25 @@ public class PayloadHelper {
                 break;
             case "LIST_MY_SESSION":
                 logger.warning("List my session.");
+                break;
+            case "QUIZ_INFO":
+                logger.warning("Send Quiz info");
+                quizId = (String) this.payload.getOther().get("quizId");
+                quiz = QuizOfy.loadById(quizId);
+                QuizHelper quizHelper = new QuizHelper(quiz);
+                textMessage = quizHelper.quizInfo(this.payload.getSenderId());
+                facebook.sendMessage(gson.toJson(textMessage));
+                break;
+            case "START_QUIZ":
+                Map<String, Object> other = this.payload.getOther();
+                quizId = (String) other.get("quizId");
+                quiz = QuizOfy.loadById(quizId);
+                questionList = QuestionOfy.questionListByQuiz(quiz);
+                textMessage = QuestionHelper.textMessage(questionList.get(0), 0, this.payload.getSenderId());
+                facebook.sendMessage(gson.toJson(textMessage));
+                break;
+            case "ADD_ANSWER":
+                logger.warning("add answer");
                 break;
             default:
                 logger.warning("un-known action");
@@ -89,6 +113,9 @@ public class PayloadHelper {
                 String welcomeStr = ConversationMessage.welcomeMessage(user, this.payload.getMessengerId());
                 Facebook facebook = new Facebook();
                 facebook.sendMessage(welcomeStr);
+                break;
+            case "SEND_NEXT_QUESTION":
+                logger.warning("SEND_NEXT_QUESTION to user");
                 break;
             case "NONE":
                 logger.warning("No Action required.");

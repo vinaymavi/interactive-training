@@ -4,12 +4,14 @@ import com.google.gson.Gson;
 import entity.Option;
 import entity.Question;
 import entity.User;
+import send.QuickReply;
 import send.TextMessage;
+import send.payload.Payload;
 
 import java.util.*;
 
 /**
- * Created by vku131 on 1/25/17.
+ * Question entity helper functions.
  */
 public class QuestionHelper {
     private static Gson gson = new Gson();
@@ -41,6 +43,7 @@ public class QuestionHelper {
         return optionList;
     }
 
+    @Deprecated
     public static String createFbTextMsg(User user, Question question) {
         Map<String, String> recipient = new HashMap<>();
         Map<String, Object> msgMap = new HashMap<>();
@@ -52,4 +55,32 @@ public class QuestionHelper {
         return gson.toJson(textMessage);
     }
 
+    /**
+     * @param question      {Question}
+     * @param questionIndex {Int} list index of question.
+     * @param senderId      {String}
+     * @return
+     */
+    public static TextMessage textMessage(Question question, int questionIndex, String senderId) {
+        List<QuickReply> quickReplies = new ArrayList<>();
+        QuickReply quickReply;
+        Payload payload;
+
+        List<Option> options = question.getOptions();
+        Option option;
+        for (int i = 0; i < options.size(); i++) {
+            option = options.get(i);
+            quickReply = new QuickReply(option.getContent());
+            payload = new Payload("ADD_ANSWER", "SEND_NEXT_QUESTION");
+            payload.setOther("questionId", question.getQuestionId());
+            payload.setOther("isRight", option.isRight());
+            payload.setOther("questionIndex", questionIndex);
+            quickReply.setPayload(gson.toJson(payload));
+            quickReplies.add(quickReply);
+        }
+
+        TextMessage textMessage = new TextMessage(question.getDesc(), quickReplies);
+        textMessage.setRecipient(senderId);
+        return textMessage;
+    }
 }

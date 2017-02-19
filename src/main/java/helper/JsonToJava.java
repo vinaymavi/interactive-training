@@ -3,11 +3,11 @@ package helper;
 import entity.webhook.facebook.WebhookPushData;
 
 /**
- * Created by vku131 on 2/9/17.
+ * TODO need to check what is the use of this class.
  */
 public class JsonToJava {
-    public static WebhookPushData toFacebookPushData(String json){
+    public static WebhookPushData toFacebookPushData(String json) {
         com.google.gson.Gson gson = new com.google.gson.Gson();
-        return gson.fromJson(json,WebhookPushData.class);
+        return gson.fromJson(json, WebhookPushData.class);
     }
 }

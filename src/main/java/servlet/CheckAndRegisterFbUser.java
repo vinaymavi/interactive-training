@@ -3,7 +3,6 @@ package servlet;
 import com.google.gson.Gson;
 import entity.User;
 import entity.webhook.facebook.FbUserProfile;
-import entity.webhook.facebook.Message;
 import entity.webhook.facebook.MessageEntry;
 import entity.webhook.facebook.WebhookPushData;
 import helper.FacebookHelper;
@@ -17,12 +16,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
 /**
- * Created by vku131 on 2/15/17.
+ * Task queue call this servlet to process webhook request.
  */
 public class CheckAndRegisterFbUser extends HttpServlet {
     private static Gson gson = new Gson();
@@ -62,7 +60,7 @@ public class CheckAndRegisterFbUser extends HttpServlet {
             user = UserOfy.loadBySenderId(senderId);
             if (fbUserProfile != null) {
                 logger.warning("fbUserProfile created");
-                user = FacebookHelper.UserProfileToUser(fbUserProfile, user, senderId);
+                user = FacebookHelper.FbUserProfileToUser(fbUserProfile, user, senderId);
             }
             if (!user.isRegistered()) {
                 String adminMsgPayload = ConversationMessage.newUserInfoToAdminButtonTemplate(webhookPushData,
@@ -89,34 +87,8 @@ public class CheckAndRegisterFbUser extends HttpServlet {
 
     public void doGet(HttpServletRequest req, HttpServletResponse resp) {
         Payload payload;
-        /**
-         * {
-         "type":"postback",
-         "title":"Quizes",
-         "payload":"ADMIN_MESSAGE:LIST_QUIZ:NONE:NONE:NONE"
-         },
-         {
-         "type":"postback",
-         "title":"Current Sessions",
-         "payload":"ADMIN_MESSAGE:LIST_CURRENT_SESSION:NONE:NONE:NONE"
-         },
-         {
-         "type":"postback",
-         "title":"Upcoming Sessions",
-         "payload":"ADMIN_MESSAGE:LIST_SESSION:NONE:NONE:NONE"
-         },
-         {
-         "type":"postback",
-         "title":"My Sessions",
-         "payload":"ADMIN_MESSAGE:LIST_MY_SESSION:NONE:NONE:NONE"
-         },
-         {
-         "type":"postback",
-         "title":"Help",
-         "payload":"ADMIN_MESSAGE:HELP:NONE:NONE:NONE"
-         }
-         */
         try {
+//            Given payload only for testing.
             payload = new Payload("LIST_QUIZ", "NONE");
             logger.info("LIST_QUIZ = " + gson.toJson(payload));
             payload = new Payload("LIST_CURRENT_SESSION", "NONE");
@@ -129,7 +101,7 @@ public class CheckAndRegisterFbUser extends HttpServlet {
             logger.info("HELP = " + gson.toJson(payload));
             payload = gson.fromJson("{\"from\":\"ADMIN_MESSAGE\",\"action\":\"LIST_QUIZ\",\"nextAction\":\"NONE\"," +
                     "\"other\":{}}", Payload.class);
-            logger.info("Object to JSON"+gson.toJson(payload));
+            logger.info("Object to JSON" + gson.toJson(payload));
             resp.getWriter().write("<h1>CheckAndRegister is working.</h1>");
         } catch (IOException ioe) {
             logger.warning(ioe.getMessage());

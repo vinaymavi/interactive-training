@@ -3,6 +3,7 @@ package helper;
 import com.google.gson.Gson;
 import entity.Quiz;
 import send.QuickReply;
+import send.TextMessage;
 import send.payload.Payload;
 
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ public class QuizHelper {
         for (Quiz quiz : this.quizs) {
             quickReply = new QuickReply(quiz.getName());
             payload = new Payload("QUIZ_INFO", "NONE");
+            payload.setOther("quizId", quiz.getQuizId());
             quickReply.setPayload(gson.toJson(payload));
             quickReplies.add(quickReply);
         }
@@ -52,8 +54,30 @@ public class QuizHelper {
         List<QuickReply> quickReplies = new ArrayList<>();
         QuickReply quickReply = new QuickReply(this.quiz.getName());
         payload = new Payload("QUIZ_INFO", "NONE");
+        payload.setOther("quizId", quiz.getQuizId());
         quickReply.setPayload(gson.toJson(payload));
         quickReplies.add(quickReply);
         return quickReplies;
+    }
+
+    public TextMessage quizInfo(String senderId) {
+        List<QuickReply> quickReplies = new ArrayList<>();
+        QuickReply quickReply;
+        Payload payload;
+        String msg = "Name = " + this.quiz.getName() + ", Desc = " + this.quiz.getDesc();
+        quickReply = new QuickReply("Start");
+        payload = new Payload("START_QUIZ", "NONE");
+        payload.setOther("quizId", this.quiz.getQuizId());
+        quickReply.setPayload(gson.toJson(payload));
+        quickReplies.add(quickReply);
+
+        quickReply = new QuickReply("Back");
+        payload = new Payload("LIST_QUIZ", "NONE");
+        quickReply.setPayload(gson.toJson(payload));
+        quickReplies.add(quickReply);
+
+        TextMessage textMessage = new TextMessage(msg, quickReplies);
+        textMessage.setRecipient(senderId);
+        return textMessage;
     }
 }

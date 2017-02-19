@@ -20,7 +20,7 @@ public class Payload {
      */
     private String messengerId;
     private String senderId;
-    private Map<String, String> other;
+    private Map<String, Object> other;
 
     public Payload() {
     }
@@ -90,7 +90,7 @@ public class Payload {
         this.senderId = senderId;
     }
 
-    public Map<String, String> getOther() {
+    public Map<String, Object> getOther() {
         return other;
     }
 
@@ -99,7 +99,7 @@ public class Payload {
      * @param key {String}
      * @param value {String}
      */
-    public void setOther(String key, String value) {
+    public void setOther(String key, Object value) {
         this.other.put(key, value);
     }
 }
