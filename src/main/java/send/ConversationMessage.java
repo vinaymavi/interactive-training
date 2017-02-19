@@ -33,7 +33,8 @@ public class ConversationMessage {
 
         List<QuickReply> quickReplies = new ArrayList<>();
         QuickReply doneQuickReply = new QuickReply("text", "Done");
-        doneQuickReply.setPayload("ADMIN_MESSAGE:REGISTRATION:SUCCESS:SEND_WELCOME_MESSAGE:" + messageEntry.getSender().get("id") + "");
+        doneQuickReply.setPayload("ADMIN_MESSAGE:REGISTRATION:SUCCESS:SEND_WELCOME_MESSAGE:" + messageEntry.getSender
+                ().get("id") + "");
 
         QuickReply wrongInfoQuickReply = new QuickReply("text", "WrongInfo");
         wrongInfoQuickReply.setPayload("ADMIN_MESSAGE:NONE:FAILURE:NONE:" + messageEntry.getSender().get("id") + "");
@@ -68,7 +69,7 @@ public class ConversationMessage {
         Map<String, Object> message = new HashMap<>();
         String welcomeStr;
 
-        message.put("text", "Hey "+user.getFirstName()+"," +
+        message.put("text", "Hey " + user.getFirstName() + "," +
                 "you have been registered successfully. Thank you for registration :)");
         textMessage.setRecipient(senderId);
         textMessage.setMessage(message);

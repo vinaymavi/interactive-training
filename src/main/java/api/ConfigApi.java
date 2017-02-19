@@ -27,7 +27,7 @@ public class ConfigApi {
     Logger logger = Logger.getLogger(ConfigApi.class.getName());
 
     @ApiMethod(name = "config.save", path = "config_save", httpMethod = "POST")
-    public Config save(@Named("groupName") String groupName, @Named("name") String name, @Named("value") String value) {
+    public Config create(@Named("groupName") String groupName, @Named("name") String name, @Named("value") String value) {
         List<Config> configList = ConfigOfy.loadByGroupName(groupName.trim());
         Config config;
         Map<String, Object> configMap;

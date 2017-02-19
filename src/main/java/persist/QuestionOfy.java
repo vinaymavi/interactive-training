@@ -4,6 +4,7 @@ package persist;
 import com.googlecode.objectify.Key;
 import entity.Presentation;
 import entity.Question;
+import entity.Quiz;
 import entity.Slide;
 
 import java.util.List;
@@ -40,23 +41,28 @@ public class QuestionOfy {
     }
 
     public static List<Question> listBySlide(Slide slide) {
-//  TODO logging required.
+        logger.warning("Slide Index= " + slide.getIndex());
         return ofy().load().type(Question.class).ancestor(slide).list();
     }
 
     public static List<Question> listByPresentation(Presentation presentation) {
-        //  TODO logging required.
+        logger.warning("Presentation Name = " + presentation.getName());
         return ofy().load().type(Question.class).ancestor(presentation).list();
     }
 
     public static List<Question> feedbackListByPresentation(Presentation presentation) {
-        //  TODO logging required.
+        logger.warning("Presentation Name = " + presentation.getName());
         return ofy().load().type(Question.class).ancestor(presentation).filter("questionNature", "feedback").list();
     }
 
     public static List<Question> questionListByPresentation(Presentation presentation) {
-        //  TODO logging required.
+        logger.warning("Presentation Name = " + presentation.getName());
         return ofy().load().type(Question.class).ancestor(presentation).filter("questionNature", "question").list();
+    }
+
+    public static List<Question> questionListByQuiz(Quiz quiz) {
+        logger.warning("Quiz name=" + quiz.getName());
+        return ofy().load().type(Question.class).ancestor(quiz).filter("questionNature", "quiz").list();
     }
 
 

@@ -22,7 +22,7 @@ public class PayloadHelper {
 
     public PayloadHelper(String[] payloadItems) {
 //        "payload":"ADMIN_MESSAGE:REGISTRATION:SUCCESS:SEND_MESSAGE:null"
-        if (payloadItems != null || payloadItems.length >= 5) {
+        if (payloadItems != null && payloadItems.length >= 5) {
             this.from = payloadItems[0];
             this.action = payloadItems[1];
             this.status = payloadItems[2];

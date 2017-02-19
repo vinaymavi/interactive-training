@@ -18,6 +18,9 @@ public class AuthHelper {
 
     public Auth createAuth(String fbId) {
         User user = UserOfy.loadByFbId(fbId);
+        if(user == null){
+            logger.warning("No user found for fbId = "+fbId);
+        }
         String token = this.createToken();
         logger.info("token=" + token);
         Auth auth = new Auth();

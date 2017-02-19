@@ -31,6 +31,7 @@ public class OfyService {
         factory().register(Auth.class);
         factory().register(WebhookPushData.class);
         factory().register(Config.class);
+        factory().register(Quiz.class);
         logger.warning("Classes registered for Objectify service.");
     }
 

@@ -30,7 +30,7 @@ public class UserApi {
     Logger logger = Logger.getLogger(UserApi.class.getName());
 
     @ApiMethod(name = "user.create", httpMethod = ApiMethod.HttpMethod.POST, path = "user_create")
-    public User createUser(User user) {
+    public User create(User user) {
         logger.info(user.getFbId());
         Key<User> key = UserOfy.save(user);
         return UserOfy.loadByKey(key);
