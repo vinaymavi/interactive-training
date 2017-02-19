@@ -72,7 +72,7 @@ public class CheckAndRegisterFbUser extends HttpServlet {
         } else {
             user = UserOfy.loadBySenderId(senderId);
             payloadItems = quickReplyPayload.split(":");
-            payloadHelper = new PayloadHelper(payloadItems);
+            payloadHelper = new PayloadHelper(payloadItems,senderId);
             payloadHelper.processPayload();
             logger.warning("payloadItems[0]=" + payloadItems[0]);
         }

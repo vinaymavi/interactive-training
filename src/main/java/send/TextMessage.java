@@ -1,5 +1,7 @@
 package send;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -11,6 +13,12 @@ public class TextMessage extends Message {
     private Map<String, Object> message;
 
     public TextMessage() {
+    }
+
+    public TextMessage(String message, List<QuickReply> quickReplies) {
+        this.message = new HashMap<>();
+        this.message.put("text",message);
+        this.message.put("quick_replies",quickReplies);
     }
 
     public Map<String, Object> getMessage() {
