@@ -70,5 +70,9 @@ public class QuestionOfy {
         return questionList;
     }
 
+    public static Question loadByQuestionId(String questionId) {
+        logger.info("QuestionId = " + questionId);
+        return ofy().load().type(Question.class).filter("questionId", questionId).first().safe();
+    }
 
 }

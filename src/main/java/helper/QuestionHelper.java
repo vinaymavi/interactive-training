@@ -3,6 +3,7 @@ package helper;
 import com.google.gson.Gson;
 import entity.Option;
 import entity.Question;
+import entity.Quiz;
 import entity.User;
 import send.QuickReply;
 import send.TextMessage;
@@ -61,7 +62,7 @@ public class QuestionHelper {
      * @param senderId      {String}
      * @return
      */
-    public static List<TextMessage> textMessage(Question question, int questionIndex, String senderId) {
+    public static List<TextMessage> textMessage(Question question, Quiz quiz, int questionIndex, String senderId) {
         List<QuickReply> quickReplies = new ArrayList<>();
         QuickReply quickReply;
         Payload payload;
@@ -84,6 +85,7 @@ public class QuestionHelper {
             payload.setOther("questionId", question.getQuestionId());
             payload.setOther("isRight", option.isRight());
             payload.setOther("questionIndex", questionIndex);
+            payload.setOther("quizId", quiz.getQuizId());
             quickReply.setPayload(gson.toJson(payload));
             quickReplies.add(quickReply);
             textMessage = new TextMessage("#" + (i + 1) + "    " + option.getContent(), quickReplies);

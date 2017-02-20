@@ -2,28 +2,54 @@ package entity;
 
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.*;
+import helper.AuthHelper;
 
 import java.util.Date;
 
 /**
- * Created by vinaymavi on 27/06/15.
- *
- * @Description This is Answer Entity for Google Datastore.
+ * @Desc This answer entity will store all type of answers.
+ * question,feedback
  */
 @Entity(name = "answer")
 public class Answer {
     @Id
     private Long id;
+    @Index
+    private String answerId;
     @Parent
     @Load
     private Ref<Question> questionRef;
+    @Index
     @Load
     private Ref<User> userRef;
+    @Index
     @Load
     private Ref<Session> sessionRef;
-    private Boolean isCorrect;
+    @Index
+    @Load
+    private Ref<Quiz> quizRef;
+    @Index
+    private Boolean isRight;
+    private String questionNature;
     private Date addDate;
     private Date updateDate;
+
+    public Answer() {
+
+    }
+
+    /**
+     * @param user     {{@Link User}}
+     * @param question {{{@link Question}}}
+     * @param isRight  {{@link Boolean}}
+     */
+    public Answer(User user, Question question, boolean isRight) {
+        this.userRef = Ref.create(user);
+        this.isRight = isRight;
+        this.questionNature = question.getQuestionNature();
+        this.answerId = AuthHelper.createToken();
+        this.questionRef = Ref.create(question);
+    }
 
     public Long getId() {
         return id;
@@ -33,36 +59,72 @@ public class Answer {
         this.id = id;
     }
 
-    public Ref<Question> getQuestionRef() {
-        return questionRef;
+    public String getAnswerId() {
+        return answerId;
     }
 
-    public void setQuestionRef(Ref<Question> questionRef) {
-        this.questionRef = questionRef;
+    public void setAnswerId(String answerId) {
+        this.answerId = answerId;
     }
 
-    public Ref<User> getUserRef() {
-        return userRef;
+    public Question getQuestionRef() {
+        if (questionRef == null) {
+            return null;
+        }
+        return questionRef.get();
     }
 
-    public void setUserRef(Ref<User> userRef) {
-        this.userRef = userRef;
+    public void setQuestionRef(Question questionRef) {
+        this.questionRef = Ref.create(questionRef);
     }
 
-    public Ref<Session> getSessionRef() {
-        return sessionRef;
+    public User getUserRef() {
+        if (userRef == null) {
+            return null;
+        }
+        return userRef.get();
     }
 
-    public void setSessionRef(Ref<Session> sessionRef) {
-        this.sessionRef = sessionRef;
+    public void setUserRef(User userRef) {
+        this.userRef = Ref.create(userRef);
+    }
+
+    public Session getSessionRef() {
+        if (sessionRef == null) {
+            return null;
+        }
+        return sessionRef.get();
+    }
+
+    public void setSessionRef(Session sessionRef) {
+        this.sessionRef = Ref.create(sessionRef);
+    }
+
+    public Quiz getQuizRef() {
+        if (quizRef == null) {
+            return null;
+        }
+        return quizRef.get();
+    }
+
+    public void setQuizRef(Quiz quizRef) {
+        this.quizRef = Ref.create(quizRef);
+    }
+
+    public String getQuestionNature() {
+        return questionNature;
+    }
+
+    public void setQuestionNature(String questionNature) {
+        this.questionNature = questionNature;
     }
 
     public Boolean getCorrect() {
-        return isCorrect;
+        return isRight;
     }
 
     public void setCorrect(Boolean correct) {
-        isCorrect = correct;
+        isRight = correct;
     }
 
     public Date getAddDate() {

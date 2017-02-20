@@ -1,9 +1,11 @@
 package helper;
 
 import com.google.gson.Gson;
+import entity.Answer;
 import entity.Question;
 import entity.Quiz;
 import entity.User;
+import persist.AnswerOfy;
 import persist.QuestionOfy;
 import persist.QuizOfy;
 import persist.UserOfy;
@@ -28,6 +30,18 @@ public class PayloadHelper {
     private static final Facebook facebook = new Facebook();
     private Payload payload;
 
+    String quizId;
+    Quiz quiz;
+    List<Question> questionList;
+    TextMessage textMessage;
+    List<TextMessage> textMessageList;
+    Answer answer;
+    User user;
+    Question question;
+    Boolean isRight;
+    String questionNature;
+    int questionIndex;
+
     public PayloadHelper(Payload payload) {
         this.payload = payload;
     }
@@ -44,14 +58,9 @@ public class PayloadHelper {
     }
 
     private void processAction() {
-        String quizId;
-        Quiz quiz;
-        List<Question> questionList;
-        TextMessage textMessage;
-        List<TextMessage> textMessageList;
         switch (this.payload.getAction()) {
             case "REGISTRATION":
-                User user = UserOfy.loadBySenderId(this.payload.getMessengerId());
+                user = UserOfy.loadBySenderId(this.payload.getMessengerId());
                 user.setRegistered(true);
                 UserOfy.save(user);
                 break;
@@ -95,7 +104,7 @@ public class PayloadHelper {
                 quizId = (String) other.get("quizId");
                 quiz = QuizOfy.loadById(quizId);
                 questionList = QuestionOfy.questionListByQuiz(quiz);
-                textMessageList = QuestionHelper.textMessage(questionList.get(0), 0, this.payload
+                textMessageList = QuestionHelper.textMessage(questionList.get(0), quiz, 0, this.payload
                         .getSenderId());
                 for (int i = 0; i < textMessageList.size(); i++) {
                     textMessage = textMessageList.get(i);
@@ -104,7 +113,11 @@ public class PayloadHelper {
 
                 break;
             case "ADD_ANSWER":
-                logger.warning("add answer");
+                user = UserOfy.loadBySenderId(this.payload.getSenderId());
+                question = QuestionOfy.loadByQuestionId((String) this.payload.getOther().get("questionId"));
+                isRight = (Boolean) this.payload.getOther().get("isRight");
+                answer = new Answer(user, question, isRight);
+                logger.info("Answer Key = " + AnswerOfy.save(answer));
                 break;
             default:
                 logger.warning("un-known action");
@@ -117,11 +130,28 @@ public class PayloadHelper {
             case "SEND_WELCOME_MESSAGE":
                 User user = UserOfy.loadBySenderId(this.payload.getMessengerId());
                 String welcomeStr = ConversationMessage.welcomeMessage(user, this.payload.getMessengerId());
-                Facebook facebook = new Facebook();
                 facebook.sendMessage(welcomeStr);
                 break;
             case "SEND_NEXT_QUESTION":
-                logger.warning("SEND_NEXT_QUESTION to user");
+                //TODO this is duplicate code. need to write a single place.
+                Map<String, Object> other = this.payload.getOther();
+                quizId = (String) other.get("quizId");
+                quiz = QuizOfy.loadById(quizId);
+                questionList = QuestionOfy.questionListByQuiz(quiz);
+                Double index = (Double) other.get("questionIndex");
+                questionIndex = index.intValue() + 1;
+                if (questionIndex == questionList.size()) {
+                    logger.info("No more question need to send result");
+                    textMessage = new QuizHelper().quizCompleteMsg(this.payload.getSenderId());
+                    facebook.sendMessage(gson.toJson(textMessage));
+                } else {
+                    textMessageList = QuestionHelper.textMessage(questionList.get(questionIndex), quiz, questionIndex, this.payload
+                            .getSenderId());
+                    for (int i = 0; i < textMessageList.size(); i++) {
+                        textMessage = textMessageList.get(i);
+                        facebook.sendMessage(gson.toJson(textMessage));
+                    }
+                }
                 break;
             case "NONE":
                 logger.warning("No Action required.");

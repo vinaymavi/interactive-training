@@ -13,10 +13,15 @@ import java.util.List;
  * Created by vinaymavi on 19/02/17.
  */
 public class QuizHelper {
+    private static final String QUIZ_COMPLETE_MSG = "Hey, you have been successfully completed quiz :)." +
+            "" + System.lineSeparator() + "We will send quiz result shortly.";
     private static final Gson gson = new Gson();
     private Quiz quiz;
     private List<Quiz> quizs;
     Payload payload;
+
+    public QuizHelper() {
+    }
 
     public QuizHelper(Quiz quiz) {
         this.quiz = quiz;
@@ -77,6 +82,12 @@ public class QuizHelper {
         quickReplies.add(quickReply);
 
         TextMessage textMessage = new TextMessage(msg, quickReplies);
+        textMessage.setRecipient(senderId);
+        return textMessage;
+    }
+
+    public TextMessage quizCompleteMsg(String senderId) {
+        TextMessage textMessage = new TextMessage(QUIZ_COMPLETE_MSG);
         textMessage.setRecipient(senderId);
         return textMessage;
     }
