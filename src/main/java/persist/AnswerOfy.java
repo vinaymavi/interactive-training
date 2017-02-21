@@ -3,6 +3,8 @@ package persist;
 import com.googlecode.objectify.Key;
 import entity.Answer;
 import entity.Question;
+import entity.Quiz;
+import entity.User;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -10,7 +12,7 @@ import java.util.logging.Logger;
 import static persist.OfyService.ofy;
 
 /**
- * @description This Objectify class of @code{entity.Answer} class.
+ * @description This Objectify class of {@link entity.Answer} class.
  */
 public class AnswerOfy {
     public static final Logger logger = Logger.getLogger(AnswerOfy.class.getName());
@@ -29,9 +31,31 @@ public class AnswerOfy {
      * Load Answer by Key.
      *
      * @param key
-     * @return {entity.Answer}
+     * @return {{@link entity.Answer}}
      */
     public static Answer loadByKey(Key<Answer> key) {
         return ofy().load().key(key).safe();
     }
+
+    /**
+     * Load all answers of a quiz.
+     *
+     * @param quiz {{@link Quiz}}
+     * @return {{{@link List<Quiz>}}}
+     */
+    public static List<Answer> loadByQuiz(Quiz quiz) {
+        logger.info("Quiz Name = " + quiz.getName());
+        return ofy().load().type(Answer.class).filter("quizRef", quiz).list();
+    }
+
+    /**
+     * @param quiz {{@link Quiz}}
+     * @param user {{@link User}}
+     * @return {{@link List<Answer>}}
+     */
+    public static List<Answer> loadByQuiz(Quiz quiz, User user) {
+        logger.info("Quiz Name = " + quiz.getName() + ", User name = " + user.getFirstName());
+        return ofy().load().type(Answer.class).filter("quizRef", quiz).filter("userRef", user).list();
+    }
+
 }

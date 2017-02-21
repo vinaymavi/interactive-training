@@ -1,23 +1,32 @@
 package helper;
 
 import com.google.gson.Gson;
+import entity.Answer;
 import entity.Quiz;
+import entity.User;
+import persist.AnswerOfy;
 import send.QuickReply;
 import send.TextMessage;
 import send.payload.Payload;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 
 /**
- * Created by vinaymavi on 19/02/17.
+ * This is collection of Quiz entity helper function.
  */
 public class QuizHelper {
+    private static final Logger logger = Logger.getLogger(QuestionHelper.class.getName());
     private static final String QUIZ_COMPLETE_MSG = "Hey, you have been successfully completed quiz :)." +
             "" + System.lineSeparator() + "We will send quiz result shortly.";
     private static final Gson gson = new Gson();
     private Quiz quiz;
     private List<Quiz> quizs;
+    DecimalFormat decimalFormat = new DecimalFormat("####0.00");
     Payload payload;
 
     public QuizHelper() {
@@ -90,5 +99,52 @@ public class QuizHelper {
         TextMessage textMessage = new TextMessage(QUIZ_COMPLETE_MSG);
         textMessage.setRecipient(senderId);
         return textMessage;
+    }
+
+    /**
+     * Create quiz result.
+     *
+     * @param quiz {{@link Quiz}}
+     * @param user {{@link User}}
+     * @return {{@link Map}}
+     */
+    public Map<String, String> quizResult(Quiz quiz, User user) {
+        List<Answer> answers = AnswerOfy.loadByQuiz(quiz, user);
+        double totalAns = answers.size();
+        if (totalAns == 0) {
+            logger.warning("No Answer found.");
+            return null;
+        }
+        double rightAns = 0;
+        double wrongAns = 0;
+        double result;
+        Map<String, String> resultMap = new HashMap<>();
+        for (Answer ans : answers) {
+            if (ans.isRight()) {
+                rightAns++;
+            }
+        }
+        wrongAns = totalAns - rightAns;
+        logger.info("Total=" + totalAns + ", Right=" + rightAns + ", wrong=" + wrongAns);
+        result = ((rightAns / totalAns) * 100);
+        resultMap.put("result", "Your score is " + decimalFormat.format(result) + "% .");
+        return resultMap;
+    }
+
+    /**
+     * create result text message.
+     *
+     * @param msg      {{@link String}}
+     * @param senderId {{@link String}}
+     * @return {{@link TextMessage}}
+     */
+    public TextMessage resultMessage(String msg, String senderId) {
+        TextMessage textMessage = new TextMessage(msg);
+        textMessage.setRecipient(senderId);
+        return textMessage;
+    }
+
+    public void sendQuizResult() {
+
     }
 }

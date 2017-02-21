@@ -100,6 +100,7 @@ public class PayloadHelper {
                 facebook.sendMessage(gson.toJson(textMessage));
                 break;
             case "START_QUIZ":
+//                TODO this is duplicate.
                 Map<String, Object> other = this.payload.getOther();
                 quizId = (String) other.get("quizId");
                 quiz = QuizOfy.loadById(quizId);
@@ -114,9 +115,13 @@ public class PayloadHelper {
                 break;
             case "ADD_ANSWER":
                 user = UserOfy.loadBySenderId(this.payload.getSenderId());
+                other = this.payload.getOther();
                 question = QuestionOfy.loadByQuestionId((String) this.payload.getOther().get("questionId"));
                 isRight = (Boolean) this.payload.getOther().get("isRight");
                 answer = new Answer(user, question, isRight);
+                quizId = (String) other.get("quizId");
+                quiz = QuizOfy.loadById(quizId);
+                answer.setQuizRef(quiz);
                 logger.info("Answer Key = " + AnswerOfy.save(answer));
                 break;
             default:
@@ -126,9 +131,10 @@ public class PayloadHelper {
 
     private void processNextAction() {
         logger.warning("Next Action = " + this.payload.getNextAction());
+        QuizHelper quizHelper = new QuizHelper();
         switch (this.payload.getNextAction()) {
             case "SEND_WELCOME_MESSAGE":
-                User user = UserOfy.loadBySenderId(this.payload.getMessengerId());
+                user = UserOfy.loadBySenderId(this.payload.getMessengerId());
                 String welcomeStr = ConversationMessage.welcomeMessage(user, this.payload.getMessengerId());
                 facebook.sendMessage(welcomeStr);
                 break;
@@ -139,11 +145,19 @@ public class PayloadHelper {
                 quiz = QuizOfy.loadById(quizId);
                 questionList = QuestionOfy.questionListByQuiz(quiz);
                 Double index = (Double) other.get("questionIndex");
+                user = UserOfy.loadBySenderId(this.payload.getSenderId());
                 questionIndex = index.intValue() + 1;
                 if (questionIndex == questionList.size()) {
                     logger.info("No more question need to send result");
-                    textMessage = new QuizHelper().quizCompleteMsg(this.payload.getSenderId());
+
+                    textMessage = quizHelper.quizCompleteMsg(this.payload.getSenderId());
                     facebook.sendMessage(gson.toJson(textMessage));
+                    Map<String, String> resultMap = quizHelper.quizResult(quiz, user);
+                    if (resultMap != null) {
+                        textMessage = quizHelper.resultMessage(resultMap.get("result"), this.payload.getSenderId());
+                        facebook.sendMessage(gson.toJson(textMessage));
+                    }
+
                 } else {
                     textMessageList = QuestionHelper.textMessage(questionList.get(questionIndex), quiz, questionIndex, this.payload
                             .getSenderId());

@@ -119,11 +119,11 @@ public class Answer {
         this.questionNature = questionNature;
     }
 
-    public Boolean getCorrect() {
+    public Boolean isRight() {
         return isRight;
     }
 
-    public void setCorrect(Boolean correct) {
+    public void setRight(Boolean correct) {
         isRight = correct;
     }
 
