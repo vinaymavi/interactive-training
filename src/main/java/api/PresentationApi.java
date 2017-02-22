@@ -31,6 +31,7 @@ public class PresentationApi {
         if (user == null) {
 //            TODO Exception required.
             logger.warning("Null user object");
+            return null;
         }
         presentation.setUserRef(user);
         return PresentationOfy.loadByKey(PresentationOfy.save(presentation));

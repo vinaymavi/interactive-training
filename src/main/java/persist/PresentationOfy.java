@@ -31,13 +31,13 @@ public class PresentationOfy {
     }
 
     public static Presentation loadByPresentationId(String presentationId) {
-        logger.info("PresentationId = "+presentationId);
-        Presentation presentation = ofy().load().type(Presentation.class).filter("presentationId",presentationId).first().safe();
+        logger.info("PresentationId = " + presentationId);
+        Presentation presentation = ofy().load().type(Presentation.class).filter("presentationId", presentationId).first().safe();
         return presentation;
     }
 
     public static List<Presentation> listByUser(User user) {
-//        TODO logging missing.
+        logger.info("User =" + user.getFirstName());
         return ofy().load().type(Presentation.class).ancestor(user).list();
     }
 }

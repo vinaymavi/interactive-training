@@ -57,6 +57,8 @@ public class QuestionHelper {
     }
 
     /**
+     * Return text message for a question.
+     *
      * @param question      {Question}
      * @param questionIndex {Int} list index of question.
      * @param senderId      {String}
@@ -95,5 +97,43 @@ public class QuestionHelper {
 
 
         return textMessageList;
+    }
+
+    /**
+     * Return text message with question group payload.
+     *
+     * @param questions {{@link List<Question>}}
+     * @param senderId  {{@link String}}
+     * @return
+     */
+    public static TextMessage textMessages(List<Question> questions, String senderId) {
+        TextMessage textMessage;
+        List<QuickReply> quickReplies = new ArrayList<>();
+        QuickReply quickReply;
+        Payload payload;
+        Set groups = questionGroups(questions);
+        Iterator iterator = groups.iterator();
+        Question question = questions.get(0);
+        String questionNature;
+        while (iterator.hasNext()) {
+            questionNature = (String) iterator.next();
+            quickReply = new QuickReply(questionNature);
+            payload = new Payload("SEND_QUESTIONS_TO_AUDIENCE", "SEND_CONFIRMATION_MSG_TO_OWNER");
+            payload.setOther("presentationId", question.getPresentationRef().getPresentationId());
+            payload.setOther("questionNature", questionNature);
+            quickReply.setPayload(gson.toJson(payload));
+            quickReplies.add(quickReply);
+        }
+        textMessage = new TextMessage("Please select group to send question to audience.", quickReplies);
+        textMessage.setRecipient(senderId);
+        return textMessage;
+    }
+
+    private static Set<String> questionGroups(List<Question> questions) {
+        Set<String> groups = new HashSet<>();
+        for (Question question : questions) {
+            groups.add(question.getQuestionNature());
+        }
+        return groups;
     }
 }

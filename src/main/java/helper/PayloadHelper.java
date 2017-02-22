@@ -1,20 +1,15 @@
 package helper;
 
 import com.google.gson.Gson;
-import entity.Answer;
-import entity.Question;
-import entity.Quiz;
-import entity.User;
-import persist.AnswerOfy;
-import persist.QuestionOfy;
-import persist.QuizOfy;
-import persist.UserOfy;
+import entity.*;
+import persist.*;
 import send.ConversationMessage;
 import send.Facebook;
 import send.QuickReply;
 import send.TextMessage;
 import send.payload.Payload;
 
+import javax.xml.soap.Text;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,8 +23,10 @@ public class PayloadHelper {
     private static Logger logger = Logger.getLogger(PayloadHelper.class.getName());
     private static final Gson gson = new Gson();
     private static final Facebook facebook = new Facebook();
+    private static SessionHelper sessionHelper = new SessionHelper();
     private Payload payload;
 
+    Map<String, Object> other;
     String quizId;
     Quiz quiz;
     List<Question> questionList;
@@ -40,7 +37,10 @@ public class PayloadHelper {
     Question question;
     Boolean isRight;
     String questionNature;
+    String sessionId;
     int questionIndex;
+    Session session;
+    Presentation presentation;
 
     public PayloadHelper(Payload payload) {
         this.payload = payload;
@@ -90,6 +90,26 @@ public class PayloadHelper {
                 break;
             case "LIST_MY_SESSION":
                 logger.warning("List my session.");
+                user = UserOfy.loadBySenderId(this.payload.getSenderId());
+                List<Presentation> presentations = PresentationOfy.listByUser(user);
+                List<Session> sessions = SessionOfy.loadByPresentation(presentations);
+                List<TextMessage> textMessages = sessionHelper.textMessages(sessions, this.payload.getSenderId());
+                for (TextMessage textMessage : textMessages) {
+                    facebook.sendMessage(gson.toJson(textMessage));
+                }
+                break;
+            case "SESSION_QUESTION_GROUPS":
+                other = this.payload.getOther();
+                sessionId = (String) other.get("sessionId");
+                session = SessionOfy.loadBySessionId(sessionId);
+                presentation = session.getPresentationRef();
+                questionList = QuestionOfy.listByPresentation(presentation);
+                textMessage = QuestionHelper.textMessages(questionList, this.payload.getSenderId());
+                facebook.sendMessage(gson.toJson(textMessage));
+                logger.info("SHOW SESSION_QUESTION_GROUPS");
+                break;
+            case "SEND_QUESTIONS_TO_AUDIENCE":
+                logger.info("SEND_QUESTIONS_TO_AUDIENCE");
                 break;
             case "QUIZ_INFO":
                 logger.warning("Send Quiz info");
@@ -140,7 +160,7 @@ public class PayloadHelper {
                 break;
             case "SEND_NEXT_QUESTION":
                 //TODO this is duplicate code. need to write a single place.
-                Map<String, Object> other = this.payload.getOther();
+                other = this.payload.getOther();
                 quizId = (String) other.get("quizId");
                 quiz = QuizOfy.loadById(quizId);
                 questionList = QuestionOfy.questionListByQuiz(quiz);
@@ -166,6 +186,9 @@ public class PayloadHelper {
                         facebook.sendMessage(gson.toJson(textMessage));
                     }
                 }
+                break;
+            case "SEND_CONFIRMATION_MSG_TO_OWNER":
+                logger.info("SEND_CONFIRMATION_MSG_TO_OWNER");
                 break;
             case "NONE":
                 logger.warning("No Action required.");
