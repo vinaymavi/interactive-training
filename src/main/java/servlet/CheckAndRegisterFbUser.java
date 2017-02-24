@@ -69,14 +69,15 @@ public class CheckAndRegisterFbUser extends HttpServlet {
                 facebook.sendMessage(adminMsgPayload);
                 UserOfy.save(user);
             } else {
-                logger.warning("User Already registered");
+//                TODO send not able to understand message.
+                logger.warning("User Already registered and we are not able to understand the query.");
             }
         } else {
             payload = gson.fromJson(quickReplyPayload, Payload.class);
             payload.setSenderId(senderId);
             user = UserOfy.loadBySenderId(senderId);
             if (user == null) {
-                logger.warning("User not registerred for sender id = " + senderId);
+                logger.warning("User not registered for sender id = " + senderId);
             } else {
                 payloadHelper = new PayloadHelper(payload);
                 payloadHelper.processPayload();

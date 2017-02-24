@@ -3,10 +3,7 @@ package helper;
 import com.google.gson.Gson;
 import entity.*;
 import persist.*;
-import send.ConversationMessage;
-import send.Facebook;
-import send.QuickReply;
-import send.TextMessage;
+import send.*;
 import send.payload.Payload;
 
 import javax.xml.soap.Text;
@@ -47,6 +44,7 @@ public class PayloadHelper {
     }
 
     public void processPayload() {
+        this.sendEditAction(this.payload.getSenderId());
         switch (this.payload.getFrom()) {
             case "ADMIN_MESSAGE":
                 this.processAction();
@@ -196,5 +194,13 @@ public class PayloadHelper {
             default:
                 logger.warning("un-known next action");
         }
+    }
+
+    private void sendEditAction(String senderId) {
+        ActionTyping actionTyping = new ActionTyping();
+        actionTyping.setRecipient(senderId);
+        String msg = gson.toJson(actionTyping);
+        logger.info("ActionTyping =" + msg);
+        facebook.sendMessage(msg);
     }
 }
