@@ -4,4 +4,8 @@
         <property name="session" direction="asc"/>
         <property name="index" direction="asc"/>
     </datastore-index>
+    <datastore-index kind="answer" ancestor="false" source="manual">
+        <property name="quizRef" direction="asc"/>
+        <property name="userRef" direction="asc"/>
+    </datastore-index>
 </datastore-indexes>

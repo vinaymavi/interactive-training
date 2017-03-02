@@ -15,8 +15,20 @@ public class QuickReply {
 
     }
 
+    /**
+     * @param content_type {String} text default
+     * @param title        {String}
+     */
     public QuickReply(String content_type, String title) {
         this.content_type = content_type;
+        this.title = title;
+    }
+
+    /**
+     * @param title {String}
+     */
+    public QuickReply(String title) {
+        this.content_type = "text";
         this.title = title;
     }
 

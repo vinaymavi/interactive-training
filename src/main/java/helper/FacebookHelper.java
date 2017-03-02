@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by vku131 on 2/13/17.
+ * Helper function to crate facebook message.
  */
 public class FacebookHelper {
     public static List<QuickReply> StringToQuickReplies(String quickReplies) {
@@ -25,6 +25,7 @@ public class FacebookHelper {
         return quickRepliesList;
     }
 
+    @Deprecated
     public static List<QuickReply> optionToQuickReply(List<Option> optionList) {
         List<QuickReply> quickRepliesList = new ArrayList<>();
         QuickReply qr;
@@ -36,7 +37,7 @@ public class FacebookHelper {
         return quickRepliesList;
     }
 
-    public static User UserProfileToUser(FbUserProfile fbUserProfile, User user, String senderId) {
+    public static User FbUserProfileToUser(FbUserProfile fbUserProfile, User user, String senderId) {
         if (!(user instanceof User)) {
             user = new User();
         }

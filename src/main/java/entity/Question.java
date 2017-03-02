@@ -21,6 +21,9 @@ public class Question {
     private String desc;
     @Load
     private Ref<Slide> slideRef;
+    @Load
+    @Index
+    private Ref<Quiz> quizRef;
     List<Option> options;
     @Parent
     @Load
@@ -69,6 +72,17 @@ public class Question {
         this.slideRef = Ref.create(slideRef);
     }
 
+    public Quiz getQuizRef() {
+        if (quizRef == null) {
+            return null;
+        }
+        return quizRef.get();
+    }
+
+    public void setQuizRef(Quiz quizRef) {
+        this.quizRef = Ref.create(quizRef);
+    }
+
     public List<Option> getOptions() {
         return options;
     }
@@ -78,6 +92,9 @@ public class Question {
     }
 
     public Presentation getPresentationRef() {
+        if (presentationRef == null) {
+            return null;
+        }
         return presentationRef.get();
     }
 
@@ -90,7 +107,7 @@ public class Question {
     }
 
     /**
-     * @param questionNature values could be feedback|question
+     * @param questionNature values could be feedback|question|quiz
      */
     public void setQuestionNature(String questionNature) {
         this.questionNature = questionNature;

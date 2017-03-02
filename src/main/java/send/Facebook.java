@@ -50,6 +50,7 @@ public class Facebook {
     }
 
     public Map<String, String> sendMessage(String msgPayload) {
+        logger.info("msgPayload = " + msgPayload);
         this.httpRequest = new HTTPRequest(this.url, HTTPMethod.POST);
         this.httpRequest.setHeader(httpHeader);
         this.httpRequest.setPayload(msgPayload.getBytes());
