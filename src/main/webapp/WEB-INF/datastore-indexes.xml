@@ -8,4 +8,8 @@
         <property name="quizRef" direction="asc"/>
         <property name="userRef" direction="asc"/>
     </datastore-index>
+    <datastore-index kind="session" ancestor="false" source="manual">
+        <property name="isLive" direction="asc"/>
+        <property name="isEnd" direction="asc"/>
+    </datastore-index>
 </datastore-indexes>
