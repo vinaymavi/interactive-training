@@ -1,12 +1,15 @@
 package send;
 
 import com.google.appengine.api.urlfetch.*;
+import com.google.gson.Gson;
 import entity.config.Config;
 import persist.ConfigOfy;
 
+import javax.xml.soap.Text;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +33,7 @@ public class Facebook {
     private HTTPRequest httpRequest;
     private HTTPResponse httpResponse;
     private HTTPHeader httpHeader = new HTTPHeader("Content-Type", "application/json");
+    private Gson gson = new Gson();
 
     public Facebook() {
         this.configList = ConfigOfy.loadByGroupName(GROUP_NAME);
@@ -66,6 +70,18 @@ public class Facebook {
             logger.warning(ioe.getMessage());
         }
         return respMap;
+    }
+
+    public List<Map<String, String>> sendMessage(List<TextMessage> list) {
+        List<Map<String, String>> respList = new ArrayList<>();
+        for (TextMessage textMessage : list) {
+            respList.add(this.sendMessage(gson.toJson(textMessage)));
+        }
+        return respList;
+    }
+
+    public Map<String, String> sendMessage(TextMessage textMessage) {
+        return this.sendMessage(gson.toJson(textMessage));
     }
 
     public String getUserProfile(String senderId) {

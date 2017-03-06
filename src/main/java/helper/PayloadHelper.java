@@ -6,8 +6,6 @@ import persist.*;
 import send.*;
 import send.payload.Payload;
 
-import javax.xml.soap.Text;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -21,6 +19,8 @@ public class PayloadHelper {
     private static final Gson gson = new Gson();
     private static final Facebook facebook = new Facebook();
     private static SessionHelper sessionHelper = new SessionHelper();
+    private static UserHelper userHelper = new UserHelper();
+    AppHelper appHelper = new AppHelper();
     private Payload payload;
 
     Map<String, Object> other;
@@ -29,6 +29,7 @@ public class PayloadHelper {
     List<Question> questionList;
     TextMessage textMessage;
     List<TextMessage> textMessageList;
+    List<Session> sessions;
     Answer answer;
     User user;
     Question question;
@@ -78,23 +79,29 @@ public class PayloadHelper {
                 }
                 break;
             case "LIST_SESSION":
+                sessions = SessionOfy.upcomingSessions();
+                textMessageList = sessionHelper.sessions(sessions, this.payload.getSenderId());
+                facebook.sendMessage(textMessageList);
                 logger.warning("List sessions.");
                 break;
             case "LIST_CURRENT_SESSION":
+                sessions = SessionOfy.currentSessions();
+                textMessageList = sessionHelper.sessions(sessions, this.payload.getSenderId());
+                facebook.sendMessage(textMessageList);
                 logger.warning("List current session.");
                 break;
             case "HELP":
+                textMessage = appHelper.help(this.payload.getSenderId());
+                facebook.sendMessage(gson.toJson(textMessage));
                 logger.warning("List help.");
                 break;
             case "LIST_MY_SESSION":
                 logger.warning("List my session.");
                 user = UserOfy.loadBySenderId(this.payload.getSenderId());
                 List<Presentation> presentations = PresentationOfy.listByUser(user);
-                List<Session> sessions = SessionOfy.loadByPresentation(presentations);
+                sessions = SessionOfy.loadByPresentation(presentations);
                 List<TextMessage> textMessages = sessionHelper.textMessages(sessions, this.payload.getSenderId());
-                for (TextMessage textMessage : textMessages) {
-                    facebook.sendMessage(gson.toJson(textMessage));
-                }
+                facebook.sendMessage(textMessages);
                 break;
             case "SESSION_QUESTION_GROUPS":
                 other = this.payload.getOther();
@@ -142,6 +149,28 @@ public class PayloadHelper {
                 answer.setQuizRef(quiz);
                 logger.info("Answer Key = " + AnswerOfy.save(answer));
                 break;
+            case "SESSION_ACTIONS":
+                other = this.payload.getOther();
+                sessionId = (String) other.get("sessionId");
+                user = UserOfy.loadBySenderId(this.payload.getSenderId());
+                session = SessionOfy.loadBySessionId(sessionId);
+                if (session == null) {
+                    logger.warning("Session null sessionId=" + sessionId);
+                }
+                textMessage = sessionHelper.sessionActions(user, session);
+                facebook.sendMessage(textMessage);
+                logger.info("SESSION_ACTIONS");
+                break;
+            case "JOIN_SESSION":
+            case "ATTEND_SESSION":
+
+                other = this.payload.getOther();
+                sessionId = (String) other.get("sessionId");
+                user = UserOfy.loadBySenderId(this.payload.getSenderId());
+                session = SessionOfy.loadBySessionId(sessionId);
+                sessionHelper.addAudience(user, session);
+                userHelper.joinSession(user, session);
+                break;
             default:
                 logger.warning("un-known action");
         }
@@ -187,6 +216,18 @@ public class PayloadHelper {
                 break;
             case "SEND_CONFIRMATION_MSG_TO_OWNER":
                 logger.info("SEND_CONFIRMATION_MSG_TO_OWNER");
+                break;
+            case "JOIN_SESSION_CONFIRM":
+            case "ATTEND_SESSION_CONFIRM":
+                /**
+                 * User register for session confirmation.
+                 */
+                other = this.payload.getOther();
+                sessionId = (String) other.get("sessionId");
+                user = UserOfy.loadBySenderId(this.payload.getSenderId());
+                session = SessionOfy.loadBySessionId(sessionId);
+                textMessage = sessionHelper.registrationSuccessful(user);
+                facebook.sendMessage(gson.toJson(textMessage));
                 break;
             case "NONE":
                 logger.warning("No Action required.");

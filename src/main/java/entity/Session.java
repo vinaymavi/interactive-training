@@ -22,10 +22,11 @@ public class Session {
     private Address address;
     private EmailAddress emailAddress;
     private Mobile mobile;
-    private Boolean isLive;
-
     @Index
-    @Load
+    private Boolean isLive;
+    @Index
+    private Boolean isEnd;
+    @Index
     private List<User> audience;
     @Parent
     @Load
@@ -96,6 +97,14 @@ public class Session {
 
     public void setLive(Boolean live) {
         isLive = live;
+    }
+
+    public Boolean getEnd() {
+        return isEnd;
+    }
+
+    public void setEnd(Boolean end) {
+        isEnd = end;
     }
 
     public Presentation getPresentationRef() {

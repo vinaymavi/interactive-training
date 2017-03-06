@@ -70,10 +70,44 @@ public class SessionApi {
     @ApiMethod(name = "session.pushFeedback", path = "session_push_feedback")
     public Map<String, String> pushFeedback(@Named("token") String token, @Named("sessionId") String sessionId) {
         Queue queue = QueueFactory.getDefaultQueue();
-        queue.add(TaskOptions.Builder.withUrl("/send_feedback_message_fb").param("sid",sessionId));
+        queue.add(TaskOptions.Builder.withUrl("/send_feedback_message_fb").param("sid", sessionId));
         Map<String, String> resp = new HashMap<>();
         resp.put("status", "OK");
         resp.put("message", "Task queue initialized");
         return resp;
+    }
+
+    @ApiMethod(name = "session.upcoming", path = "session_upcoming", httpMethod = "GET")
+    public List<Session> upcomingSessions() {
+        List<Session> sessionList = SessionOfy.upcomingSessions();
+        logger.info("Size = " + sessionList.size());
+        return sessionList;
+    }
+
+    @ApiMethod(name = "session.current", path = "session_current", httpMethod = "GET")
+    public List<Session> currentSessions() {
+        List<Session> sessionList = SessionOfy.currentSessions();
+        logger.info("Size = " + sessionList.size());
+        return sessionList;
+    }
+
+    @ApiMethod(name = "session.startSession", path = "session_start_session", httpMethod = "GET")
+    public Session startSession(@Named("sessionId") String sessionId) {
+        logger.info("sessionId =" + sessionId);
+        Session session = SessionOfy.loadBySessionId(sessionId);
+        session.setLive(true);
+        SessionOfy.save(session);
+        session = SessionOfy.loadBySessionId(sessionId);
+        return session;
+    }
+
+    @ApiMethod(name = "session.endSession", path = "session_end_session", httpMethod = "GET")
+    public Session endSession(@Named("sessionId") String sessionId) {
+        logger.info("sessionId =" + sessionId);
+        Session session = SessionOfy.loadBySessionId(sessionId);
+        session.setEnd(true);
+        SessionOfy.save(session);
+        session = SessionOfy.loadBySessionId(sessionId);
+        return session;
     }
 }

@@ -67,4 +67,12 @@ public class SessionOfy {
         logger.info("Session size=" + sessions.size());
         return sessions;
     }
+
+    public static List<Session> upcomingSessions() {
+        return ofy().load().type(Session.class).filter("isLive !=", true).list();
+    }
+
+    public static List<Session> currentSessions() {
+        return ofy().load().type(Session.class).filter("isLive", true).filter("isEnd !=", true).list();
+    }
 }
