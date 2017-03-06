@@ -1,15 +1,18 @@
 package entity;
 
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Load;
 
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
- * Created by vku131 on 1/20/17.
+ * User Entity.
  */
 @Entity(name = "user")
 public class User {
@@ -36,6 +39,9 @@ public class User {
     private Mobile mobile;
     private EmailAddress emailAddress;
     private boolean isRegistered;
+    @Index
+    private Set<String> sessionList;
+
     public User() {
         this.isRegistered = false;
     }
@@ -171,5 +177,13 @@ public class User {
 
     public void setRegistered(boolean registered) {
         isRegistered = registered;
+    }
+
+    public Set<String> getSessionList() {
+        return sessionList;
+    }
+
+    public void setSessionList(Set<String> sessionList) {
+        this.sessionList = sessionList;
     }
 }

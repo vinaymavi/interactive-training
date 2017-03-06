@@ -3,6 +3,7 @@ package helper;
 import com.google.gson.Gson;
 import entity.Session;
 import entity.User;
+import persist.SessionOfy;
 import send.QuickReply;
 import send.TextMessage;
 import send.payload.Payload;
@@ -91,14 +92,14 @@ public class SessionHelper {
     public TextMessage sessionActions(User user, Session session) {
 
         if (session.getLive() != null && session.getLive()) {
-            this.joinSession(user, session);
+            this.joinSessionMsg(user, session);
         } else {
-            this.attendSession(user, session);
+            this.attendSessionMsg(user, session);
         }
         return this.textMessage;
     }
 
-    private TextMessage joinSession(User user, Session session) {
+    private TextMessage joinSessionMsg(User user, Session session) {
 
         quickReplies = new ArrayList<>();
         //Yes
@@ -121,7 +122,7 @@ public class SessionHelper {
         return textMessage;
     }
 
-    private TextMessage attendSession(User user, Session session) {
+    private TextMessage attendSessionMsg(User user, Session session) {
         quickReplies = new ArrayList<>();
         //Yes
         quickReply = new QuickReply("Yes :)");
@@ -143,9 +144,36 @@ public class SessionHelper {
         return textMessage;
     }
 
-    private TextMessage leaveSession(User user, Session session) {
+    private TextMessage leaveSessionMsg(User user, Session session) {
         textMessage = new TextMessage();
 
+        return textMessage;
+    }
+
+    /**
+     * @param user    {{@link User}}
+     * @param session {{@link Session}}
+     * @return {{@link List<User>}}
+     */
+    public List<User> addAudience(User user, Session session) {
+//        TODO check is User already registered.
+        List<User> audienceList;
+        audienceList = session.getAudience();
+        if (audienceList != null && audienceList.size() > 0) {
+            audienceList.add(user);
+        } else {
+            audienceList = new ArrayList<>();
+            audienceList.add(user);
+        }
+        session.setAudience(audienceList);
+        SessionOfy.save(session);
+        return audienceList;
+    }
+
+    public TextMessage registrationSuccessful(User user) {
+//        TODO message can have session info.
+        textMessage = new TextMessage("You have been successfully registered.");
+        textMessage.setRecipient(user.getSenderId());
         return textMessage;
     }
 }

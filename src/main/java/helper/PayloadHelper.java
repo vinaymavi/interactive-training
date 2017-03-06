@@ -19,6 +19,7 @@ public class PayloadHelper {
     private static final Gson gson = new Gson();
     private static final Facebook facebook = new Facebook();
     private static SessionHelper sessionHelper = new SessionHelper();
+    private static UserHelper userHelper = new UserHelper();
     AppHelper appHelper = new AppHelper();
     private Payload payload;
 
@@ -153,12 +154,22 @@ public class PayloadHelper {
                 sessionId = (String) other.get("sessionId");
                 user = UserOfy.loadBySenderId(this.payload.getSenderId());
                 session = SessionOfy.loadBySessionId(sessionId);
-                if(session == null){
-                    logger.warning("Session null sessionId="+sessionId);
+                if (session == null) {
+                    logger.warning("Session null sessionId=" + sessionId);
                 }
                 textMessage = sessionHelper.sessionActions(user, session);
                 facebook.sendMessage(textMessage);
                 logger.info("SESSION_ACTIONS");
+                break;
+            case "JOIN_SESSION":
+            case "ATTEND_SESSION":
+
+                other = this.payload.getOther();
+                sessionId = (String) other.get("sessionId");
+                user = UserOfy.loadBySenderId(this.payload.getSenderId());
+                session = SessionOfy.loadBySessionId(sessionId);
+                sessionHelper.addAudience(user, session);
+                userHelper.joinSession(user, session);
                 break;
             default:
                 logger.warning("un-known action");
@@ -205,6 +216,18 @@ public class PayloadHelper {
                 break;
             case "SEND_CONFIRMATION_MSG_TO_OWNER":
                 logger.info("SEND_CONFIRMATION_MSG_TO_OWNER");
+                break;
+            case "JOIN_SESSION_CONFIRM":
+            case "ATTEND_SESSION_CONFIRM":
+                /**
+                 * User register for session confirmation.
+                 */
+                other = this.payload.getOther();
+                sessionId = (String) other.get("sessionId");
+                user = UserOfy.loadBySenderId(this.payload.getSenderId());
+                session = SessionOfy.loadBySessionId(sessionId);
+                textMessage = sessionHelper.registrationSuccessful(user);
+                facebook.sendMessage(gson.toJson(textMessage));
                 break;
             case "NONE":
                 logger.warning("No Action required.");

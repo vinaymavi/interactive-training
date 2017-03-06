@@ -27,7 +27,6 @@ public class Session {
     @Index
     private Boolean isEnd;
     @Index
-    @Load
     private List<User> audience;
     @Parent
     @Load
