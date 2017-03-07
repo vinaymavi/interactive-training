@@ -41,6 +41,7 @@ public class PayloadHelper {
     Presentation presentation;
     Option option;
     List<User> audience;
+    Double index;
 
     public PayloadHelper(Payload payload) {
         this.payload = payload;
@@ -133,9 +134,15 @@ public class PayloadHelper {
                         }
                     }
                 } else {
-                    logger.info("question implementation is pending.");
+                    questionList = QuestionOfy.questionListByPresentation(presentation);
+                    for (User u : audience) {
+                        textMessageList = QuestionHelper.textMsgQuestion(questionList.get(0), 0, u.getSenderId(), session);
+                        for (int i = 0; i < textMessageList.size(); i++) {
+                            textMessage = textMessageList.get(i);
+                            facebook.sendMessage(gson.toJson(textMessage));
+                        }
+                    }
                 }
-                logger.info("SEND_QUESTIONS_TO_AUDIENCE");
                 break;
             case "QUIZ_INFO":
                 logger.warning("Send Quiz info");
@@ -193,12 +200,27 @@ public class PayloadHelper {
                 userHelper.joinSession(user, session);
                 break;
             case "ADD_FEEDBACK_ANSWER":
+//                TODO code looks duplicate by next section.
                 user = UserOfy.loadBySenderId(this.payload.getSenderId());
                 other = this.payload.getOther();
                 question = QuestionOfy.loadByQuestionId((String) this.payload.getOther().get("questionId"));
-                Double index = (Double) other.get("optionIndex");
+                index = (Double) other.get("optionIndex");
                 option = question.getOptions().get(index.intValue());
                 answer = new Answer(user, question, option);
+                sessionId = (String) other.get("sessionId");
+                session = SessionOfy.loadBySessionId(sessionId);
+                answer.setSessionRef(session);
+                logger.info("Answer Key = " + AnswerOfy.save(answer));
+                break;
+            case "ADD_QUESTION_ANSWER":
+                user = UserOfy.loadBySenderId(this.payload.getSenderId());
+                other = this.payload.getOther();
+                question = QuestionOfy.loadByQuestionId((String) this.payload.getOther().get("questionId"));
+                index = (Double) other.get("optionIndex");
+                option = question.getOptions().get(index.intValue());
+                isRight = (Boolean) other.get("isRight");
+                answer = new Answer(user, question, option);
+                answer.setRight(isRight);
                 sessionId = (String) other.get("sessionId");
                 session = SessionOfy.loadBySessionId(sessionId);
                 answer.setSessionRef(session);
@@ -278,6 +300,24 @@ public class PayloadHelper {
                     textMessageList = QuestionHelper.feedbackEndMsg(this.payload.getSenderId());
                 } else {
                     textMessageList = QuestionHelper.textMsgFeedback(questionList.get(questionIndex), questionIndex, this.payload.getSenderId(), session);
+                }
+                for (int i = 0; i < textMessageList.size(); i++) {
+                    textMessage = textMessageList.get(i);
+                    facebook.sendMessage(gson.toJson(textMessage));
+                }
+                break;
+            case "SEND_NEXT_QUESTION_QUESTION":
+                other = this.payload.getOther();
+                sessionId = (String) other.get("sessionId");
+                session = SessionOfy.loadBySessionId(sessionId);
+                presentation = session.getPresentationRef();
+                questionList = QuestionOfy.questionListByPresentation(presentation);
+                index = (Double) other.get("questionIndex");
+                questionIndex = index.intValue() + 1;
+                if (questionList.size() == questionIndex) {
+                    textMessageList = QuestionHelper.feedbackEndMsg(this.payload.getSenderId());
+                } else {
+                    textMessageList = QuestionHelper.textMsgQuestion(questionList.get(questionIndex), questionIndex, this.payload.getSenderId(), session);
                 }
                 for (int i = 0; i < textMessageList.size(); i++) {
                     textMessage = textMessageList.get(i);

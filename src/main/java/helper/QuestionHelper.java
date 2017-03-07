@@ -127,6 +127,15 @@ public class QuestionHelper {
         return textMessage;
     }
 
+    /**
+     * Create message for question nature feedback.
+     *
+     * @param question      {{@link Question}}
+     * @param questionIndex {{@link int}}
+     * @param senderId      {{@link String}}
+     * @param session       {{@link Session}}
+     * @return {{@link List<TextMessage>}}
+     */
     public static List<TextMessage> textMsgFeedback(Question question, int questionIndex, String senderId, Session session) {
         List<QuickReply> quickReplies = new ArrayList<>();
         QuickReply quickReply;
@@ -149,6 +158,49 @@ public class QuestionHelper {
             payload = new Payload("ADD_FEEDBACK_ANSWER", "SEND_NEXT_FEEDBACK_QUESTION");
             payload.setOther("questionId", question.getQuestionId());
             payload.setOther("questionIndex", questionIndex);
+            payload.setOther("optionIndex", i);
+            payload.setOther("sessionId", session.getSessionId());
+            quickReply.setPayload(gson.toJson(payload));
+            quickReplies.add(quickReply);
+            textMessage = new TextMessage("#" + (i + 1) + "    " + option.getContent(), quickReplies);
+            textMessage.setRecipient(senderId);
+            textMessageList.add(textMessage);
+        }
+        return textMessageList;
+    }
+
+    /**
+     * Create question for questionNature question.
+     *
+     * @param question      {{@link Question}}
+     * @param questionIndex {{@link int}}
+     * @param senderId      {{@link String}}
+     * @param session       {{@link Session}}
+     * @return {{@link List<TextMessage>}}
+     */
+    public static List<TextMessage> textMsgQuestion(Question question, int questionIndex, String senderId, Session session) {
+        List<QuickReply> quickReplies = new ArrayList<>();
+        QuickReply quickReply;
+        Payload payload;
+
+        List<Option> options = question.getOptions();
+        Option option;
+        TextMessage textMessage;
+        List<TextMessage> textMessageList = new ArrayList<>();
+
+        // Question textMessage.
+        textMessage = new TextMessage(question.getDesc());
+        textMessageList.add(textMessage);
+        textMessage.setRecipient(senderId);
+
+        // Option text message.
+        for (int i = 0; i < options.size(); i++) {
+            option = options.get(i);
+            quickReply = new QuickReply(" " + (i + 1) + " ");
+            payload = new Payload("ADD_QUESTION_ANSWER", "SEND_NEXT_QUESTION_QUESTION");
+            payload.setOther("questionId", question.getQuestionId());
+            payload.setOther("questionIndex", questionIndex);
+            payload.setOther("isRight", option.isRight());
             payload.setOther("optionIndex", i);
             payload.setOther("sessionId", session.getSessionId());
             quickReply.setPayload(gson.toJson(payload));
