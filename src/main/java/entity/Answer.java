@@ -30,6 +30,8 @@ public class Answer {
     private Ref<Quiz> quizRef;
     @Index
     private Boolean isRight;
+    @Index
+    private Option selectedOption;
     private String questionNature;
     private Date addDate;
     private Date updateDate;
@@ -49,6 +51,14 @@ public class Answer {
         this.questionNature = question.getQuestionNature();
         this.answerId = AuthHelper.createToken();
         this.questionRef = Ref.create(question);
+    }
+
+    public Answer(User user, Question question, Option selectedOption) {
+        this.userRef = Ref.create(user);
+        this.questionNature = question.getQuestionNature();
+        this.answerId = AuthHelper.createToken();
+        this.questionRef = Ref.create(question);
+        this.selectedOption = selectedOption;
     }
 
     public Long getId() {
@@ -125,6 +135,14 @@ public class Answer {
 
     public void setRight(Boolean correct) {
         isRight = correct;
+    }
+
+    public Option getSelectedOption() {
+        return selectedOption;
+    }
+
+    public void setSelectedOption(Option selectedOption) {
+        this.selectedOption = selectedOption;
     }
 
     public Date getAddDate() {

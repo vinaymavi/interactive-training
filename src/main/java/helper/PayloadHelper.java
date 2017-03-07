@@ -39,6 +39,8 @@ public class PayloadHelper {
     int questionIndex;
     Session session;
     Presentation presentation;
+    Option option;
+    List<User> audience;
 
     public PayloadHelper(Payload payload) {
         this.payload = payload;
@@ -109,11 +111,30 @@ public class PayloadHelper {
                 session = SessionOfy.loadBySessionId(sessionId);
                 presentation = session.getPresentationRef();
                 questionList = QuestionOfy.listByPresentation(presentation);
-                textMessage = QuestionHelper.textMessages(questionList, this.payload.getSenderId());
+                textMessage = QuestionHelper.textMessages(questionList, this.payload.getSenderId(), session);
                 facebook.sendMessage(gson.toJson(textMessage));
                 logger.info("SHOW SESSION_QUESTION_GROUPS");
                 break;
             case "SEND_QUESTIONS_TO_AUDIENCE":
+                //TODO need to write a server this operation can be long.
+                other = this.payload.getOther();
+                sessionId = (String) other.get("sessionId");
+                session = SessionOfy.loadBySessionId(sessionId);
+                audience = session.getAudience();
+                presentation = session.getPresentationRef();
+                questionNature = (String) other.get("questionNature");
+                questionList = QuestionOfy.listByPresentation(presentation);
+                if (questionNature.equals("feedback")) {
+                    for (User u : audience) {
+                        textMessageList = QuestionHelper.textMsgFeedback(questionList.get(0), 0, u.getSenderId(), session);
+                        for (int i = 0; i < textMessageList.size(); i++) {
+                            textMessage = textMessageList.get(i);
+                            facebook.sendMessage(gson.toJson(textMessage));
+                        }
+                    }
+                } else {
+                    logger.info("question implementation is pending.");
+                }
                 logger.info("SEND_QUESTIONS_TO_AUDIENCE");
                 break;
             case "QUIZ_INFO":
@@ -125,7 +146,7 @@ public class PayloadHelper {
                 facebook.sendMessage(gson.toJson(textMessage));
                 break;
             case "START_QUIZ":
-//                TODO this is duplicate.
+                //TODO this is duplicate.
                 Map<String, Object> other = this.payload.getOther();
                 quizId = (String) other.get("quizId");
                 quiz = QuizOfy.loadById(quizId);
@@ -139,6 +160,7 @@ public class PayloadHelper {
 
                 break;
             case "ADD_ANSWER":
+//                TODO need to add selected option.
                 user = UserOfy.loadBySenderId(this.payload.getSenderId());
                 other = this.payload.getOther();
                 question = QuestionOfy.loadByQuestionId((String) this.payload.getOther().get("questionId"));
@@ -163,13 +185,24 @@ public class PayloadHelper {
                 break;
             case "JOIN_SESSION":
             case "ATTEND_SESSION":
-
                 other = this.payload.getOther();
                 sessionId = (String) other.get("sessionId");
                 user = UserOfy.loadBySenderId(this.payload.getSenderId());
                 session = SessionOfy.loadBySessionId(sessionId);
                 sessionHelper.addAudience(user, session);
                 userHelper.joinSession(user, session);
+                break;
+            case "ADD_FEEDBACK_ANSWER":
+                user = UserOfy.loadBySenderId(this.payload.getSenderId());
+                other = this.payload.getOther();
+                question = QuestionOfy.loadByQuestionId((String) this.payload.getOther().get("questionId"));
+                Double index = (Double) other.get("optionIndex");
+                option = question.getOptions().get(index.intValue());
+                answer = new Answer(user, question, option);
+                sessionId = (String) other.get("sessionId");
+                session = SessionOfy.loadBySessionId(sessionId);
+                answer.setSessionRef(session);
+                logger.info("Answer Key = " + AnswerOfy.save(answer));
                 break;
             default:
                 logger.warning("un-known action");
@@ -179,6 +212,7 @@ public class PayloadHelper {
     private void processNextAction() {
         logger.warning("Next Action = " + this.payload.getNextAction());
         QuizHelper quizHelper = new QuizHelper();
+        Double index;
         switch (this.payload.getNextAction()) {
             case "SEND_WELCOME_MESSAGE":
                 user = UserOfy.loadBySenderId(this.payload.getMessengerId());
@@ -191,7 +225,7 @@ public class PayloadHelper {
                 quizId = (String) other.get("quizId");
                 quiz = QuizOfy.loadById(quizId);
                 questionList = QuestionOfy.questionListByQuiz(quiz);
-                Double index = (Double) other.get("questionIndex");
+                index = (Double) other.get("questionIndex");
                 user = UserOfy.loadBySenderId(this.payload.getSenderId());
                 questionIndex = index.intValue() + 1;
                 if (questionIndex == questionList.size()) {
@@ -215,6 +249,9 @@ public class PayloadHelper {
                 }
                 break;
             case "SEND_CONFIRMATION_MSG_TO_OWNER":
+                /**
+                 * Send message to session owner.
+                 */
                 logger.info("SEND_CONFIRMATION_MSG_TO_OWNER");
                 break;
             case "JOIN_SESSION_CONFIRM":
@@ -228,6 +265,24 @@ public class PayloadHelper {
                 session = SessionOfy.loadBySessionId(sessionId);
                 textMessage = sessionHelper.registrationSuccessful(user);
                 facebook.sendMessage(gson.toJson(textMessage));
+                break;
+            case "SEND_NEXT_FEEDBACK_QUESTION":
+                other = this.payload.getOther();
+                sessionId = (String) other.get("sessionId");
+                session = SessionOfy.loadBySessionId(sessionId);
+                presentation = session.getPresentationRef();
+                questionList = QuestionOfy.listByPresentation(presentation);
+                index = (Double) other.get("questionIndex");
+                questionIndex = index.intValue() + 1;
+                if (questionList.size() == questionIndex) {
+                    textMessageList = QuestionHelper.feedbackEndMsg(this.payload.getSenderId());
+                } else {
+                    textMessageList = QuestionHelper.textMsgFeedback(questionList.get(questionIndex), questionIndex, this.payload.getSenderId(), session);
+                }
+                for (int i = 0; i < textMessageList.size(); i++) {
+                    textMessage = textMessageList.get(i);
+                    facebook.sendMessage(gson.toJson(textMessage));
+                }
                 break;
             case "NONE":
                 logger.warning("No Action required.");
