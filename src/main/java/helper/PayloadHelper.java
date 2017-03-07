@@ -123,8 +123,8 @@ public class PayloadHelper {
                 audience = session.getAudience();
                 presentation = session.getPresentationRef();
                 questionNature = (String) other.get("questionNature");
-                questionList = QuestionOfy.listByPresentation(presentation);
                 if (questionNature.equals("feedback")) {
+                    questionList = QuestionOfy.feedbackListByPresentation(presentation);
                     for (User u : audience) {
                         textMessageList = QuestionHelper.textMsgFeedback(questionList.get(0), 0, u.getSenderId(), session);
                         for (int i = 0; i < textMessageList.size(); i++) {
@@ -271,7 +271,7 @@ public class PayloadHelper {
                 sessionId = (String) other.get("sessionId");
                 session = SessionOfy.loadBySessionId(sessionId);
                 presentation = session.getPresentationRef();
-                questionList = QuestionOfy.listByPresentation(presentation);
+                questionList = QuestionOfy.feedbackListByPresentation(presentation);
                 index = (Double) other.get("questionIndex");
                 questionIndex = index.intValue() + 1;
                 if (questionList.size() == questionIndex) {
