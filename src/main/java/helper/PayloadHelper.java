@@ -8,6 +8,7 @@ import send.payload.Payload;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -40,7 +41,7 @@ public class PayloadHelper {
     Session session;
     Presentation presentation;
     Option option;
-    List<User> audience;
+    Set<User> audience;
     Double index;
 
     public PayloadHelper(Payload payload) {

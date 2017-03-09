@@ -14,11 +14,7 @@ import persist.PresentationOfy;
 import persist.SessionOfy;
 import persist.UserOfy;
 
-import javax.jws.soap.SOAPBinding;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -55,9 +51,9 @@ public class SessionApi {
     public Session addAudience(@Named("token") String token, @Named("sessionId") String sessionId, @Named("fbId") String fbId) {
         Session session = SessionOfy.loadBySessionId(sessionId);
         User user = UserOfy.loadByFbId(fbId);
-        List<User> userList = session.getAudience();
+        Set<User> userList = session.getAudience();
         if (userList == null) {
-            userList = new ArrayList<>();
+            userList = new HashSet<>();
             ;
             userList.add(user);
         } else {

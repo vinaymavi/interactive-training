@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -28,7 +29,7 @@ public class Export extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse resp) {
         String sessionId = req.getParameter("id");
         String type = req.getParameter("type");
-        List<User> audience;
+        Set<User> audience;
         List<Question> questions;
         List<Answer> answers;
         ExportHelper exportHelper;

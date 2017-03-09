@@ -15,11 +15,11 @@ public class ExportHelper {
     private static final Logger logger = Logger.getLogger(ExportHelper.class.getName());
     List<Answer> answers;
     List<Question> questions;
-    List<User> audience;
+    Set<User> audience;
     Map<String, List<Answer>> userQuestionMapping;
     Map<String, Answer> answerMap;
 
-    public ExportHelper(List<Answer> answers, List<Question> questions, List<User> audience) {
+    public ExportHelper(List<Answer> answers, List<Question> questions, Set<User> audience) {
         this.answers = answers;
         this.questions = questions;
         this.audience = audience;
@@ -52,12 +52,14 @@ public class ExportHelper {
             logger.warning("answers,audience,questions among three should not be null.");
             return ExportHelper.ERROR_MSG;
         }
+        logger.info("Audience Size =" + this.audience.size());
         String mapKey;
         this.answerListToMap();
+        logger.info("question Size = " + this.questions.size());
         for (Question question : this.questions) {
             for (User user : this.audience) {
                 mapKey = question.getQuestionId() + ":" + user.getSenderId();
-                this.checkAndUpdateMap(mapKey, user.getFirstName());
+                this.checkAndUpdateMap(mapKey, user.getSenderId(), user.getFirstName());
             }
         }
         return this.createCsvString();
@@ -80,12 +82,15 @@ public class ExportHelper {
         for (Map.Entry<String, List<Answer>> entry : this.userQuestionMapping.entrySet()) {
             userName = entry.getKey();
             answerList = entry.getValue();
+            logger.info("user = " + userName + ", listSize=" + answerList.size());
             csvString.append(userName + ",");
             for (Answer a : answerList) {
                 try {
                     if (a == null) {
+                        logger.info("null");
                         csvString.append(",");
                     } else {
+                        logger.info("not null");
                         csvString.append(a.getSelectedOption().getContent() + ",");
                     }
                 } catch (NullPointerException ne) {
@@ -104,23 +109,25 @@ public class ExportHelper {
      *
      * @param mapKey {{@link String}}
      */
-    private void checkAndUpdateMap(String mapKey, String userName) {
+    private void checkAndUpdateMap(String mapKey, String userId, String userName) {
         Answer answer;
         List<Answer> answerList;
 //        check is user answered the question.
         if (this.answerMap.containsKey(mapKey)) {
+            logger.info("mapKey=" + mapKey + ",username = " + userName);
             answer = this.answerMap.get(mapKey);
         } else {
+            logger.info("mapKey=" + mapKey + ",username = " + userName + ", inside=null");
             answer = null;
         }
 
 //        Check is user answer list already created or not.
-        if (this.userQuestionMapping.containsKey(userName)) {
-            this.userQuestionMapping.get(userName).add(answer);
+        if (this.userQuestionMapping.containsKey(userId)) {
+            this.userQuestionMapping.get(userId).add(answer);
         } else {
             answerList = new ArrayList<>();
-            this.userQuestionMapping.put(userName, answerList);
-            this.userQuestionMapping.get(userName).add(answer);
+            this.userQuestionMapping.put(userId, answerList);
+            this.userQuestionMapping.get(userId).add(answer);
         }
     }
 }

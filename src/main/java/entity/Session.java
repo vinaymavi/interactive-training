@@ -3,9 +3,8 @@ package entity;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by vku131 on 1/20/17.
@@ -27,7 +26,7 @@ public class Session {
     @Index
     private Boolean isEnd;
     @Index
-    private List<User> audience;
+    private Set<User> audience;
     @Parent
     @Load
     private Ref<Presentation> presentationRef;
@@ -139,12 +138,12 @@ public class Session {
         this.liveDate = liveDate;
     }
 
-    public List<User> getAudience() {
+    public Set<User> getAudience() {
 
         return audience;
     }
 
-    public void setAudience(List<User> audience) {
+    public void setAudience(Set<User> audience) {
 
         this.audience = audience;
     }
