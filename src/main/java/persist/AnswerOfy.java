@@ -1,10 +1,7 @@
 package persist;
 
 import com.googlecode.objectify.Key;
-import entity.Answer;
-import entity.Question;
-import entity.Quiz;
-import entity.User;
+import entity.*;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -58,4 +55,12 @@ public class AnswerOfy {
         return ofy().load().type(Answer.class).filter("quizRef", quiz).filter("userRef", user).list();
     }
 
+    /**
+     * @param session {{@link Session}}
+     * @return {{@link List<Answer>}}
+     */
+    public static List<Answer> loadBySession(Session session) {
+        logger.info("Quiz Name = " + session.getName());
+        return ofy().load().type(Answer.class).filter("sessionRef", session).list();
+    }
 }

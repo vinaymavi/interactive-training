@@ -9,9 +9,7 @@ import send.TextMessage;
 import send.payload.Payload;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -155,19 +153,18 @@ public class SessionHelper {
      * @param session {{@link Session}}
      * @return {{@link List<User>}}
      */
-    public List<User> addAudience(User user, Session session) {
-//        TODO check is User already registered.
-        List<User> audienceList;
-        audienceList = session.getAudience();
-        if (audienceList != null && audienceList.size() > 0) {
-            audienceList.add(user);
+    public Set<User> addAudience(User user, Session session) {
+        Set<User> userSet;
+        userSet = session.getAudience();
+        if (userSet != null && userSet.size() > 0) {
+            userSet.add(user);
         } else {
-            audienceList = new ArrayList<>();
-            audienceList.add(user);
+            userSet = new HashSet<>();
+            userSet.add(user);
         }
-        session.setAudience(audienceList);
+        session.setAudience(userSet);
         SessionOfy.save(session);
-        return audienceList;
+        return userSet;
     }
 
     public TextMessage registrationSuccessful(User user) {
