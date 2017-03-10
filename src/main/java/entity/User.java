@@ -186,4 +186,25 @@ public class User {
     public void setSessionList(Set<String> sessionList) {
         this.sessionList = sessionList;
     }
+
+    @Override
+    public int hashCode() {
+        return this.id.intValue();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (!(obj instanceof User)) {
+            return false;
+        }
+
+        if (this.getSenderId().equals(((User) obj).getSenderId())) {
+            return true;
+        }
+        return false;
+    }
 }
