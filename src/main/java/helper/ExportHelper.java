@@ -112,6 +112,7 @@ public class ExportHelper {
     private void checkAndUpdateMap(String mapKey, String userId, String userName) {
         Answer answer;
         List<Answer> answerList;
+        String csvFirstColuman = userName + "_" + userId;
 //        check is user answered the question.
         if (this.answerMap.containsKey(mapKey)) {
             logger.info("mapKey=" + mapKey + ",username = " + userName);
@@ -122,12 +123,12 @@ public class ExportHelper {
         }
 
 //        Check is user answer list already created or not.
-        if (this.userQuestionMapping.containsKey(userId)) {
-            this.userQuestionMapping.get(userId).add(answer);
+        if (this.userQuestionMapping.containsKey(csvFirstColuman)) {
+            this.userQuestionMapping.get(csvFirstColuman).add(answer);
         } else {
             answerList = new ArrayList<>();
-            this.userQuestionMapping.put(userId, answerList);
-            this.userQuestionMapping.get(userId).add(answer);
+            this.userQuestionMapping.put(csvFirstColuman, answerList);
+            this.userQuestionMapping.get(csvFirstColuman).add(answer);
         }
     }
 }
