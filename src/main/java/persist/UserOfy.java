@@ -43,4 +43,11 @@ public class UserOfy {
         User user = ofy().load().type(User.class).filter("senderId =", senderId).first().now();
         return user;
     }
+
+    public static List<User> loadAll() {
+        logger.info("Load All user.");
+        List<User> users = ofy().load().type(User.class).list();
+        logger.info("Total users size = " + users.size());
+        return users;
+    }
 }

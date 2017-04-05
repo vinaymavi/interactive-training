@@ -166,6 +166,11 @@ public class SessionHelper {
         SessionOfy.save(session);
         return userSet;
     }
+    public void addAudience(List<User> users,Session session){
+        for (User u : users){
+            this.addAudience(u,session);
+        }
+    }
 
     public TextMessage registrationSuccessful(User user) {
 //        TODO message can have session info.

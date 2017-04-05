@@ -29,4 +29,10 @@ public class UserHelper {
         UserOfy.save(user);
         return sessionList;
     }
+
+    public void registerAllUser(List<User> users, Session session) {
+        for (User u : users) {
+            this.joinSession(u, session);
+        }
+    }
 }

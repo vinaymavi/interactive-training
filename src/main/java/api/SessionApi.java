@@ -10,6 +10,8 @@ import entity.Presentation;
 import entity.Session;
 import entity.User;
 import helper.AuthHelper;
+import helper.SessionHelper;
+import helper.UserHelper;
 import persist.PresentationOfy;
 import persist.SessionOfy;
 import persist.UserOfy;
@@ -105,5 +107,20 @@ public class SessionApi {
         SessionOfy.save(session);
         session = SessionOfy.loadBySessionId(sessionId);
         return session;
+    }
+
+    @ApiMethod(name = "session.registerAllUser", path = "session_register_all_user", httpMethod = "POST")
+    public Session registerAllUser(@Named("sessionId") String sessionId) {
+        List<User> users = UserOfy.loadAll();
+        Session session = SessionOfy.loadBySessionId(sessionId);
+        if (users.size() == 0) {
+            logger.info("User list is empty");
+        } else {
+            UserHelper userHelper = new UserHelper();
+            userHelper.registerAllUser(users, session);
+            SessionHelper sessionHelper = new SessionHelper();
+            sessionHelper.addAudience(users,session);
+        }
+        return SessionOfy.loadBySessionId(sessionId);
     }
 }
