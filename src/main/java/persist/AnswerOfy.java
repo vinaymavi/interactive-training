@@ -60,7 +60,7 @@ public class AnswerOfy {
      * @return {{@link List<Answer>}}
      */
     public static List<Answer> loadBySession(Session session) {
-        logger.info("Quiz Name = " + session.getName());
+        logger.info("Session Name = " + session.getName());
         return ofy().load().type(Answer.class).filter("sessionRef", session).list();
     }
 }

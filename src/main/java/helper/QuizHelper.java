@@ -10,10 +10,7 @@ import send.TextMessage;
 import send.payload.Payload;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -23,6 +20,8 @@ public class QuizHelper {
     private static final Logger logger = Logger.getLogger(QuestionHelper.class.getName());
     private static final String QUIZ_COMPLETE_MSG = "Hey, you have been successfully completed quiz :)." +
             "" + System.lineSeparator() + "We will send quiz result shortly.";
+    private static final String SKILL_CATALOGUE = "Hey, Your skills are registered successfully." +
+            "" + System.lineSeparator() + "Thank you sparing time with us :)";
     private static final Gson gson = new Gson();
     private Quiz quiz;
     private List<Quiz> quizs;
@@ -101,6 +100,12 @@ public class QuizHelper {
         return textMessage;
     }
 
+    public TextMessage skillCatalogue(String senderId) {
+        TextMessage textMessage = new TextMessage(SKILL_CATALOGUE);
+        textMessage.setRecipient(senderId);
+        return textMessage;
+    }
+
     /**
      * Create quiz result.
      *
@@ -146,5 +151,14 @@ public class QuizHelper {
 
     public void sendQuizResult() {
 
+    }
+
+    public Set<User> audience(Quiz quiz) {
+        List<Answer> answers = AnswerOfy.loadByQuiz(quiz);
+        Set<User> auidence = new HashSet<>();
+        for (Answer a : answers) {
+            auidence.add(a.getUserRef());
+        }
+        return auidence;
     }
 }

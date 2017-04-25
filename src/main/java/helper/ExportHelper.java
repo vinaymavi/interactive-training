@@ -39,6 +39,7 @@ public class ExportHelper {
             key += ":" + a.getUserRef().getSenderId();
             this.answerMap.put(key, a);
         }
+        logger.info("Answer map size = " + this.answerMap.size());
         return this.answerMap;
     }
 

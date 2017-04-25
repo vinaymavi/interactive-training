@@ -173,7 +173,10 @@ public class PayloadHelper {
                 other = this.payload.getOther();
                 question = QuestionOfy.loadByQuestionId((String) this.payload.getOther().get("questionId"));
                 isRight = (Boolean) this.payload.getOther().get("isRight");
+                index = (Double) other.get("optionIndex");
+                option = question.getOptions().get(index.intValue());
                 answer = new Answer(user, question, isRight);
+                answer.setSelectedOption(option);
                 quizId = (String) other.get("quizId");
                 quiz = QuizOfy.loadById(quizId);
                 answer.setQuizRef(quiz);
@@ -253,13 +256,18 @@ public class PayloadHelper {
                 questionIndex = index.intValue() + 1;
                 if (questionIndex == questionList.size()) {
                     logger.info("No more question need to send result");
-
-                    textMessage = quizHelper.quizCompleteMsg(this.payload.getSenderId());
-                    facebook.sendMessage(gson.toJson(textMessage));
-                    Map<String, String> resultMap = quizHelper.quizResult(quiz, user);
-                    if (resultMap != null) {
-                        textMessage = quizHelper.resultMessage(resultMap.get("result"), this.payload.getSenderId());
+//                    TODO hack to skill cateloge session.
+                    if (quizId.equals("hqim6mlaghsquav9sg9te7q1rj")) {
+                        textMessage = quizHelper.skillCatalogue(this.payload.getSenderId());
                         facebook.sendMessage(gson.toJson(textMessage));
+                    } else {
+                        textMessage = quizHelper.quizCompleteMsg(this.payload.getSenderId());
+                        facebook.sendMessage(gson.toJson(textMessage));
+                        Map<String, String> resultMap = quizHelper.quizResult(quiz, user);
+                        if (resultMap != null) {
+                            textMessage = quizHelper.resultMessage(resultMap.get("result"), this.payload.getSenderId());
+                            facebook.sendMessage(gson.toJson(textMessage));
+                        }
                     }
 
                 } else {
