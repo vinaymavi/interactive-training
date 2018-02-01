@@ -8,7 +8,11 @@ import java.util.Date;
 import java.util.Map;
 
 /**
- * Created by vku131 on 2/10/17.
+ * Configuration need to configuration a chat bot with multiple platforms.
+ * like facebook
+ * configuration group need two configuration
+ * base_url - url of end point
+ * access - token to access the app.
  */
 @Entity(name = "config")
 public class Config {

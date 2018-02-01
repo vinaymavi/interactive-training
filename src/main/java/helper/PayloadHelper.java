@@ -61,6 +61,7 @@ public class PayloadHelper {
     }
 
     private void processAction() {
+        String msgPayload;
         switch (this.payload.getAction()) {
             case "REGISTRATION":
                 user = UserOfy.loadBySenderId(this.payload.getMessengerId());
@@ -72,13 +73,18 @@ public class PayloadHelper {
                 List<Quiz> quizList = QuizOfy.list();
                 if (quizList.size() > 0) {
                     QuizHelper quizHelper = new QuizHelper(quizList);
-                    String msgPayload;
+
                     textMessage = new TextMessage(QUIZ_LIST_MESSAGE, quizHelper.quickReplies(true));
                     textMessage.setRecipient(this.payload.getSenderId());
                     msgPayload = gson.toJson(textMessage);
                     logger.info("message = " + msgPayload);
                     facebook.sendMessage(msgPayload);
                 } else {
+                    textMessage = new TextMessage("No quiz found :(");
+                    textMessage.setRecipient(this.payload.getSenderId());
+                    msgPayload = gson.toJson(textMessage);
+                    logger.info("message = " + msgPayload);
+                    facebook.sendMessage(msgPayload);
                     logger.warning("No quiz found");
                 }
                 break;
