@@ -437,71 +437,13 @@
     <div class="container">
       <div class="row">
         <div class="col-md-12">
-          <div class="mu-contact-area">
-
-            <div class="mu-title-area">
-              <h2 class="mu-heading-title">GET IN TOUCH</h2>
-              <span class="mu-title-dot"></span>
-              <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever</p>
-            </div>
-
-
-
+          <div class="mu-contact-area" style="padding-top: 0px">
             <!-- Start Contact Content -->
             <div class="mu-contact-content">
               <div class="row">
 
-                <div class="col-md-7">
-                  <div class="mu-contact-left">
-                    <div id="form-messages"></div>
-                    <form id="ajax-contact" method="post" action="mailer.php" class="mu-contact-form">
-                      <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Name" id="name" name="name" required>
-                      </div>
-                      <div class="form-group">
-                        <input type="email" class="form-control" placeholder="Enter Email" id="email" name="email" required>
-                      </div>
-                      <div class="form-group">
-                        <textarea class="form-control" placeholder="Message" id="message" name="message" required></textarea>
-                      </div>
-                      <button type="submit" class="mu-send-msg-btn"><span>SUBMIT</span></button>
-                    </form>
-                  </div>
-                </div>
-
-                <div class="col-md-5">
-                  <div class="mu-contact-right">
-                    <div class="mu-contact-right-single">
-                      <div class="mu-icon"><i class="fa fa-map-marker"></i></div>
-                      <p><strong>Office Location</strong></p>
-                      <p>Dooley Branch Rd Millen, GA 30442, USA</p>
-                    </div>
-
-                    <div class="mu-contact-right-single">
-                      <div class="mu-icon"><i class="fa fa-phone"></i></div>
-                      <p><strong>Phone Number</strong></p>
-                      <p>+90 987 678 9834</p>
-                      <p>+90 567 098 785</p>
-                    </div>
-
-                    <div class="mu-contact-right-single">
-                      <div class="mu-icon"><i class="fa fa-envelope"></i></div>
-                      <p><strong>Email Address</strong></p>
-                      <p>contact@domain.com</p>
-                      <p>support@domain.com</p>
-                    </div>
-
-                    <div class="mu-contact-right-single">
-                      <div class="mu-social-media">
-                        <a href="#"><i class="fa fa-facebook"></i></a>
-                        <a href="#"><i class="fa fa-twitter"></i></a>
-                        <a href="#"><i class="fa fa-google-plus"></i></a>
-                        <a href="#"><i class="fa fa-linkedin"></i></a>
-                        <a href="#"><i class="fa fa-youtube"></i></a>
-                      </div>
-                    </div>
-
-                  </div>
+                <div class="col-sm-12">
+                  <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdvmx64l8W2dAqR69eqNQ3_7M85WGpYL8jEh6McJr3XnDL_Eg/viewform?embedded=true" style="width: 100%;height:1000px" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
                 </div>
 
               </div>
