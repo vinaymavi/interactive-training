@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 
 /**
  * Payload helper main class the process all webhook requests payload.
+ * TODO: implementaion of this file does not looks good. can be improve with recursion.
  */
 public class PayloadHelper {
     private static final String QUIZ_LIST_MESSAGE = "Please select quiz from bubble list.";
@@ -119,7 +120,7 @@ public class PayloadHelper {
                 session = SessionOfy.loadBySessionId(sessionId);
                 presentation = session.getPresentationRef();
                 questionList = QuestionOfy.listByPresentation(presentation);
-                textMessage = QuestionHelper.textMessages(questionList, this.payload.getSenderId(), session);
+                textMessage = QuestionHelper.textMessage(questionList, this.payload.getSenderId(), session);
                 facebook.sendMessage(gson.toJson(textMessage));
                 logger.info("SHOW SESSION_QUESTION_GROUPS");
                 break;

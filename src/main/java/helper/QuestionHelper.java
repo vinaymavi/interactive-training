@@ -65,6 +65,7 @@ public class QuestionHelper {
         List<QuickReply> quickReplies = new ArrayList<>();
         QuickReply quickReply;
         Payload payload;
+        StringBuffer messageContent = new StringBuffer();
 
         List<Option> options = question.getOptions();
         Option option;
@@ -72,9 +73,9 @@ public class QuestionHelper {
         List<TextMessage> textMessageList = new ArrayList<>();
 
         // Question textMessage.
-        textMessage = new TextMessage(question.getDesc());
-        textMessageList.add(textMessage);
-        textMessage.setRecipient(senderId);
+        messageContent.append(question.getDesc());
+        messageContent.append(System.lineSeparator());
+        messageContent.append(System.lineSeparator());
 
         // Option text message.
         for (int i = 0; i < options.size(); i++) {
@@ -87,11 +88,12 @@ public class QuestionHelper {
             payload.setOther("quizId", quiz.getQuizId());
             quickReply.setPayload(gson.toJson(payload));
             quickReplies.add(quickReply);
-            textMessage = new TextMessage("#" + (i + 1) + "    " + option.getContent(), quickReplies);
-            textMessage.setRecipient(senderId);
-            textMessageList.add(textMessage);
+            messageContent.append("#" + (i + 1) + "    " + option.getContent());
+            messageContent.append(System.lineSeparator());
         }
-
+        textMessage = new TextMessage(messageContent.toString(),quickReplies);
+        textMessage.setRecipient(senderId);
+        textMessageList.add(textMessage);
 
         return textMessageList;
     }
@@ -103,7 +105,7 @@ public class QuestionHelper {
      * @param senderId  {{@link String}}
      * @return
      */
-    public static TextMessage textMessages(List<Question> questions, String senderId, Session session) {
+    public static TextMessage textMessage(List<Question> questions, String senderId, Session session) {
         TextMessage textMessage;
         List<QuickReply> quickReplies = new ArrayList<>();
         QuickReply quickReply;
@@ -182,6 +184,7 @@ public class QuestionHelper {
         List<QuickReply> quickReplies = new ArrayList<>();
         QuickReply quickReply;
         Payload payload;
+        StringBuffer messageContent = new StringBuffer();
 
         List<Option> options = question.getOptions();
         Option option;
@@ -189,9 +192,7 @@ public class QuestionHelper {
         List<TextMessage> textMessageList = new ArrayList<>();
 
         // Question textMessage.
-        textMessage = new TextMessage(question.getDesc());
-        textMessageList.add(textMessage);
-        textMessage.setRecipient(senderId);
+        messageContent.append(question.getDesc());
 
         // Option text message.
         for (int i = 0; i < options.size(); i++) {
@@ -205,10 +206,11 @@ public class QuestionHelper {
             payload.setOther("sessionId", session.getSessionId());
             quickReply.setPayload(gson.toJson(payload));
             quickReplies.add(quickReply);
-            textMessage = new TextMessage("#" + (i + 1) + "    " + option.getContent(), quickReplies);
-            textMessage.setRecipient(senderId);
-            textMessageList.add(textMessage);
+            messageContent.append("#" + (i + 1) + "    " + option.getContent());
         }
+        textMessage = new TextMessage(messageContent.toString(),quickReplies);
+        textMessage.setRecipient(senderId);
+        textMessageList.add(textMessage);
         return textMessageList;
     }
 
