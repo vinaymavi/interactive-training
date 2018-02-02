@@ -66,6 +66,7 @@ public class CheckAndRegisterFbUser extends HttpServlet {
 
 
         logger.warning(payloadString);
+//        TODO: need to remvoe all console errors resolved.
         if (payloadString == "DEVELOPER_DEFINED_PAYLOAD") {
             return;
         }
