@@ -54,19 +54,28 @@ public class PayloadHelper {
         this.sendEditAction(this.payload.getSenderId());
         switch (this.payload.getFrom()) {
             case "ADMIN_MESSAGE":
-                this.processAction();
-                this.processNextAction();
+                try {
+                    this.processAction();
+                    this.processNextAction();
+                } catch (Exception e) {
+                    logger.warning(e.getMessage());
+                }
+
                 break;
             default:
                 logger.warning("this is an un-known payload.");
         }
     }
 
-    private void processAction() {
+    private void processAction() throws Exception {
         String msgPayload;
         switch (this.payload.getAction()) {
             case "REGISTRATION":
                 user = UserOfy.loadBySenderId(this.payload.getMessengerId());
+                if (user == null) {
+                    throw new Exception("User not found");
+                }
+
                 user.setRegistered(true);
                 UserOfy.save(user);
                 break;
@@ -75,7 +84,7 @@ public class PayloadHelper {
 //                TODO need to enhance for load more quiz.
                 List<Quiz> quizList = QuizOfy.list();
                 if (quizList.size() > 0) {
-                    ListTemplate listTemplate = ListTemplateHelper.getQuizList(quizList,this.payload.getSenderId());
+                    ListTemplate listTemplate = ListTemplateHelper.createMessage(quizList, this.payload.getSenderId());
                     msgPayload = gson.toJson(listTemplate);
                     logger.info("message = " + msgPayload);
                     facebook.sendMessage(msgPayload);

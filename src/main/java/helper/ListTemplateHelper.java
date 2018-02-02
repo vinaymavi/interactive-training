@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 public class ListTemplateHelper {
     private static Logger logger = Logger.getLogger(ListTemplateHelper.class.getName());
 
-    static ListTemplate getQuizList(List<Quiz> quizList, String senderId) {
+    static ListTemplate createMessage(List<Quiz> quizList, String senderId) {
         List<Element> elementList = new ArrayList<>();
         URL DEFAULT_QUIZ_URL = null;
         try {
@@ -30,7 +30,7 @@ public class ListTemplateHelper {
             Element element = new Element(quiz.getName(), quiz.getDesc(), DEFAULT_QUIZ_URL);
             String subtitle = quiz.getDesc()+System.lineSeparator()+"By - "+quiz.getUser().getFirstName();
             Element element1 = new Element(quiz.getName(),subtitle , DEFAULT_QUIZ_URL);
-            Button buttonPostback = new ButtonPostback("Start",ResponsePayloadHelper.startQuizPayLoad(quiz.getQuizId()));
+            Button buttonPostback = new ButtonPostback("Start",ResponsePayloadHelper.startQuiz(quiz.getQuizId()));
             List<Button> buttonList = new ArrayList<>();
             buttonList.add(buttonPostback);
             element.setButtons(buttonList);
@@ -38,7 +38,7 @@ public class ListTemplateHelper {
             elementList.add(element);
             elementList.add(element1);
         }
-        Payload payload = new Payload("list","compact",null,elementList);
+        Payload payload = new ListTemplatePayload("list","compact",null,elementList);
         Attachment attachment = new Attachment("template",payload);
         ListTemplate listTemplate = new ListTemplate(senderId, attachment);
         return listTemplate;

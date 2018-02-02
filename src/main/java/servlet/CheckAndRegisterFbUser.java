@@ -6,11 +6,13 @@ import entity.webhook.facebook.FbUserProfile;
 import entity.webhook.facebook.MessageEntry;
 import entity.webhook.facebook.WebhookPushData;
 import helper.FacebookHelper;
+import helper.GenericTemplateHelper;
 import helper.PayloadHelper;
 import persist.UserOfy;
 import send.ConversationMessage;
 import send.Facebook;
 import send.components.ResponsePayload;
+import send.template.GenericTemplate;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +33,7 @@ public class CheckAndRegisterFbUser extends HttpServlet {
         facebook = new Facebook();
         logger.warning("Check and Register start");
         String reqPayload = req.getParameter("payload");
+        logger.info("Request Payload = " + reqPayload);
         WebhookPushData webhookPushData = gson.fromJson(reqPayload, WebhookPushData.class);
         MessageEntry messageEntry = webhookPushData.getEntry().get(0).getMessaging().get(0);
         String senderId = messageEntry.getSender().get("id");
@@ -63,8 +66,8 @@ public class CheckAndRegisterFbUser extends HttpServlet {
                 user = FacebookHelper.FbUserProfileToUser(fbUserProfile, user, senderId);
             }
             if (!user.isRegistered()) {
-                String adminMsgPayload = ConversationMessage.newUserInfoToAdminButtonTemplate(webhookPushData,
-                        fbUserProfile);
+                GenericTemplate genericTemplate = GenericTemplateHelper.createMessage(webhookPushData,fbUserProfile,messageEntry);
+                String adminMsgPayload = gson.toJson(genericTemplate);
                 logger.warning("adminMsgPayload" + adminMsgPayload);
                 facebook.sendMessage(adminMsgPayload);
                 UserOfy.save(user);

@@ -1,6 +1,6 @@
 package send.template;
 
-import send.Attachment;
+import send.components.Attachment;
 import send.Message;
 
 import java.util.HashMap;
