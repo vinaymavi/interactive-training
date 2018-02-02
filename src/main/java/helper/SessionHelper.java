@@ -6,7 +6,7 @@ import entity.User;
 import persist.SessionOfy;
 import send.QuickReply;
 import send.TextMessage;
-import send.payload.Payload;
+import send.components.ResponsePayload;
 
 
 import java.util.*;
@@ -38,12 +38,12 @@ public class SessionHelper {
     public List<TextMessage> textMessages(List<Session> sessions, String senderId) {
         textMessages = new ArrayList<>();
         quickReplies = new ArrayList<>();
-        Payload payload;
+        ResponsePayload payload;
         for (int i = 0; i < sessions.size(); i++) {
             session = sessions.get(i);
             message = "#" + (i + 1) + " " + session.getName() + System.lineSeparator() + session.getDesc();
             quickReply = new QuickReply("" + (i + 1));
-            payload = new Payload("SESSION_QUESTION_GROUPS", "NONE");
+            payload = new ResponsePayload("SESSION_QUESTION_GROUPS", "NONE");
             other = payload.getOther();
             other.put("sessionId", session.getSessionId());
             quickReply.setPayload(gson.toJson(payload));
@@ -65,12 +65,12 @@ public class SessionHelper {
     public List<TextMessage> sessions(List<Session> list, String senderId) {
         textMessages = new ArrayList<>();
         quickReplies = new ArrayList<>();
-        Payload payload;
+        ResponsePayload payload;
         for (int i = 0; i < list.size(); i++) {
             session = list.get(i);
             message = "#" + (i + 1) + " " + session.getName() + System.lineSeparator() + session.getDesc();
             quickReply = new QuickReply("" + (i + 1));
-            payload = new Payload("SESSION_ACTIONS", "NONE");
+            payload = new ResponsePayload("SESSION_ACTIONS", "NONE");
             other = payload.getOther();
             other.put("sessionId", session.getSessionId());
             quickReply.setPayload(gson.toJson(payload));
@@ -102,14 +102,14 @@ public class SessionHelper {
         quickReplies = new ArrayList<>();
         //Yes
         quickReply = new QuickReply("Yes :)");
-        Payload payload = new Payload("JOIN_SESSION", "JOIN_SESSION_CONFIRM");
+        ResponsePayload payload = new ResponsePayload("JOIN_SESSION", "JOIN_SESSION_CONFIRM");
         payload.setOther("sessionId", session.getSessionId());
         quickReply.setPayload(gson.toJson(payload));
         quickReplies.add(quickReply);
 
         //No
         quickReply = new QuickReply("Nope :(");
-        payload = new Payload("LIST_CURRENT_SESSION", "NONE");
+        payload = new ResponsePayload("LIST_CURRENT_SESSION", "NONE");
         payload.setOther("sessionId", session.getSessionId());
         quickReply.setPayload(gson.toJson(payload));
         quickReplies.add(quickReply);
@@ -124,14 +124,14 @@ public class SessionHelper {
         quickReplies = new ArrayList<>();
         //Yes
         quickReply = new QuickReply("Yes :)");
-        Payload payload = new Payload("ATTEND_SESSION", "ATTEND_SESSION_CONFIRM");
+        ResponsePayload payload = new ResponsePayload("ATTEND_SESSION", "ATTEND_SESSION_CONFIRM");
         payload.setOther("sessionId", session.getSessionId());
         quickReply.setPayload(gson.toJson(payload));
         quickReplies.add(quickReply);
 
         //No
         quickReply = new QuickReply("Nope :(");
-        payload = new Payload("LIST_SESSION", "NONE");
+        payload = new ResponsePayload("LIST_SESSION", "NONE");
         payload.setOther("sessionId", session.getSessionId());
         quickReply.setPayload(gson.toJson(payload));
         quickReplies.add(quickReply);

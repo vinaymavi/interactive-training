@@ -5,8 +5,8 @@ import entity.User;
 import entity.webhook.facebook.FbUserProfile;
 import entity.webhook.facebook.MessageEntry;
 import entity.webhook.facebook.WebhookPushData;
-import send.button.ButtonPayload;
-import send.payload.Payload;
+import send.components.ButtonPayload;
+import send.components.ResponsePayload;
 import send.template.ButtonTemplate;
 
 import java.util.ArrayList;
@@ -30,15 +30,15 @@ public class ConversationMessage {
         TextMessage textMessage = new TextMessage();
         MessageEntry messageEntry = webhookPushData.getEntry().get(0).getMessaging().get(0);
         Map<String, Object> message = new HashMap<>();
-        Payload payload;
+        ResponsePayload payload;
         List<QuickReply> quickReplies = new ArrayList<>();
         QuickReply doneQuickReply = new QuickReply("text", "Done");
-        payload = new Payload("REGISTRATION", "SEND_WELCOME_MESSAGE", messageEntry.getSender().get("id"));
+        payload = new ResponsePayload("REGISTRATION", "SEND_WELCOME_MESSAGE", messageEntry.getSender().get("id"));
         payload.setMessengerId(messageEntry.getSender().get("id"));
         doneQuickReply.setPayload(gson.toJson(payload));
 
         QuickReply wrongInfoQuickReply = new QuickReply("text", "WrongInfo");
-        payload = new Payload("NONE", "NONE", messageEntry.getSender().get("id"));
+        payload = new ResponsePayload("NONE", "NONE", messageEntry.getSender().get("id"));
         payload.setMessengerId(messageEntry.getSender().get("id"));
         wrongInfoQuickReply.setPayload(gson.toJson(payload));
 
@@ -57,16 +57,16 @@ public class ConversationMessage {
     public static String newUserInfoToAdminButtonTemplate(WebhookPushData webhookPushData, FbUserProfile
             fbUserProfile) {
         String adminId = "1405055952852003";
-        Payload payload;
+        ResponsePayload payload;
         String text = "NEW_USER|Name - " + fbUserProfile.getFirst_name() + " " + fbUserProfile.getLast_name() +
                 "| Facebook Id - " + webhookPushData.getEntry().get(0)
                 .getMessaging().get(0).getMessage().getText();
         MessageEntry messageEntry = webhookPushData.getEntry().get(0).getMessaging().get(0);
         List<ButtonPayload> buttonPayloads = new ArrayList<>();
-        payload = new Payload("REGISTRATION", "SEND_WELCOME_MESSAGE", messageEntry.getSender().get("id"));
+        payload = new ResponsePayload("REGISTRATION", "SEND_WELCOME_MESSAGE", messageEntry.getSender().get("id"));
         payload.setMessengerId(messageEntry.getSender().get("id"));
         buttonPayloads.add(new ButtonPayload("Done", gson.toJson(payload)));
-        payload = new Payload("NONE", "NONE", messageEntry.getSender().get("id"));
+        payload = new ResponsePayload("NONE", "NONE", messageEntry.getSender().get("id"));
         payload.setMessengerId(messageEntry.getSender().get("id"));
         buttonPayloads.add(new ButtonPayload("WrongInfo", gson.toJson(payload)));
         ButtonTemplate buttonTemplate = new ButtonTemplate(adminId, text, buttonPayloads);

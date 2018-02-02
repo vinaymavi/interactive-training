@@ -498,10 +498,10 @@
 
 		// Arrow controls
 		createSingletonNode( dom.wrapper, 'aside', 'controls',
-			'<button class="navigate-left" aria-label="previous slide"></button>' +
-			'<button class="navigate-right" aria-label="next slide"></button>' +
-			'<button class="navigate-up" aria-label="above slide"></button>' +
-			'<button class="navigate-down" aria-label="below slide"></button>' );
+			'<components class="navigate-left" aria-label="previous slide"></components>' +
+			'<components class="navigate-right" aria-label="next slide"></components>' +
+			'<components class="navigate-up" aria-label="above slide"></components>' +
+			'<components class="navigate-down" aria-label="below slide"></components>' );
 
 		// Slide number
 		dom.slideNumber = createSingletonNode( dom.wrapper, 'div', 'slide-number', '' );
@@ -4219,7 +4219,7 @@
 				case 32: isOverview() ? deactivateOverview() : event.shiftKey ? navigatePrev() : navigateNext(); break;
 				// return
 				case 13: isOverview() ? deactivateOverview() : triggered = false; break;
-				// two-spot, semicolon, b, v, period, Logitech presenter tools "black screen" button
+				// two-spot, semicolon, b, v, period, Logitech presenter tools "black screen" components
 				case 58: case 59: case 66: case 86: case 190: case 191: togglePause(); break;
 				// f
 				case 70: enterFullscreen(); break;

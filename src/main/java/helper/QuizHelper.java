@@ -7,8 +7,9 @@ import entity.User;
 import persist.AnswerOfy;
 import send.QuickReply;
 import send.TextMessage;
-import send.payload.Payload;
+import send.components.ResponsePayload;
 
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +28,7 @@ public class QuizHelper {
     private Quiz quiz;
     private List<Quiz> quizs;
     DecimalFormat decimalFormat = new DecimalFormat("####0.00");
-    Payload payload;
+    ResponsePayload payload;
 
     public QuizHelper() {
     }
@@ -51,7 +52,7 @@ public class QuizHelper {
         QuickReply quickReply;
         for (Quiz quiz : this.quizs) {
             quickReply = new QuickReply(quiz.getName());
-            payload = new Payload("QUIZ_INFO", "NONE");
+            payload = new ResponsePayload("QUIZ_INFO", "NONE");
             payload.setOther("quizId", quiz.getQuizId());
             quickReply.setPayload(gson.toJson(payload));
             quickReplies.add(quickReply);
@@ -67,7 +68,7 @@ public class QuizHelper {
     public List<QuickReply> quickReplies() {
         List<QuickReply> quickReplies = new ArrayList<>();
         QuickReply quickReply = new QuickReply(this.quiz.getName());
-        payload = new Payload("QUIZ_INFO", "NONE");
+        payload = new ResponsePayload("QUIZ_INFO", "NONE");
         payload.setOther("quizId", quiz.getQuizId());
         quickReply.setPayload(gson.toJson(payload));
         quickReplies.add(quickReply);
@@ -77,16 +78,16 @@ public class QuizHelper {
     public TextMessage quizInfo(String senderId) {
         List<QuickReply> quickReplies = new ArrayList<>();
         QuickReply quickReply;
-        Payload payload;
+        ResponsePayload payload;
         String msg = "Name = " + this.quiz.getName() + ", Desc = " + this.quiz.getDesc();
         quickReply = new QuickReply("Start");
-        payload = new Payload("START_QUIZ", "NONE");
+        payload = new ResponsePayload("START_QUIZ", "NONE");
         payload.setOther("quizId", this.quiz.getQuizId());
         quickReply.setPayload(gson.toJson(payload));
         quickReplies.add(quickReply);
 
         quickReply = new QuickReply("Back");
-        payload = new Payload("LIST_QUIZ", "NONE");
+        payload = new ResponsePayload("LIST_QUIZ", "NONE");
         quickReply.setPayload(gson.toJson(payload));
         quickReplies.add(quickReply);
 

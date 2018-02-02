@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import entity.*;
 import send.QuickReply;
 import send.TextMessage;
-import send.payload.Payload;
+import send.components.ResponsePayload;
 
 import java.util.*;
 
@@ -64,7 +64,7 @@ public class QuestionHelper {
     public static List<TextMessage> textMessage(Question question, Quiz quiz, int questionIndex, String senderId) {
         List<QuickReply> quickReplies = new ArrayList<>();
         QuickReply quickReply;
-        Payload payload;
+        ResponsePayload payload;
         StringBuffer messageContent = new StringBuffer();
 
         List<Option> options = question.getOptions();
@@ -81,7 +81,7 @@ public class QuestionHelper {
         for (int i = 0; i < options.size(); i++) {
             option = options.get(i);
             quickReply = new QuickReply(" " + (i + 1) + " ");
-            payload = new Payload("ADD_ANSWER", "SEND_NEXT_QUESTION");
+            payload = new ResponsePayload("ADD_ANSWER", "SEND_NEXT_QUESTION");
             payload.setOther("questionId", question.getQuestionId());
             payload.setOther("isRight", option.isRight());
             payload.setOther("questionIndex", questionIndex);
@@ -109,7 +109,7 @@ public class QuestionHelper {
         TextMessage textMessage;
         List<QuickReply> quickReplies = new ArrayList<>();
         QuickReply quickReply;
-        Payload payload;
+        ResponsePayload payload;
         Set groups = questionGroups(questions);
         Iterator iterator = groups.iterator();
         Question question = questions.get(0);
@@ -117,7 +117,7 @@ public class QuestionHelper {
         while (iterator.hasNext()) {
             questionNature = (String) iterator.next();
             quickReply = new QuickReply(questionNature);
-            payload = new Payload("SEND_QUESTIONS_TO_AUDIENCE", "SEND_CONFIRMATION_MSG_TO_OWNER");
+            payload = new ResponsePayload("SEND_QUESTIONS_TO_AUDIENCE", "SEND_CONFIRMATION_MSG_TO_OWNER");
             payload.setOther("presentationId", question.getPresentationRef().getPresentationId());
             payload.setOther("questionNature", questionNature);
             payload.setOther("sessionId", session.getSessionId());
@@ -141,7 +141,7 @@ public class QuestionHelper {
     public static List<TextMessage> textMsgFeedback(Question question, int questionIndex, String senderId, Session session) {
         List<QuickReply> quickReplies = new ArrayList<>();
         QuickReply quickReply;
-        Payload payload;
+        ResponsePayload payload;
 
         List<Option> options = question.getOptions();
         Option option;
@@ -157,7 +157,7 @@ public class QuestionHelper {
         for (int i = 0; i < options.size(); i++) {
             option = options.get(i);
             quickReply = new QuickReply(" " + (i + 1) + " ");
-            payload = new Payload("ADD_FEEDBACK_ANSWER", "SEND_NEXT_FEEDBACK_QUESTION");
+            payload = new ResponsePayload("ADD_FEEDBACK_ANSWER", "SEND_NEXT_FEEDBACK_QUESTION");
             payload.setOther("questionId", question.getQuestionId());
             payload.setOther("questionIndex", questionIndex);
             payload.setOther("optionIndex", i);
@@ -183,7 +183,7 @@ public class QuestionHelper {
     public static List<TextMessage> textMsgQuestion(Question question, int questionIndex, String senderId, Session session) {
         List<QuickReply> quickReplies = new ArrayList<>();
         QuickReply quickReply;
-        Payload payload;
+        ResponsePayload payload;
         StringBuffer messageContent = new StringBuffer();
 
         List<Option> options = question.getOptions();
@@ -198,7 +198,7 @@ public class QuestionHelper {
         for (int i = 0; i < options.size(); i++) {
             option = options.get(i);
             quickReply = new QuickReply(" " + (i + 1) + " ");
-            payload = new Payload("ADD_QUESTION_ANSWER", "SEND_NEXT_QUESTION_QUESTION");
+            payload = new ResponsePayload("ADD_QUESTION_ANSWER", "SEND_NEXT_QUESTION_QUESTION");
             payload.setOther("questionId", question.getQuestionId());
             payload.setOther("questionIndex", questionIndex);
             payload.setOther("isRight", option.isRight());

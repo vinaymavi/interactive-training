@@ -19,4 +19,13 @@ public class Message {
         recipient.put("id", recipientId);
         this.recipient = recipient;
     }
+
+    public Message() {
+    }
+
+    public Message(String recipientId) {
+        Map<String, String> recipient = new HashMap<>();
+        recipient.put("id", recipientId);
+        this.recipient = recipient;
+    }
 }

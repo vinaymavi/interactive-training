@@ -4,7 +4,8 @@ import com.google.gson.Gson;
 import entity.*;
 import persist.*;
 import send.*;
-import send.payload.Payload;
+import send.components.ResponsePayload;
+import send.template.ListTemplate;
 
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class PayloadHelper {
     private static SessionHelper sessionHelper = new SessionHelper();
     private static UserHelper userHelper = new UserHelper();
     AppHelper appHelper = new AppHelper();
-    private Payload payload;
+    private ResponsePayload payload;
 
     Map<String, Object> other;
     String quizId;
@@ -45,7 +46,7 @@ public class PayloadHelper {
     Set<User> audience;
     Double index;
 
-    public PayloadHelper(Payload payload) {
+    public PayloadHelper(ResponsePayload payload) {
         this.payload = payload;
     }
 
@@ -71,13 +72,11 @@ public class PayloadHelper {
                 break;
             case "LIST_QUIZ":
 //                TODO move this code quiz helper.
+//                TODO need to enhance for load more quiz.
                 List<Quiz> quizList = QuizOfy.list();
                 if (quizList.size() > 0) {
-                    QuizHelper quizHelper = new QuizHelper(quizList);
-
-                    textMessage = new TextMessage(QUIZ_LIST_MESSAGE, quizHelper.quickReplies(true));
-                    textMessage.setRecipient(this.payload.getSenderId());
-                    msgPayload = gson.toJson(textMessage);
+                    ListTemplate listTemplate = ListTemplateHelper.getQuizList(quizList,this.payload.getSenderId());
+                    msgPayload = gson.toJson(listTemplate);
                     logger.info("message = " + msgPayload);
                     facebook.sendMessage(msgPayload);
                 } else {

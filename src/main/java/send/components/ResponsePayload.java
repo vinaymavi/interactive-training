@@ -1,14 +1,14 @@
-package send.payload;
+package send.components;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Facebook messenger work with payload.
- * We need to send payload with message and when User clicks to the button or quick replies the same payload
+ * We need to send payload with message and when User clicks to the components or quick replies the same payload
  * messenger send to the webhook.
  */
-public class Payload {
+public class ResponsePayload {
     private static final String DEFAULT_FROM = "ADMIN_MESSAGE";
     private String from;
     private String action;
@@ -22,7 +22,7 @@ public class Payload {
     private String senderId;
     private Map<String, Object> other;
 
-    public Payload() {
+    public ResponsePayload() {
     }
 
     /**
@@ -30,7 +30,7 @@ public class Payload {
      * @param nextAction {String}
      * @param senderId   {String}
      */
-    public Payload(String action, String nextAction, String senderId) {
+    public ResponsePayload(String action, String nextAction, String senderId) {
         this.from = DEFAULT_FROM;
         this.action = action;
         this.nextAction = nextAction;
@@ -42,7 +42,7 @@ public class Payload {
      * @param action     {String}
      * @param nextAction {String}
      */
-    public Payload(String action, String nextAction) {
+    public ResponsePayload(String action, String nextAction) {
         this.from = DEFAULT_FROM;
         this.action = action;
         this.nextAction = nextAction;

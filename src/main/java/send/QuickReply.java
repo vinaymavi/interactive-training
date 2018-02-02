@@ -1,8 +1,5 @@
 package send;
 
-import com.google.gson.Gson;
-import send.payload.Payload;
-
 import java.net.URL;
 
 /**

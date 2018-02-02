@@ -1,7 +1,7 @@
 package send.template;
 
 import send.Message;
-import send.button.ButtonPayload;
+import send.components.ButtonPayload;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +26,7 @@ public class ButtonTemplate extends Message {
      *                    "attachment":{
      *                    "type":"template",
      *                    "payload":{
-     *                    "template_type":"button",
+     *                    "template_type":"components",
      *                    "text":"What do you want to do next?",
      *                    "buttons":[
      *                    {
@@ -46,14 +46,14 @@ public class ButtonTemplate extends Message {
      *                    }
      */
     public ButtonTemplate(String recipientId, String desc, List<ButtonPayload> buttons) {
+        super(recipientId);
         Map<String, Object> attachment = new HashMap<>();
         Map<String, Object> payload = new HashMap<>();
-        payload.put("template_type", "button");
+        payload.put("template_type", "components");
         payload.put("text", desc);
         payload.put("buttons", buttons);
         attachment.put("type", "template");
         attachment.put("payload", payload);
         this.message.put("attachment", attachment);
-        this.setRecipient(recipientId);
     }
 }

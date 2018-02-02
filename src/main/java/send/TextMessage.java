@@ -13,6 +13,7 @@ public class TextMessage extends Message {
     private Map<String, Object> message;
 
     public TextMessage() {
+
     }
 
     public TextMessage(String message) {

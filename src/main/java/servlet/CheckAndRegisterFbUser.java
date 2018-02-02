@@ -10,7 +10,7 @@ import helper.PayloadHelper;
 import persist.UserOfy;
 import send.ConversationMessage;
 import send.Facebook;
-import send.payload.Payload;
+import send.components.ResponsePayload;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +37,7 @@ public class CheckAndRegisterFbUser extends HttpServlet {
         User user = null;
         FbUserProfile fbUserProfile = null;
         PayloadHelper payloadHelper;
-        Payload payload;
+        ResponsePayload payload;
         Map<String, String> quickReplies = null;
         if (webhookPushData.getEntry().get(0).getMessaging().get(0).getMessage() != null) {
             quickReplies = webhookPushData.getEntry().get(0).getMessaging().get(0).getMessage().getQuick_reply();
@@ -73,7 +73,7 @@ public class CheckAndRegisterFbUser extends HttpServlet {
                 logger.warning("User Already registered and we are not able to understand the query.");
             }
         } else {
-            payload = gson.fromJson(quickReplyPayload, Payload.class);
+            payload = gson.fromJson(quickReplyPayload, ResponsePayload.class);
             payload.setSenderId(senderId);
             user = UserOfy.loadBySenderId(senderId);
             if (user == null) {
@@ -87,21 +87,21 @@ public class CheckAndRegisterFbUser extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest req, HttpServletResponse resp) {
-        Payload payload;
+        ResponsePayload payload;
         try {
 //            Given payload only for testing.
-            payload = new Payload("LIST_QUIZ", "NONE");
+            payload = new ResponsePayload("LIST_QUIZ", "NONE");
             logger.info("LIST_QUIZ = " + gson.toJson(payload));
-            payload = new Payload("LIST_CURRENT_SESSION", "NONE");
+            payload = new ResponsePayload("LIST_CURRENT_SESSION", "NONE");
             logger.info("LIST_CURRENT_SESSION = " + gson.toJson(payload));
-            payload = new Payload("LIST_SESSION", "NONE");
+            payload = new ResponsePayload("LIST_SESSION", "NONE");
             logger.info("LIST_SESSION = " + gson.toJson(payload));
-            payload = new Payload("LIST_MY_SESSION", "NONE");
+            payload = new ResponsePayload("LIST_MY_SESSION", "NONE");
             logger.info("LIST_MY_SESSION = " + gson.toJson(payload));
-            payload = new Payload("HELP", "NONE");
+            payload = new ResponsePayload("HELP", "NONE");
             logger.info("HELP = " + gson.toJson(payload));
             payload = gson.fromJson("{\"from\":\"ADMIN_MESSAGE\",\"action\":\"LIST_QUIZ\",\"nextAction\":\"NONE\"," +
-                    "\"other\":{}}", Payload.class);
+                    "\"other\":{}}", ResponsePayload.class);
             logger.info("Object to JSON" + gson.toJson(payload));
             resp.getWriter().write("<h1>CheckAndRegister is working.</h1>");
         } catch (IOException ioe) {

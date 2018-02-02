@@ -1,6 +1,8 @@
-package send.button;
+package send.components;
 
 /**
+ * @deprecated
+ * We should use {{@link ButtonPostback}}
  * Created by vinaymavi on 17/02/17.
  */
 public class ButtonPayload {
