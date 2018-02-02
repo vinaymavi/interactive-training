@@ -11,6 +11,7 @@ public class MessageEntry {
     private Map<String,String> sender;
     private Map<String,String> recipient;
     private Map<String,String> postback;
+    private Map<String,String> referral;
     private double timestamp;
     private Message message;
 
@@ -55,5 +56,13 @@ public class MessageEntry {
 
     public void setPostback(Map<String, String> postback) {
         this.postback = postback;
+    }
+
+    public Map<String, String> getReferral() {
+        return referral;
+    }
+
+    public void setReferral(Map<String, String> referral) {
+        this.referral = referral;
     }
 }

@@ -37,6 +37,7 @@ public class CheckAndRegisterFbUser extends HttpServlet {
         PayloadHelper payloadHelper;
         ResponsePayload payload;
         Map<String, String> quickReplies = null;
+        String payloadString = null;
         logger.warning("Check and Register start");
 
         String reqPayload = req.getParameter("payload");
@@ -48,21 +49,27 @@ public class CheckAndRegisterFbUser extends HttpServlet {
         senderId = messageEntry.getSender().get("id");
 
         //       quick replies and postback have two different keys.
-        if (webhookPushData.getEntry().get(0).getMessaging().get(0).getMessage() != null) {
-            quickReplies = webhookPushData.getEntry().get(0).getMessaging().get(0).getMessage().getQuick_reply();
+        if (webhookPushData.getEntry().get(0).getMessaging().get(0).getMessage() != null
+                && webhookPushData.getEntry().get(0).getMessaging().get(0).getMessage().getQuick_reply() != null) {
+
+            payloadString = webhookPushData.getEntry().get(0).getMessaging().get(0).getMessage().getQuick_reply().get("payload");
+
+        } else if (webhookPushData.getEntry().get(0).getMessaging().get(0) != null
+                && webhookPushData.getEntry().get(0).getMessaging().get(0).getPostback() != null) {
+
+            payloadString = webhookPushData.getEntry().get(0).getMessaging().get(0).getPostback().get("payload");
+
+        } else if (webhookPushData.getEntry().get(0).getMessaging().get(0) != null
+                && webhookPushData.getEntry().get(0).getMessaging().get(0).getReferral() != null) {
+            payloadString = gson.fromJson(webhookPushData.getEntry().get(0).getMessaging().get(0).getReferral().get("ref"), String.class);
         }
-        String quickReplyPayload = null;
 
-        if (quickReplies != null) {
-            quickReplyPayload = quickReplies.get("payload");
-        } else if (webhookPushData.getEntry().get(0).getMessaging().get(0).getPostback() != null) {
-            quickReplyPayload = webhookPushData.getEntry().get(0).getMessaging().get(0).getPostback().get("payload");
+
+        logger.warning(payloadString);
+        if (payloadString == "DEVELOPER_DEFINED_PAYLOAD") {
+            return;
         }
-
-
-        logger.warning(quickReplyPayload);
-
-        if (quickReplyPayload == null) {
+        if (payloadString == null) {
             String profileStr = null;
             profileStr = new Facebook().getUserProfile(senderId);
             logger.warning("ProfileStr" + profileStr);
@@ -83,7 +90,7 @@ public class CheckAndRegisterFbUser extends HttpServlet {
                 logger.warning("User Already registered and we are not able to understand the query.");
             }
         } else {
-            payload = gson.fromJson(quickReplyPayload, ResponsePayload.class);
+            payload = gson.fromJson(payloadString, ResponsePayload.class);
             payload.setSenderId(senderId);
             user = UserOfy.loadBySenderId(senderId);
             if (user == null) {

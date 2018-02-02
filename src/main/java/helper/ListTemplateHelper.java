@@ -1,5 +1,6 @@
 package helper;
 
+import api.Constants;
 import entity.Quiz;
 
 import send.components.*;
@@ -21,7 +22,7 @@ public class ListTemplateHelper {
         List<Element> elementList = new ArrayList<>();
         URL DEFAULT_QUIZ_URL = null;
         try {
-            DEFAULT_QUIZ_URL = new URL("https://www.valuecoders.com/blog/wp-content/uploads/2017/02/javascript-frameworks.jpg");
+            DEFAULT_QUIZ_URL = new URL(Constants.DEFAULT_QUIZ_IMAGE);
         } catch (MalformedURLException e) {
             logger.warning(e.getMessage());
         }

@@ -6,6 +6,7 @@ import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Load;
 
+import java.net.URL;
 import java.util.Date;
 
 /**
@@ -21,6 +22,7 @@ public class Quiz {
     private String desc;
     @Index
     private String quizId;
+    private URL shorturl;
     @Load
     @Index
     Ref<User> user;
@@ -93,5 +95,13 @@ public class Quiz {
 
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
+    }
+
+    public URL getShorturl() {
+        return shorturl;
+    }
+
+    public void setShorturl(URL shorturl) {
+        this.shorturl = shorturl;
     }
 }

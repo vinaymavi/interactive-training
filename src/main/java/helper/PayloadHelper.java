@@ -5,6 +5,7 @@ import entity.*;
 import persist.*;
 import send.*;
 import send.components.ResponsePayload;
+import send.template.GenericTemplate;
 import send.template.ListTemplate;
 
 import java.util.List;
@@ -155,9 +156,8 @@ public class PayloadHelper {
                 logger.warning("Send Quiz info");
                 quizId = (String) this.payload.getOther().get("quizId");
                 quiz = QuizOfy.loadById(quizId);
-                QuizHelper quizHelper = new QuizHelper(quiz);
-                textMessage = quizHelper.quizInfo(this.payload.getSenderId());
-                facebook.sendMessage(gson.toJson(textMessage));
+                GenericTemplate genericTemplate = GenericTemplateHelper.createMessage(quiz,this.payload.getSenderId());
+                facebook.sendMessage(gson.toJson(genericTemplate));
                 break;
             case "START_QUIZ":
                 //TODO this is duplicate.

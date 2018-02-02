@@ -32,4 +32,10 @@ public class ResponsePayloadHelper {
         return gson.toJson(payload);
     }
 
+    public static String quizInfo(String quizId){
+        ResponsePayload payload = new ResponsePayload(ActionNames.QUIZ_INFO,ActionNames.NONE);
+        payload.setOther("quizId",quizId);
+        return gson.toJson(payload);
+    }
+
 }

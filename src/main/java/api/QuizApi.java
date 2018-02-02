@@ -6,6 +6,7 @@ import com.google.api.server.spi.config.Named;
 import entity.Quiz;
 import entity.User;
 import helper.AuthHelper;
+import helper.ShortUrlHelper;
 import persist.AuthOfy;
 import persist.QuizOfy;
 
@@ -36,5 +37,12 @@ public class QuizApi {
     @ApiMethod(name = "quiz.list", path = "quiz_list", httpMethod = "POST")
     public List<Quiz> list() {
         return QuizOfy.list();
+    }
+
+    @ApiMethod(name = "quiz.shorturl", path = "quiz_shorturl", httpMethod = "POST")
+    public Quiz shorturl(@Named("Token") String token, @Named("Quiz id") String quizId) {
+        Quiz quiz = QuizOfy.loadById(quizId);
+        quiz.setShorturl(ShortUrlHelper.quiz(quiz));
+        return quiz;
     }
 }
