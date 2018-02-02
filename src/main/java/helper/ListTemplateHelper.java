@@ -28,8 +28,12 @@ public class ListTemplateHelper {
         for (Quiz quiz :
                 quizList) {
             Element element = new Element(quiz.getName(), quiz.getDesc(), DEFAULT_QUIZ_URL);
-            String subtitle = quiz.getDesc()+System.lineSeparator()+"By - "+quiz.getUser().getFirstName();
-            Element element1 = new Element(quiz.getName(),subtitle , DEFAULT_QUIZ_URL);
+            StringBuffer subtitleBuffer = new StringBuffer();
+            subtitleBuffer.append(quiz.getDesc());
+            if(quiz.getUser() != null){
+                subtitleBuffer.append(System.lineSeparator()+"By - "+quiz.getUser().getFirstName());
+            }
+            Element element1 = new Element(quiz.getName(),subtitleBuffer.toString() , DEFAULT_QUIZ_URL);
             Button buttonPostback = new ButtonPostback("Start",ResponsePayloadHelper.startQuiz(quiz.getQuizId()));
             List<Button> buttonList = new ArrayList<>();
             buttonList.add(buttonPostback);

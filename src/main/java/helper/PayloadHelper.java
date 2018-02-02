@@ -54,28 +54,19 @@ public class PayloadHelper {
         this.sendEditAction(this.payload.getSenderId());
         switch (this.payload.getFrom()) {
             case "ADMIN_MESSAGE":
-                try {
-                    this.processAction();
-                    this.processNextAction();
-                } catch (Exception e) {
-                    logger.warning(e.getMessage());
-                }
-
+                this.processAction();
+                this.processNextAction();
                 break;
             default:
                 logger.warning("this is an un-known payload.");
         }
     }
 
-    private void processAction() throws Exception {
+    private void processAction() {
         String msgPayload;
         switch (this.payload.getAction()) {
             case "REGISTRATION":
                 user = UserOfy.loadBySenderId(this.payload.getMessengerId());
-                if (user == null) {
-                    throw new Exception("User not found");
-                }
-
                 user.setRegistered(true);
                 UserOfy.save(user);
                 break;
