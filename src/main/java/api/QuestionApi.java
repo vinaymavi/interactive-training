@@ -42,7 +42,7 @@ public class QuestionApi {
             logger.severe("SlideId,PresentationId,QuizId at-least one required");
             return null;
         }
-
+        // slide id to register question on a perticular slide.
         if (slideId != null && slideId instanceof String) {
             slide = SlideOfy.loadBySlideId(slideId);
             question.setSlideRef(slide);

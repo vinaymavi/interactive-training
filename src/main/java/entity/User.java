@@ -189,7 +189,7 @@ public class User {
 
     @Override
     public int hashCode() {
-        return this.id.intValue();
+        return this.id != null ? this.id.intValue() : 0;
     }
 
     @Override
