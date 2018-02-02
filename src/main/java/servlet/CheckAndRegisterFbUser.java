@@ -31,17 +31,23 @@ public class CheckAndRegisterFbUser extends HttpServlet {
 
     public void doPost(HttpServletRequest req, HttpServletResponse resp) {
         facebook = new Facebook();
-        logger.warning("Check and Register start");
-        String reqPayload = req.getParameter("payload");
-        logger.info("Request Payload = " + reqPayload);
-        WebhookPushData webhookPushData = gson.fromJson(reqPayload, WebhookPushData.class);
-        MessageEntry messageEntry = webhookPushData.getEntry().get(0).getMessaging().get(0);
-        String senderId = messageEntry.getSender().get("id");
+        String senderId;
         User user = null;
         FbUserProfile fbUserProfile = null;
         PayloadHelper payloadHelper;
         ResponsePayload payload;
         Map<String, String> quickReplies = null;
+        logger.warning("Check and Register start");
+
+        String reqPayload = req.getParameter("payload");
+
+        logger.info("Request Payload = " + reqPayload);
+
+        WebhookPushData webhookPushData = gson.fromJson(reqPayload, WebhookPushData.class);
+        MessageEntry messageEntry = webhookPushData.getEntry().get(0).getMessaging().get(0);
+        senderId = messageEntry.getSender().get("id");
+
+        //       quick replies and postback have two different keys.
         if (webhookPushData.getEntry().get(0).getMessaging().get(0).getMessage() != null) {
             quickReplies = webhookPushData.getEntry().get(0).getMessaging().get(0).getMessage().getQuick_reply();
         }
@@ -52,6 +58,7 @@ public class CheckAndRegisterFbUser extends HttpServlet {
         } else if (webhookPushData.getEntry().get(0).getMessaging().get(0).getPostback() != null) {
             quickReplyPayload = webhookPushData.getEntry().get(0).getMessaging().get(0).getPostback().get("payload");
         }
+
 
         logger.warning(quickReplyPayload);
 
@@ -66,7 +73,7 @@ public class CheckAndRegisterFbUser extends HttpServlet {
                 user = FacebookHelper.FbUserProfileToUser(fbUserProfile, user, senderId);
             }
             if (!user.isRegistered()) {
-                GenericTemplate genericTemplate = GenericTemplateHelper.createMessage(webhookPushData,fbUserProfile,messageEntry);
+                GenericTemplate genericTemplate = GenericTemplateHelper.createMessage(webhookPushData, fbUserProfile, messageEntry);
                 String adminMsgPayload = gson.toJson(genericTemplate);
                 logger.warning("adminMsgPayload" + adminMsgPayload);
                 facebook.sendMessage(adminMsgPayload);
