@@ -15,7 +15,7 @@
   <!-- Slick slider -->
   <link href="assets/css/slick.css" rel="stylesheet">
   <!-- Theme color -->
-  <link id="switcher" href="assets/css/theme-color/default-theme.css" rel="stylesheet">
+  <link id="switcher" href="assets/css/theme-color/dark-blue-theme.css" rel="stylesheet">
 
 
   <!-- Main Style -->
@@ -249,45 +249,24 @@
               <div class="mu-apps-screenshot-slider">
 
                 <div class="mu-single-screeshot">
-                  <img src="assets/images/screenshot/01.jpg" alt="App screenshot img">
+                  <img src="assets/images/screenshot/getstarted.jpg" alt="Get Started">
                 </div>
 
                 <div class="mu-single-screeshot">
-                  <img src="assets/images/screenshot/02.jpg" alt="App screenshot img">
+                  <img src="assets/images/screenshot/quizlist.jpg" alt="Quiz list">
                 </div>
 
                 <div class="mu-single-screeshot">
-                  <img src="assets/images/screenshot/03.jpg" alt="App screenshot img">
+                  <img src="assets/images/screenshot/question.jpg" alt="Question with quick replies.">
                 </div>
 
                 <div class="mu-single-screeshot">
-                  <img src="assets/images/screenshot/04.jpg" alt="App screenshot img">
+                  <img src="assets/images/screenshot/quizresult.jpg" alt="Quiz result">
                 </div>
 
                 <div class="mu-single-screeshot">
-                  <img src="assets/images/screenshot/05.jpg" alt="App screenshot img">
+                  <img src="assets/images/screenshot/focuseditem.jpg" alt="Focused quiz with reference URL.">
                 </div>
-
-                <div class="mu-single-screeshot">
-                  <img src="assets/images/screenshot/01.jpg" alt="App screenshot img">
-                </div>
-
-                <div class="mu-single-screeshot">
-                  <img src="assets/images/screenshot/02.jpg" alt="App screenshot img">
-                </div>
-
-                <div class="mu-single-screeshot">
-                  <img src="assets/images/screenshot/03.jpg" alt="App screenshot img">
-                </div>
-
-                <div class="mu-single-screeshot">
-                  <img src="assets/images/screenshot/04.jpg" alt="App screenshot img">
-                </div>
-
-                <div class="mu-single-screeshot">
-                  <img src="assets/images/screenshot/05.jpg" alt="App screenshot img">
-                </div>
-
               </div>
 
             </div>
