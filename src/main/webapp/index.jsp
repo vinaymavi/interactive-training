@@ -57,7 +57,7 @@
         <!-- Start header featured area -->
         <div class="mu-header-featured-area">
           <div class="mu-header-featured-img">
-            <img src="assets/images/iphone.png" alt="iphone image">
+            <img src="assets/images/screenshot/focuseditem_without_blur.jpg" alt="iphone image">
           </div>
 
           <div class="mu-header-featured-content">
@@ -127,7 +127,7 @@
               <div class="row">
                 <div class="col-md-6">
                   <div class="mu-feature-content-left">
-                    <img class="mu-profile-img" src="assets/images/iphone-group.png" alt="iphone Image">
+                    <img class="mu-profile-img" src="assets/images/screenshot/getstarted_small_size.jpg" alt="iphone Image">
                   </div>
                 </div>
                 <div class="col-md-6">
