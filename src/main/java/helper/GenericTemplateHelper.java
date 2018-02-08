@@ -1,6 +1,7 @@
 package helper;
 
 import api.Constants;
+import constants.Messages;
 import entity.Quiz;
 import entity.webhook.facebook.FbUserProfile;
 import entity.webhook.facebook.MessageEntry;
@@ -64,6 +65,23 @@ public class GenericTemplateHelper {
         List<Button> buttonList = new ArrayList<>();
         buttonList.add(buttonPostback);
         element.setButtons(buttonList);
+        elementList.add(element);
+
+        Payload payload = new Payload("generic", null, elementList);
+        Attachment attachment = new Attachment("template", payload);
+        GenericTemplate genericTemplate = new GenericTemplate(senderId, attachment);
+        return genericTemplate;
+    }
+
+    public static GenericTemplate unableToHelp(String senderId){
+        List<Element> elementList = new ArrayList<>();
+        URL imgNotAbleToHelo = null;
+        try {
+            imgNotAbleToHelo = new URL(Constants.DEFAULT_UNABLETOHELP_IMAGE);
+        } catch (MalformedURLException e) {
+            logger.warning(e.getMessage());
+        }
+        Element element = new Element(Messages.NOT_ABLE_TO_HELP_TITLE, Messages.NOT_ABLE_TO_HELP_MESSAGE, imgNotAbleToHelo);
         elementList.add(element);
 
         Payload payload = new Payload("generic", null, elementList);

@@ -38,6 +38,8 @@ public class CheckAndRegisterFbUser extends HttpServlet {
         ResponsePayload payload;
         Map<String, String> quickReplies = null;
         String payloadString = null;
+        String profileStr = null;
+
         logger.warning("Check and Register start");
 
         String reqPayload = req.getParameter("payload");
@@ -70,37 +72,28 @@ public class CheckAndRegisterFbUser extends HttpServlet {
         if (payloadString == "DEVELOPER_DEFINED_PAYLOAD") {
             return;
         }
-        if (payloadString == null) {
-            String profileStr = null;
+
+
+        user = UserOfy.loadBySenderId(senderId);
+        if (!(user instanceof User)) {
             profileStr = new Facebook().getUserProfile(senderId);
             logger.warning("ProfileStr" + profileStr);
+
             fbUserProfile = gson.fromJson(profileStr, FbUserProfile.class);
-            user = UserOfy.loadBySenderId(senderId);
+
             if (fbUserProfile != null) {
                 logger.warning("fbUserProfile created");
                 user = FacebookHelper.FbUserProfileToUser(fbUserProfile, user, senderId);
-            }
-            if (!user.isRegistered()) {
-                GenericTemplate genericTemplate = GenericTemplateHelper.createMessage(webhookPushData, fbUserProfile, messageEntry);
-                String adminMsgPayload = gson.toJson(genericTemplate);
-                logger.warning("adminMsgPayload" + adminMsgPayload);
-                facebook.sendMessage(adminMsgPayload);
                 UserOfy.save(user);
-            } else {
-//                TODO send not able to understand message.
-                logger.warning("User Already registered and we are not able to understand the query.");
-            }
-        } else {
-            payload = gson.fromJson(payloadString, ResponsePayload.class);
-            payload.setSenderId(senderId);
-            user = UserOfy.loadBySenderId(senderId);
-            if (user == null) {
-                logger.warning("User not registered for sender id = " + senderId);
-            } else {
-                payloadHelper = new PayloadHelper(payload);
-                payloadHelper.processPayload();
             }
         }
+        //TODO: need to put json conversion in try catch to avoid any expection.
+        payload = payloadString != null ? gson.fromJson(payloadString, ResponsePayload.class) : null;
+        if (payload != null) {
+            payload.setSenderId(senderId);
+        }
+        payloadHelper = new PayloadHelper(payload, user);
+        payloadHelper.processPayload();
 
     }
 

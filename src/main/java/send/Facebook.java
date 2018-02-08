@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 /**
- * Created by vku131 on 2/10/17.
+ * File use to send all message to facebook platform.
  */
 public class Facebook {
     private Logger logger = Logger.getLogger(webhook.Facebook.class.getName());

@@ -1,4 +1,4 @@
-package config;
+package constants;
 
 /**
  * Created by vku131 on 2/2/18.

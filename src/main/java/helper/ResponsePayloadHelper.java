@@ -1,7 +1,7 @@
 package helper;
 
 import com.google.gson.Gson;
-import config.ActionNames;
+import constants.ActionNames;
 import entity.webhook.facebook.FbUserProfile;
 import entity.webhook.facebook.MessageEntry;
 import send.components.ResponsePayload;

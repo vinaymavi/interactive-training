@@ -11,6 +11,7 @@ import send.template.ListTemplate;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -47,11 +48,17 @@ public class PayloadHelper {
     Set<User> audience;
     Double index;
 
-    public PayloadHelper(ResponsePayload payload) {
+    public PayloadHelper(ResponsePayload payload,User user) {
         this.payload = payload;
+        this.user = user;
     }
 
     public void processPayload() {
+        if(payload == null){
+            logger.log(Level.SEVERE,"EMPTY_PAYLOAD");
+            this.notAbleToHelp();
+            return;
+        }
         this.sendEditAction(this.payload.getSenderId());
         switch (this.payload.getFrom()) {
             case "ADMIN_MESSAGE":
@@ -62,6 +69,7 @@ public class PayloadHelper {
                 logger.warning("this is an un-known payload.");
         }
     }
+
 
     private void processAction() {
         String msgPayload;
@@ -337,6 +345,15 @@ public class PayloadHelper {
             default:
                 logger.warning("un-known next action");
         }
+    }
+
+    private void processAction(String action){
+
+    }
+
+    private void notAbleToHelp(){
+        GenericTemplate genericTemplate = GenericTemplateHelper.unableToHelp(this.user.getSenderId());
+        facebook.sendMessage(gson.toJson(genericTemplate));
     }
 
     private void sendEditAction(String senderId) {
