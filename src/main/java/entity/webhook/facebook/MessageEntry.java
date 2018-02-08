@@ -10,7 +10,7 @@ import java.util.Map;
 public class MessageEntry {
     private Map<String,String> sender;
     private Map<String,String> recipient;
-    private Map<String,String> postback;
+    private Postback postback;
     private Map<String,String> referral;
     private double timestamp;
     private Message message;
@@ -50,11 +50,11 @@ public class MessageEntry {
         this.message = message;
     }
 
-    public Map<String, String> getPostback() {
+    public Postback getPostback() {
         return postback;
     }
 
-    public void setPostback(Map<String, String> postback) {
+    public void setPostback(Postback postback) {
         this.postback = postback;
     }
 

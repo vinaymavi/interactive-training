@@ -58,8 +58,13 @@ public class CheckAndRegisterFbUser extends HttpServlet {
 
         } else if (webhookPushData.getEntry().get(0).getMessaging().get(0) != null
                 && webhookPushData.getEntry().get(0).getMessaging().get(0).getPostback() != null) {
-
-            payloadString = webhookPushData.getEntry().get(0).getMessaging().get(0).getPostback().get("payload");
+/**
+ * Referral could be part of payload in case of get-started button press.
+ * {"object":"page","entry":[{"id":"107476709764145","time":1518091624982,"messaging":[{"recipient":{"id":"107476709764145"},"timestamp":1518091624982,"sender":{"id":"1405055952852003"},"postback":{"payload":"{\"from\":\"ADMIN_MESSAGE\",\"action\":\"GET_STARTED\",\"nextAction\":\"NONE\",\"other\":{}}","referral":{"ref":"\"{\\\"from\\\":\\\"ADMIN_MESSAGE\\\",\\\"action\\\":\\\"QUIZ_INFO\\\",\\\"nextAction\\\":\\\"NONE\\\",\\\"other\\\":{\\\"quizId\\\":\\\"ookkoqiaklledt34185u47g1jp\\\"}}\"","source":"SHORTLINK","type":"OPEN_THREAD"},"title":"Get Started"}}]}]}
+ */
+            payloadString = webhookPushData.getEntry().get(0).getMessaging().get(0).getPostback().getReferral() != null ?
+                    gson.fromJson(webhookPushData.getEntry().get(0).getMessaging().get(0).getPostback().getReferral().get("ref"), String.class) :
+                    webhookPushData.getEntry().get(0).getMessaging().get(0).getPostback().getPayload();
 
         } else if (webhookPushData.getEntry().get(0).getMessaging().get(0) != null
                 && webhookPushData.getEntry().get(0).getMessaging().get(0).getReferral() != null) {
