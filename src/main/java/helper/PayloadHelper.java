@@ -8,6 +8,7 @@ import send.components.ResponsePayload;
 import send.template.GenericTemplate;
 import send.template.ListTemplate;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -47,15 +48,16 @@ public class PayloadHelper {
     Option option;
     Set<User> audience;
     Double index;
+    Double optionIndex;
 
-    public PayloadHelper(ResponsePayload payload,User user) {
+    public PayloadHelper(ResponsePayload payload, User user) {
         this.payload = payload;
         this.user = user;
     }
 
     public void processPayload() {
-        if(payload == null){
-            logger.log(Level.SEVERE,"EMPTY_PAYLOAD");
+        if (payload == null) {
+            logger.log(Level.SEVERE, "EMPTY_PAYLOAD");
             this.notAbleToHelp();
             return;
         }
@@ -164,7 +166,7 @@ public class PayloadHelper {
                 logger.warning("Send Quiz info");
                 quizId = (String) this.payload.getOther().get("quizId");
                 quiz = QuizOfy.loadById(quizId);
-                GenericTemplate genericTemplate = GenericTemplateHelper.createMessage(quiz,this.payload.getSenderId());
+                GenericTemplate genericTemplate = GenericTemplateHelper.createMessage(quiz, this.payload.getSenderId());
                 facebook.sendMessage(gson.toJson(genericTemplate));
                 break;
             case "START_QUIZ":
@@ -179,7 +181,15 @@ public class PayloadHelper {
                     textMessage = textMessageList.get(i);
                     facebook.sendMessage(gson.toJson(textMessage));
                 }
-
+                user = UserOfy.loadBySenderId(this.payload.getSenderId());
+                if (quiz.getAudience() != null) {
+                    quiz.getAudience().add(user);
+                } else {
+                    Set<User> audience = new HashSet<>();
+                    audience.add(user);
+                    quiz.setAudience(audience);
+                }
+                QuizOfy.save(quiz);
                 break;
             case "ADD_ANSWER":
 //                TODO need to add selected option.
@@ -187,7 +197,9 @@ public class PayloadHelper {
                 other = this.payload.getOther();
                 question = QuestionOfy.loadByQuestionId((String) this.payload.getOther().get("questionId"));
                 isRight = (Boolean) this.payload.getOther().get("isRight");
+                optionIndex = (Double) this.payload.getOther().get("optionIndex");
                 answer = new Answer(user, question, isRight);
+                answer.setSelectedOption(question.getOptions().get(optionIndex.intValue()));
                 quizId = (String) other.get("quizId");
                 quiz = QuizOfy.loadById(quizId);
                 answer.setQuizRef(quiz);
@@ -347,11 +359,11 @@ public class PayloadHelper {
         }
     }
 
-    private void processAction(String action){
+    private void processAction(String action) {
 
     }
 
-    private void notAbleToHelp(){
+    private void notAbleToHelp() {
         GenericTemplate genericTemplate = GenericTemplateHelper.unableToHelp(this.user.getSenderId());
         facebook.sendMessage(gson.toJson(genericTemplate));
     }

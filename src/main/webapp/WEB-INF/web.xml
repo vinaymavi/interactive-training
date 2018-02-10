@@ -93,6 +93,14 @@
         <servlet-name>export</servlet-name>
         <url-pattern>/export</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>ExportQuiz</servlet-name>
+        <servlet-class>servlet.ExportQuiz</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ExportQuiz</servlet-name>
+        <url-pattern>/export-quiz</url-pattern>
+    </servlet-mapping>
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>

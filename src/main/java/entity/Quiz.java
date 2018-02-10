@@ -8,6 +8,7 @@ import com.googlecode.objectify.annotation.Load;
 
 import java.net.URL;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Created by vinaymavi on 18/02/17.
@@ -28,6 +29,8 @@ public class Quiz {
     Ref<User> user;
     private Date addDate;
     private Date updateDate;
+    @Index
+    private Set<User> audience;
 
     public Quiz() {
 
@@ -103,5 +106,13 @@ public class Quiz {
 
     public void setShorturl(URL shorturl) {
         this.shorturl = shorturl;
+    }
+
+    public Set<User> getAudience() {
+        return audience;
+    }
+
+    public void setAudience(Set<User> audience) {
+        this.audience = audience;
     }
 }

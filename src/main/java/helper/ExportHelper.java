@@ -76,7 +76,7 @@ public class ExportHelper {
         List<Answer> answerList;
         String userName;
         for (Question q : this.questions) {
-            csvString.append(q.getDesc() + ",");
+            csvString.append(q.getDesc().replaceAll("[\\r\\n]+", "")+ ",");
         }
         csvString.append("\n");
         for (Map.Entry<String, List<Answer>> entry : this.userQuestionMapping.entrySet()) {

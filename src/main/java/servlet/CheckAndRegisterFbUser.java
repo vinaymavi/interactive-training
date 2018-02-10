@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -35,7 +36,7 @@ public class CheckAndRegisterFbUser extends HttpServlet {
         User user = null;
         FbUserProfile fbUserProfile = null;
         PayloadHelper payloadHelper;
-        ResponsePayload payload;
+        ResponsePayload payload = null;
         Map<String, String> quickReplies = null;
         String payloadString = null;
         String profileStr = null;
@@ -93,7 +94,12 @@ public class CheckAndRegisterFbUser extends HttpServlet {
             }
         }
         //TODO: need to put json conversion in try catch to avoid any expection.
-        payload = payloadString != null ? gson.fromJson(payloadString, ResponsePayload.class) : null;
+        try {
+            payload = payloadString != null ? gson.fromJson(payloadString, ResponsePayload.class) : null;
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+        }
+
         if (payload != null) {
             payload.setSenderId(senderId);
         }

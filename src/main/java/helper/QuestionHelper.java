@@ -86,6 +86,7 @@ public class QuestionHelper {
             payload.setOther("isRight", option.isRight());
             payload.setOther("questionIndex", questionIndex);
             payload.setOther("quizId", quiz.getQuizId());
+            payload.setOther("optionIndex", i);
             quickReply.setPayload(gson.toJson(payload));
             quickReplies.add(quickReply);
             messageContent.append("#" + (i + 1) + "    " + option.getContent());
