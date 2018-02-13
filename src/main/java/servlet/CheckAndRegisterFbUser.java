@@ -69,7 +69,12 @@ public class CheckAndRegisterFbUser extends HttpServlet {
 
         } else if (webhookPushData.getEntry().get(0).getMessaging().get(0) != null
                 && webhookPushData.getEntry().get(0).getMessaging().get(0).getReferral() != null) {
-            payloadString = gson.fromJson(webhookPushData.getEntry().get(0).getMessaging().get(0).getReferral().get("ref"), String.class);
+            try {
+                payloadString = gson.fromJson(webhookPushData.getEntry().get(0).getMessaging().get(0).getReferral().get("ref"), String.class);
+            }catch (Exception e ){
+                logger.log(Level.SEVERE,e.getMessage());
+            }
+
         }
 
 
