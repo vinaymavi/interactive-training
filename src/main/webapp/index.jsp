@@ -66,7 +66,7 @@
 
             <div class="mu-app-download-area">
               <h4>Lets Try It</h4>
-              <a class="mu-apple-btn" href="https://m.me/107476709764145"><i class="fa fa-comment"></i><span>Slides</span></a>
+              <a class="mu-apple-btn" href="https://m.me/slidesbot"><i class="fa fa-comment"></i><span>Slides</span></a>
             </div>
 
           </div>
@@ -292,7 +292,7 @@
 
 
             <div class="mu-download-content">
-              <a class="mu-apple-btn" href="https://m.me/107476709764145"><i class="fa fa-comment"></i><span>Slides</span></a>
+              <a class="mu-apple-btn" href="https://m.me/slidesbot"><i class="fa fa-comment"></i><span>Slides</span></a>
             </div>
 
           </div>
