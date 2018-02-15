@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-  <title>Apex App : Home</title>
+  <title>TakTak Bots : Home</title>
   <!-- Favicon -->
   <link rel="shortcut icon" type="image/icon" href="assets/images/favi.jpg"/>
   <!-- Font Awesome -->
@@ -48,7 +48,7 @@
         <!-- Start Logo -->
         <div class="mu-logo-area">
           <!-- text based logo -->
-          <a class="mu-logo" href="#">Apex App</a>
+          <a class="mu-logo" href="#">TakTak Bots</a>
           <!-- image based logo -->
           <!-- <a class="mu-logo" href="#"><img src="assets/images/logo.png" alt="logo img"></a> -->
         </div>
@@ -61,14 +61,12 @@
           </div>
 
           <div class="mu-header-featured-content">
-            <h1>Welcome To <span>Apex App</span></h1>
+            <h1>Welcome To <span>TakTak Bots</span></h1>
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto nisi, consectetur odit voluptate labore veniam, neque iure cumque aut recusandae iusto. Aliquid quos vel optio dolore consequuntur accusantium autem quaerat!</p>
 
             <div class="mu-app-download-area">
-              <h4>Download The App</h4>
-              <a class="mu-apple-btn" href="#"><i class="fa fa-apple"></i><span>apple store</span></a>
-              <a class="mu-google-btn" href="#"><i class="fa fa-android"></i><span>google play</span></a>
-              <!-- <a class="mu-windows-btn" href="#"><i class="fa fa-windows"></i><span>windows store</span></a> -->
+              <h4>Lets Try It</h4>
+              <a class="mu-apple-btn" href="https://m.me/107476709764145"><i class="fa fa-comment"></i><span>Slides</span></a>
             </div>
 
           </div>
@@ -91,9 +89,9 @@
     <nav class="mu-menu" role="navigation">
       <ul>
         <li><a href="#mu-header">Header</a></li>
-        <li><a href="#mu-feature">App Feature</a></li>
+        <li><a href="#mu-feature">Bot Feature</a></li>
         <li><a href="#mu-video">Promo Video</a></li>
-        <li><a href="#mu-apps-screenshot">Apps Screenshot</a></li>
+        <li><a href="#mu-apps-screenshot">Bot Screenshot</a></li>
         <li><a href="#mu-download">Download</a></li>
         <li><a href="#mu-faq">FAQ</a></li>
         <li><a href="#mu-contact">Get In Touch</a></li>
@@ -117,7 +115,7 @@
           <div class="mu-feature-area">
 
             <div class="mu-title-area">
-              <h2 class="mu-title">OUR APP FEATURES</h2>
+              <h2 class="mu-title">OUR BOT FEATURES</h2>
               <span class="mu-title-dot"></span>
               <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis unde, ut sapiente et voluptatum facilis consectetur incidunt provident asperiores at necessitatibus nulla sequi voluptas libero quasi explicabo veritatis minima porro.</p>
             </div>
@@ -237,7 +235,7 @@
           <div class="mu-apps-screenshot-area">
 
             <div class="mu-title-area">
-              <h2 class="mu-title">APPS SCREENSHOT</h2>
+              <h2 class="mu-title">BOT SCREENSHOT</h2>
               <span class="mu-title-dot"></span>
               <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis unde, ut sapiente et voluptatum facilis consectetur incidunt provident asperiores at necessitatibus nulla sequi voluptas libero quasi explicabo veritatis minima porro.</p>
             </div>
@@ -287,18 +285,15 @@
           <div class="mu-download-area">
 
             <div class="mu-title-area">
-              <h2 class="mu-title">GET THE APP</h2>
+              <h2 class="mu-title">LETS TRY THE BOT</h2>
               <span class="mu-title-dot"></span>
               <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis unde, ut sapiente et voluptatum facilis consectetur incidunt provident asperiores at necessitatibus nulla sequi voluptas libero quasi explicabo veritatis minima porro.</p>
             </div>
 
 
             <div class="mu-download-content">
-              <a class="mu-apple-btn" href="#"><i class="fa fa-apple"></i><span>apple store</span></a>
-              <a class="mu-google-btn" href="#"><i class="fa fa-android"></i><span>google play</span></a>
-              <a class="mu-windows-btn" href="#"><i class="fa fa-windows"></i><span>windows store</span></a>
+              <a class="mu-apple-btn" href="https://m.me/107476709764145"><i class="fa fa-comment"></i><span>Slides</span></a>
             </div>
-
 
           </div>
         </div>

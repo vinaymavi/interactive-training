@@ -1300,3 +1300,8 @@ button:focus {
 	
 }
 
+.slick-prev:before, .slick-next:before{
+	line-height: 2;
+	padding: 10px;
+}
+

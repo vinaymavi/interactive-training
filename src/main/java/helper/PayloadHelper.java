@@ -135,7 +135,7 @@ public class PayloadHelper {
                 logger.info("SHOW SESSION_QUESTION_GROUPS");
                 break;
             case "SEND_QUESTIONS_TO_AUDIENCE":
-                //TODO need to write a server this operation can be long.
+                //TODO need to write a servlet this operation can be long.
                 other = this.payload.getOther();
                 sessionId = (String) other.get("sessionId");
                 session = SessionOfy.loadBySessionId(sessionId);
