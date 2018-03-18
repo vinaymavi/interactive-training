@@ -15,7 +15,8 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- * Created by vku131 on 1/23/17.
+ * @deprecated
+ * We use this servlet to create web-based sessions,right now this feature no longer exists.
  */
 public class SessionServlet extends HttpServlet {
     private static Logger logger = Logger.getLogger(SessionServlet.class.getName());

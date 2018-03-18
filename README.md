@@ -12,3 +12,7 @@ By doing above you are ready to present an intractive session.
 
 Traning app will provide to two urls. one for presenter and second for audence.
 Traning app will push question to quesion to audence url as per persenter slide question configurtaion.
+
+## Development
+
+change mvn java version `export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_80.jdk/Contents/Home`

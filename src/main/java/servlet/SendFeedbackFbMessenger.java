@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 /**
- * Created by vku131 on 2/14/17.
+ * Servlet to send bulk messages to messenger platform.
  */
 public class SendFeedbackFbMessenger extends HttpServlet {
     private static Logger logger = Logger.getLogger(SendFeedbackFbMessenger.class.getName());

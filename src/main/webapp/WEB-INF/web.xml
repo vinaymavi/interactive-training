@@ -101,6 +101,22 @@
         <servlet-name>ExportQuiz</servlet-name>
         <url-pattern>/export-quiz</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>TriggerCloudFunction</servlet-name>
+        <servlet-class>servlet.TriggerCloudFunction</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TriggerCloudFunction</servlet-name>
+        <url-pattern>/trigger</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>Live</servlet-name>
+        <servlet-class>servlet.Live</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Live</servlet-name>
+        <url-pattern>/live</url-pattern>
+    </servlet-mapping>
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
