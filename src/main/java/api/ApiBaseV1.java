@@ -22,7 +22,9 @@ public class ApiBaseV1 {
     @ApiMethod(name = "api.info",path = "api_info")
     public Map<String,String> getApiDetails(){
         Map<String,String> map = new HashMap<String, String>();
-        map.put("api name","reveal");
+        map.put("name","InteractiveTraining");
+        map.put("author","@vinaymavi");
+        map.put("email","vinaymavi@gmail.com");
         return map;
     }
 }

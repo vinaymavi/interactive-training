@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import entity.config.Config;
 import persist.ConfigOfy;
 
-import javax.xml.soap.Text;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;

@@ -1,5 +1,8 @@
 package helper;
 
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.gson.Gson;
 import entity.*;
 import persist.*;
@@ -8,10 +11,7 @@ import send.components.ResponsePayload;
 import send.template.GenericTemplate;
 import send.template.ListTemplate;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -203,6 +203,11 @@ public class PayloadHelper {
                 quizId = (String) other.get("quizId");
                 quiz = QuizOfy.loadById(quizId);
                 answer.setQuizRef(quiz);
+                Map<String,String> payload = new HashMap<String, String>();
+                payload.put("senderId",user.getSenderId());
+                payload.put("quizId",quizId);
+                Queue queue = QueueFactory.getDefaultQueue();
+                queue.add(TaskOptions.Builder.withUrl("/trigger").param("payload", gson.toJson(payload)));
                 logger.info("Answer Key = " + AnswerOfy.save(answer));
                 break;
             case "SESSION_ACTIONS":

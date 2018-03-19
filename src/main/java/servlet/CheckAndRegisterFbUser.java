@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -59,10 +60,10 @@ public class CheckAndRegisterFbUser extends HttpServlet {
 
         } else if (webhookPushData.getEntry().get(0).getMessaging().get(0) != null
                 && webhookPushData.getEntry().get(0).getMessaging().get(0).getPostback() != null) {
-/**
- * Referral could be part of payload in case of get-started button press.
- * {"object":"page","entry":[{"id":"107476709764145","time":1518091624982,"messaging":[{"recipient":{"id":"107476709764145"},"timestamp":1518091624982,"sender":{"id":"1405055952852003"},"postback":{"payload":"{\"from\":\"ADMIN_MESSAGE\",\"action\":\"GET_STARTED\",\"nextAction\":\"NONE\",\"other\":{}}","referral":{"ref":"\"{\\\"from\\\":\\\"ADMIN_MESSAGE\\\",\\\"action\\\":\\\"QUIZ_INFO\\\",\\\"nextAction\\\":\\\"NONE\\\",\\\"other\\\":{\\\"quizId\\\":\\\"ookkoqiaklledt34185u47g1jp\\\"}}\"","source":"SHORTLINK","type":"OPEN_THREAD"},"title":"Get Started"}}]}]}
- */
+            /**
+             * Referral could be part of payload in case of get-started button press.
+             * {"object":"page","entry":[{"id":"107476709764145","time":1518091624982,"messaging":[{"recipient":{"id":"107476709764145"},"timestamp":1518091624982,"sender":{"id":"1405055952852003"},"postback":{"payload":"{\"from\":\"ADMIN_MESSAGE\",\"action\":\"GET_STARTED\",\"nextAction\":\"NONE\",\"other\":{}}","referral":{"ref":"\"{\\\"from\\\":\\\"ADMIN_MESSAGE\\\",\\\"action\\\":\\\"QUIZ_INFO\\\",\\\"nextAction\\\":\\\"NONE\\\",\\\"other\\\":{\\\"quizId\\\":\\\"ookkoqiaklledt34185u47g1jp\\\"}}\"","source":"SHORTLINK","type":"OPEN_THREAD"},"title":"Get Started"}}]}]}
+             */
             payloadString = webhookPushData.getEntry().get(0).getMessaging().get(0).getPostback().getReferral() != null ?
                     gson.fromJson(webhookPushData.getEntry().get(0).getMessaging().get(0).getPostback().getReferral().get("ref"), String.class) :
                     webhookPushData.getEntry().get(0).getMessaging().get(0).getPostback().getPayload();
@@ -71,8 +72,8 @@ public class CheckAndRegisterFbUser extends HttpServlet {
                 && webhookPushData.getEntry().get(0).getMessaging().get(0).getReferral() != null) {
             try {
                 payloadString = gson.fromJson(webhookPushData.getEntry().get(0).getMessaging().get(0).getReferral().get("ref"), String.class);
-            }catch (Exception e ){
-                logger.log(Level.SEVERE,e.getMessage());
+            } catch (Exception e) {
+                logger.log(Level.SEVERE, e.getMessage());
             }
 
         }
@@ -86,9 +87,9 @@ public class CheckAndRegisterFbUser extends HttpServlet {
 
 
         user = UserOfy.loadBySenderId(senderId);
-        if (!(user instanceof User)) {
-            profileStr = new Facebook().getUserProfile(senderId);
+        if (!(user instanceof User) ||  !(user.getProfileImage() instanceof URL)) {
             logger.warning("ProfileStr" + profileStr);
+            profileStr = new Facebook().getUserProfile(senderId);
 
             fbUserProfile = gson.fromJson(profileStr, FbUserProfile.class);
 

@@ -102,11 +102,11 @@
         <url-pattern>/export-quiz</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>TriggerCloudFunction</servlet-name>
-        <servlet-class>servlet.TriggerCloudFunction</servlet-class>
+        <servlet-name>Trigger</servlet-name>
+        <servlet-class>servlet.Trigger</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>TriggerCloudFunction</servlet-name>
+        <servlet-name>Trigger</servlet-name>
         <url-pattern>/trigger</url-pattern>
     </servlet-mapping>
     <servlet>

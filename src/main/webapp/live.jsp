@@ -74,6 +74,25 @@
 <button id='set2' onclick="render(data2)">Set2</button>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+<script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyBNyMER3IZ51HuOSl4ZK8RzIW7pctq9uDM",
+        authDomain: "slides-prod.firebaseapp.com",
+        databaseURL: "https://slides-prod.firebaseio.com",
+        projectId: "slides-prod",
+        storageBucket: "slides-prod.appspot.com",
+        messagingSenderId: "293774696802"
+    };
+    firebase.initializeApp(config);
+    var database = firebase.database();
+    console.log(database);
+    database.ref('live_results').on('value',(snapshot)=>{
+        console.log(snapshot.val());
+    });
+</script>
 <script>
     let data1 = [
         {
