@@ -2,6 +2,8 @@ package servlet;
 
 import com.google.appengine.repackaged.com.google.api.client.http.HttpRequest;
 import com.google.appengine.repackaged.com.google.api.client.http.HttpResponse;
+import entity.Quiz;
+import persist.QuizOfy;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,10 +21,11 @@ public class Live extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response){
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("live.jsp");
-        String sessionId = request.getParameter("session");
-        logger.info("LIVE_RESULT:START - session-id="+sessionId);
-        request.setAttribute("name","Git-Essential");
-        request.setAttribute("id","sessionid");
+        String quizId = request.getParameter("quiz");
+        logger.info("LIVE_RESULT:START - session-id="+quizId);
+        Quiz quiz = QuizOfy.loadById(quizId);
+        request.setAttribute("name",quiz.getName());
+        request.setAttribute("id",quizId);
 
         try{
             requestDispatcher.forward(request,response);

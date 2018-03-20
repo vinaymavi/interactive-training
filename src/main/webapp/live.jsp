@@ -64,14 +64,12 @@
         }
     </style>
     <script>
-        const sessionid = '<c:out value="${id}"/>';
+        const quizId = '<c:out value="${id}"/>';
     </script>
 </head>
 
 <body>
-<h1>Git-Essentails Live Quiz </h1>
-<button id="set1" onclick="render(data1)">Set1</button>
-<button id='set2' onclick="render(data2)">Set2</button>
+<h1><c:out value="${name}"/> Live Quiz </h1><button onclick="stopQuiz()">Stop</button>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.js"></script>
 
@@ -89,48 +87,24 @@
     firebase.initializeApp(config);
     var database = firebase.database();
     console.log(database);
-    database.ref('live_results').on('value',(snapshot)=>{
+    let data = [];
+    database.ref('live_results').on('value', (snapshot) => {
         console.log(snapshot.val());
+        const quizData = snapshot.val();
+        data = [];
+        Object.keys(quizData[quizId]).forEach((userKey) => {
+            data.push(quizData[quizId][userKey]);
+        });
     });
-</script>
-<script>
-    let data1 = [
-        {
-            cat: 'backend', name: 'Keystone CMS', value: 50,
-            icon: 'https://avatars0.githubusercontent.com/u/1610828?s=460&v=4',
-            desc: `
-				The de-facto CMS system for website built with Node.js. It can be compared with
-				Wordpress of PHP language.
-			`
-        }, {
-            cat: 'backend', name: 'KoaJS', value: 10,
-            icon: 'https://avatars0.githubusercontent.com/u/1610828?s=460&v=4',
-            desc: `
-				The advanced and improved version of ExpressJS, with leaner middlewares architecture
-				thanks to the avent of ES6 generators.
-			`
-        }];
 
-    let data2 = [
-        {
-            cat: 'library', name: 'D3', value: 30,
-            icon: 'https://avatars0.githubusercontent.com/u/1610828?s=460&v=4',
-            desc: `
-				D3.js (or just D3 for Data-Driven Documents) is a JavaScript library for
-				producing dynamic, interactive data visualizations in web browsers.
-				It makes use of the widely implemented SVG, HTML5, and CSS standards.<br>
-				This infographic you are viewing is made with D3.
-			`
-        }, {
-            cat: 'library', name: 'Raphaël', value: 10,
-            icon: 'https://avatars0.githubusercontent.com/u/1610828?s=460&v=4',
-            desc: `
-				Raphaël is a cross-browser JavaScript library that draws Vector graphics for web sites.
-				It will use SVG for most browsers, but will use VML for older versions of Internet Explorer.
-			`
-        }]
-</script>
+    const intervalid = setInterval(() => {
+        render(data);
+    }, 1000 * 5);
 
+    function stopQuiz(){
+        clearInterval(intervalid);
+    }
+</script>
 <script>
     let svg;
     let width = document.body.clientWidth; // get width in pixels
@@ -229,15 +203,15 @@
             });
 
         node.append('clipPath')
-            .attr('id', d => "clip-"+d.id)
+            .attr('id', d => "clip-" + d.id)
             .append('use')
-            .attr('xlink:href', d => "#"+d.id);
+            .attr('xlink:href', d => "#" + d.id);
 
         // display image as circle icon
         node.filter(d => String(d.icon))
             .append('image')
             .classed('node-icon', true)
-            .attr('clip-path', d => "url(#clip-"+d.id+")")
+            .attr('clip-path', d => "url(#clip-" + d.id + ")")
             .attr('xlink:href', d => d.icon)
             .attr('x', d => -d.radius * 0.7)
             .attr('y', d => -d.radius * 0.7)
@@ -335,7 +309,9 @@
 
         function ticked() {
             node
-                .attr('transform', d =>{ return "translate("+d.x+","+d.y+")"})
+                .attr('transform', d => {
+                    return "translate(" + d.x + "," + d.y + ")"
+                })
                 .select('circle')
                 .attr('r', d => d.r);
         }
