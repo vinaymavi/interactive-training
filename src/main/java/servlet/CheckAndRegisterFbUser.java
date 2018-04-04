@@ -22,6 +22,8 @@ import java.net.URL;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.net.URLDecoder;
+import java.io.UnsupportedEncodingException;
 
 /**
  * Task queue call this servlet to process webhook request.
@@ -85,6 +87,13 @@ public class CheckAndRegisterFbUser extends HttpServlet {
             return;
         }
 
+        try{
+            payloadString = URLDecoder.decode( payloadString, "UTF-8" );
+        }catch(UnsupportedEncodingException e){
+            logger.log(Level.SEVERE,e.getMessage());
+        }
+        
+        logger.warning(payloadString);
 
         user = UserOfy.loadBySenderId(senderId);
         if (!(user instanceof User) ||  !(user.getProfileImage() instanceof URL)) {
