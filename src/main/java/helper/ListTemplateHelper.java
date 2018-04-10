@@ -28,20 +28,18 @@ public class ListTemplateHelper {
         }
         for (Quiz quiz :
                 quizList) {
-            Element element = new Element(quiz.getName(), quiz.getDesc(), DEFAULT_QUIZ_URL);
+            
             StringBuffer subtitleBuffer = new StringBuffer();
             subtitleBuffer.append(quiz.getDesc());
             if(quiz.getUser() != null){
                 subtitleBuffer.append(System.lineSeparator()+"By - "+quiz.getUser().getFirstName());
-            }
-            Element element1 = new Element(quiz.getName(),subtitleBuffer.toString() , DEFAULT_QUIZ_URL);
+            }            
+            Element element = new Element(quiz.getName(), subtitleBuffer.toString(), DEFAULT_QUIZ_URL);
             Button buttonPostback = new ButtonPostback("Start",ResponsePayloadHelper.startQuiz(quiz.getQuizId()));
             List<Button> buttonList = new ArrayList<>();
             buttonList.add(buttonPostback);
-            element.setButtons(buttonList);
-            element1.setButtons(buttonList);
-            elementList.add(element);
-            elementList.add(element1);
+            element.setButtons(buttonList);            
+            elementList.add(element);            
         }
         Payload payload = new ListTemplatePayload("list","compact",null,elementList);
         Attachment attachment = new Attachment("template",payload);
